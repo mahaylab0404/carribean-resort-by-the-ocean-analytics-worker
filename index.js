@@ -159,8 +159,8 @@ async function handleFetchReviews(env) {
 
 // ── Core SerpAPI fetch + D1 store ───────────────────
 async function fetchAndStoreReviews(env) {
-  const key = env.SERPAPI_KEY;
-  if (!key) throw new Error("SERPAPI_KEY secret not configured");
+  const key = env.SERP_API_KEY;
+  if (!key) throw new Error("SERP_API_KEY secret not configured");
 
   let totalStored = 0;
 
