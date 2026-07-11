@@ -30,11 +30,14 @@ async function handleWebhook(request, env) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
+  // --- Core Routing ---
   const conversationId = body.conversation_id ?? null;
-  const duration = body.call_duration_secs ?? null;
   const status = body.status ?? null;
 
-  // ElevenLabs sends transcript as an array of { role, message } objects
+  // Telnyx phone number lives in metadata
+  const callerPhone = body.metadata?.caller_phone_number ?? null;
+
+  // Flatten transcript array into readable string
   let transcript = null;
   if (Array.isArray(body.transcript)) {
     transcript = body.transcript
@@ -44,12 +47,32 @@ async function handleWebhook(request, env) {
     transcript = body.transcript;
   }
 
+  // --- Dashboard Metrics ---
+  const duration = body.call_duration_secs ?? null;
+  const hasAudio = body.has_audio != null ? (body.has_audio ? 1 : 0) : null;
+  const hasUserAudio = body.has_user_audio != null ? (body.has_user_audio ? 1 : 0) : null;
+  const hasResponseAudio = body.has_response_audio != null ? (body.has_response_audio ? 1 : 0) : null;
+
+  // --- ElevenLabs Native Analysis ---
+  const analysis = body.analysis ?? {};
+  const dataCollection = analysis.data_collection ?? {};
+  const issueCategory = dataCollection.issue_category ?? null;
+  const callerName = dataCollection.full_name ?? null;
+  const sentiment = analysis.sentiment_analysis ?? null;
+
   try {
     await env.DB.prepare(
-      `INSERT INTO hotel_calls (conversation_id, duration, status, transcript)
-       VALUES (?, ?, ?, ?)`
+      `INSERT INTO hotel_calls (
+        conversation_id, status, caller_phone, transcript,
+        duration, has_audio, has_user_audio, has_response_audio,
+        issue_category, caller_name, sentiment
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
-      .bind(conversationId, duration, status, transcript)
+      .bind(
+        conversationId, status, callerPhone, transcript,
+        duration, hasAudio, hasUserAudio, hasResponseAudio,
+        issueCategory, callerName, sentiment
+      )
       .run();
   } catch (err) {
     console.error("D1 insert error:", err.message);
@@ -66,7 +89,10 @@ async function handleWebhook(request, env) {
 async function handleGetCalls(env) {
   try {
     const { results } = await env.DB.prepare(
-      `SELECT id, conversation_id, duration, status, transcript, created_at
+      `SELECT
+         id, conversation_id, status, caller_phone, transcript,
+         duration, has_audio, has_user_audio, has_response_audio,
+         issue_category, caller_name, sentiment, created_at
        FROM hotel_calls
        ORDER BY created_at DESC
        LIMIT 500`
