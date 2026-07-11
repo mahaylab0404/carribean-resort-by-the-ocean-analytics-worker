@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS hotel_calls;
-
-CREATE TABLE hotel_calls (
+CREATE TABLE IF NOT EXISTS hotel_calls (
   id                  INTEGER PRIMARY KEY AUTOINCREMENT,
 
   -- Core routing
