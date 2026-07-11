@@ -702,7 +702,9 @@
 </footer>
 
 <script>
-  const WORKER_URL = "https://carribean-resort-by-the-ocean-analytics-worker.mahaylabalentine04.workers.dev/";
+  const WORKER_URL    = "https://carribean-resort-by-the-ocean-analytics-worker.mahaylabalentine04.workers.dev/";
+  const ADMIN_SECRET  = "Admin123";
+  const ADMIN_HEADERS = { "Content-Type": "application/json", "X-Admin-Secret": ADMIN_SECRET };
 
   let allCalls = [];
   let activeFilters = { sentiment: "all", category: "all", date: "all" };
@@ -1215,7 +1217,7 @@
     btn.textContent = "Working…";
     btn.disabled = true;
     try {
-      const res = await fetch(WORKER_URL + endpoint, { method: "POST" });
+      const res = await fetch(WORKER_URL + endpoint, { method: "POST", headers: ADMIN_HEADERS });
       const data = await res.json();
       if (!res.ok) { alert("Error: " + (data.error || res.status)); return; }
       const msg = endpoint === "fix-flags"
@@ -1233,7 +1235,7 @@
 
   async function triggerFetch() {
     try {
-      const res = await fetch(WORKER_URL + "fetch-reviews", { method: "POST" });
+      const res = await fetch(WORKER_URL + "fetch-reviews", { method: "POST", headers: ADMIN_HEADERS });
       const data = await res.json();
       if (!res.ok) { alert("Fetch failed: " + (data.error || res.status)); return; }
       alert(`Fetched ${data.fetched} new review${data.fetched !== 1 ? "s" : ""}. Refreshing…`);
