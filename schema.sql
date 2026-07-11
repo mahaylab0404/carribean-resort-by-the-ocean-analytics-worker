@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS hotel_reviews (
   rating       INTEGER,             -- 1-5
   text         TEXT,
   published_at TEXT,
-  phone_flag   INTEGER DEFAULT 0,   -- 1 if review mentions phone/call/receptionist
+  phone_flag   INTEGER DEFAULT 0,
+  suggestion   TEXT,
   fetched_at   DATETIME DEFAULT CURRENT_TIMESTAMP
 );

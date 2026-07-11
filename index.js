@@ -7,17 +7,53 @@ const CORS = {
 const GOOGLE_PLACE_ID     = "ChIJTbXIUSOr2YgRikZNCumgfvg";
 const TRIPADVISOR_LOC_ID  = "595285";
 
-// Keywords that flag a review as phone-experience related
-const PHONE_KEYWORDS = [
-  "phone", "call", "called", "calling", "receptionist", "front desk",
-  "answering", "voicemail", "hold", "hung up", "picked up", "rang",
-  "ring", "busy", "ai", "bot", "automated", "robot", "spoke to"
+// Phrases indicating a NEGATIVE phone/call experience (not just mentions of the word)
+const PHONE_ISSUE_PATTERNS = [
+  /no one (answered|picked up|was available)/i,
+  /couldn'?t (reach|get through|get anyone)/i,
+  /never (answered|called back|responded)/i,
+  /didn'?t (answer|pick up|call back|respond)/i,
+  /unanswered (call|phone)/i,
+  /left (a message|voicemail|on hold)/i,
+  /on hold (for|forever|too long)/i,
+  /hung up on/i,
+  /phone (issue|problem|trouble|complaint)/i,
+  /hard to (reach|get|contact)/i,
+  /impossible to (reach|get|contact)/i,
+  /receptionist (was rude|ignored|unhelpful|didn'?t)/i,
+  /front desk (was rude|ignored|unhelpful|never|didn'?t)/i,
+  /called (multiple times|several times|again and again|back and forth)/i,
+  /no (response|callback|reply) (to my|to our) (call|message|voicemail)/i,
+  /phone (kept|always|just) (ringing|going to voicemail)/i,
+  /ai (was unhelpful|couldn'?t help|didn'?t understand|failed|gave wrong)/i,
+  /automated (system|voice|bot) (was|is) (confusing|useless|unhelpful|wrong)/i,
+  /robot (couldn'?t|didn'?t|failed)/i,
+  /spoke to (a bot|an ai|a machine) (and|that|who|but)/i,
 ];
 
 function phoneFlag(text) {
   if (!text) return 0;
-  const lower = text.toLowerCase();
-  return PHONE_KEYWORDS.some(k => lower.includes(k)) ? 1 : 0;
+  return PHONE_ISSUE_PATTERNS.some(p => p.test(text)) ? 1 : 0;
+}
+
+// Generate a tailored suggestion using Cloudflare Workers AI
+async function generateSuggestion(env, reviewText, rating) {
+  if (!env.AI || !reviewText) return null;
+  try {
+    const prompt = `You are a hotel operations consultant. A guest left this ${rating}-star review for a hotel:
+
+"${reviewText.slice(0, 600)}"
+
+Write ONE specific, practical, actionable suggestion (2-3 sentences max) for what the hotel management should do to prevent this issue from happening again. Be direct and specific — no generic advice. Do not start with "I suggest" or "You should". Start with the action itself.`;
+
+    const response = await env.AI.run("@cf/meta/llama-3-8b-instruct", {
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 120,
+    });
+    return response?.response?.trim() ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export default {
@@ -128,7 +164,7 @@ async function handleGetCalls(env) {
 async function handleGetReviews(env) {
   try {
     const { results } = await env.DB.prepare(
-      `SELECT id, source, author, rating, text, published_at, phone_flag, fetched_at
+      `SELECT id, source, author, rating, text, published_at, phone_flag, suggestion, fetched_at
        FROM hotel_reviews ORDER BY fetched_at DESC LIMIT 300`
     ).all();
     return new Response(JSON.stringify(results), {
@@ -173,10 +209,13 @@ async function fetchAndStoreReviews(env) {
 
     for (const r of reviews) {
       const text = r.snippet ?? r.text ?? null;
+      const rating = r.rating ?? null;
+      const flag = phoneFlag(text);
+      const suggestion = (rating && rating <= 3) ? await generateSuggestion(env, text, rating) : null;
       await env.DB.prepare(
-        `INSERT INTO hotel_reviews (source, author, rating, text, published_at, phone_flag)
-         VALUES (?, ?, ?, ?, ?, ?)`
-      ).bind("google", r.user?.name ?? null, r.rating ?? null, text, r.iso_date ?? null, phoneFlag(text)).run();
+        `INSERT INTO hotel_reviews (source, author, rating, text, published_at, phone_flag, suggestion)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind("google", r.user?.name ?? null, rating, text, r.iso_date ?? null, flag, suggestion).run();
       totalStored++;
     }
   } catch (err) {
@@ -192,10 +231,13 @@ async function fetchAndStoreReviews(env) {
 
     for (const r of reviews) {
       const text = r.text ?? null;
+      const rating = r.rating ?? null;
+      const flag = phoneFlag(text);
+      const suggestion = (rating && rating <= 3) ? await generateSuggestion(env, text, rating) : null;
       await env.DB.prepare(
-        `INSERT INTO hotel_reviews (source, author, rating, text, published_at, phone_flag)
-         VALUES (?, ?, ?, ?, ?, ?)`
-      ).bind("tripadvisor", r.user?.username ?? null, r.rating ?? null, text, r.travel_date ?? null, phoneFlag(text)).run();
+        `INSERT INTO hotel_reviews (source, author, rating, text, published_at, phone_flag, suggestion)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind("tripadvisor", r.user?.username ?? null, rating, text, r.travel_date ?? null, flag, suggestion).run();
       totalStored++;
     }
   } catch (err) {
