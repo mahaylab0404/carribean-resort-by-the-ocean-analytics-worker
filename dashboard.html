@@ -684,8 +684,8 @@
     <button class="rev-tab" id="tab-all" onclick="switchReviewTab('all')">All Reviews</button>
     <button class="rev-tab" id="tab-phone" onclick="switchReviewTab('phone')">📞 Phone Mentions</button>
     <div style="flex:1"></div>
-    <button class="rev-tab" onclick="runFix('fix-flags')" title="Re-evaluate which reviews mention phone issues">↺ Fix Phone Flags</button>
-    <button class="rev-tab" onclick="runFix('fix-suggestions')" title="Generate AI suggestions for reviews missing them">💡 Generate Suggestions</button>
+    <button class="rev-tab" onclick="runFix(event,'fix-flags')" title="Re-evaluate which reviews mention phone issues">↺ Fix Phone Flags</button>
+    <button class="rev-tab" onclick="runFix(event,'fix-suggestions')" title="Generate AI suggestions for reviews missing them">💡 Generate Suggestions</button>
   </div>
 
   <div id="review-feed">
@@ -717,6 +717,16 @@
   setInterval(updateClock, 60000);
 
   // ── HELPERS ────────────────────────────────────
+  function escHtml(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function fmtDuration(s) {
     if (!s) return "—";
     const m = Math.floor(s / 60), r = s % 60;
@@ -1015,11 +1025,11 @@
       const sc = sentColor(c.sentiment);
       const sPill = c.status === "completed"
         ? `<span class="pill pill-ok">Completed</span>`
-        : `<span class="pill pill-fail">${c.status || "Unknown"}</span>`;
-      const cPill = c.issue_category ? `<span class="pill pill-cat">${c.issue_category}</span>` : "";
+        : `<span class="pill pill-fail">${escHtml(c.status) || "Unknown"}</span>`;
+      const cPill = c.issue_category ? `<span class="pill pill-cat">${escHtml(c.issue_category)}</span>` : "";
       const dPill = c.duration ? `<span class="pill pill-dur">${fmtDuration(c.duration)}</span>` : "";
       const { day, time } = fmtTime(c.created_at);
-      const snip = c.transcript ? `"${c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 90)}…"` : "No transcript.";
+      const snip = c.transcript ? `"${escHtml(c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 90))}…"` : "No transcript.";
 
       let bubbles = "";
       if (c.transcript) {
@@ -1027,7 +1037,7 @@
           const ci = line.indexOf(":");
           if (ci === -1) return "";
           const role = line.slice(0, ci).trim().toLowerCase();
-          const msg  = line.slice(ci + 1).trim();
+          const msg  = escHtml(line.slice(ci + 1).trim());
           const cls  = (role === "agent" || role === "assistant") ? "agent" : "user";
           return `<div class="bubble ${cls}"><div class="bubble-sender">${cls === "agent" ? "AI Receptionist" : "Guest"}</div>${msg}</div>`;
         }).join("");
@@ -1038,8 +1048,8 @@
           <div class="sent-bar" style="background:${sc}"></div>
           <div class="call-main">
             <div class="caller-info">
-              <div class="caller-num">${c.caller_phone || "Unknown Number"}</div>
-              <div class="caller-name-text">${c.caller_name || "Unknown Guest"}</div>
+              <div class="caller-num">${escHtml(c.caller_phone) || "Unknown Number"}</div>
+              <div class="caller-name-text">${escHtml(c.caller_name) || "Unknown Guest"}</div>
             </div>
             <div class="pills">${sPill}${cPill}${dPill}</div>
             <div class="transcript-snip">${snip}</div>
@@ -1121,7 +1131,11 @@
     const google = reviews.filter(r => r.source === "google");
     const ta     = reviews.filter(r => r.source === "tripadvisor");
     const now    = new Date(); const msMonth = 30 * 86400000;
-    const thisMonth = reviews.filter(r => r.fetched_at && (now - new Date(r.fetched_at)) < msMonth);
+    // Use published_at (when the guest actually wrote the review) not fetched_at
+    const thisMonth = reviews.filter(r => {
+      const dateStr = r.published_at || r.fetched_at;
+      return dateStr && (now - new Date(dateStr)) < msMonth;
+    });
     const neg    = thisMonth.filter(r => r.rating && r.rating <= 2);
     const flagged = reviews.filter(r => r.phone_flag === 1);
 
@@ -1159,22 +1173,22 @@
       const src = r.source === "google" ? "google" : "tripadvisor";
       const srcLabel = r.source === "google" ? "Google" : "TripAdvisor";
       const dateStr = r.published_at
-        ? new Date(r.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+        ? escHtml(r.published_at)
         : (r.fetched_at ? new Date(r.fetched_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—");
       const phoneBadge = r.phone_flag === 1 ? `<span class="phone-badge">📞 Phone Mention</span>` : "";
 
       return `<div class="review-card ${cls}">
         <div class="review-header">
-          <span class="review-author">${r.author || "Anonymous"}</span>
+          <span class="review-author">${escHtml(r.author) || "Anonymous"}</span>
           <span class="source-badge ${src}">${srcLabel}</span>
           <span class="stars" style="font-size:0.85rem">${starsHtml(r.rating)}</span>
           ${phoneBadge}
           <span class="review-date">${dateStr}</span>
         </div>
-        <div class="review-text">${r.text || "<em style='opacity:0.5'>No review text.</em>"}</div>
+        <div class="review-text">${escHtml(r.text) || "<em style='opacity:0.5'>No review text.</em>"}</div>
         ${r.suggestion ? `<div class="review-suggestion">
           <span class="sug-icon">💡</span>
-          <div><span class="sug-label">Management Suggestion</span>${r.suggestion}</div>
+          <div><span class="sug-label">Management Suggestion</span>${escHtml(r.suggestion)}</div>
         </div>` : ""}
       </div>`;
     }).join("");
@@ -1195,17 +1209,18 @@
     buildReviewFeed(filtered);
   }
 
-  async function runFix(endpoint) {
-    const btn = event.target;
+  async function runFix(evt, endpoint) {
+    const btn = evt.target;
     const orig = btn.textContent;
     btn.textContent = "Working…";
     btn.disabled = true;
     try {
       const res = await fetch(WORKER_URL + endpoint, { method: "POST" });
       const data = await res.json();
+      if (!res.ok) { alert("Error: " + (data.error || res.status)); return; }
       const msg = endpoint === "fix-flags"
         ? `Done — re-evaluated ${data.updated} reviews, ${data.flagged} flagged as phone-related.`
-        : `Done — generated suggestions for ${data.updated} reviews.`;
+        : `Done — generated suggestions for ${data.updated} review${data.updated !== 1 ? "s" : ""}${data.remaining ? ` (${data.remaining} remaining — click again)` : ""}.`;
       alert(msg);
       await loadReviews();
     } catch (err) {
@@ -1220,7 +1235,8 @@
     try {
       const res = await fetch(WORKER_URL + "fetch-reviews", { method: "POST" });
       const data = await res.json();
-      alert(`Fetched ${data.fetched} new reviews. Refreshing…`);
+      if (!res.ok) { alert("Fetch failed: " + (data.error || res.status)); return; }
+      alert(`Fetched ${data.fetched} new review${data.fetched !== 1 ? "s" : ""}. Refreshing…`);
       await loadReviews();
     } catch (err) {
       alert("Fetch failed: " + err.message);

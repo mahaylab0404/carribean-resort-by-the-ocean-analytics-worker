@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS hotel_calls (
   id                  INTEGER PRIMARY KEY AUTOINCREMENT,
 
   -- Core routing
-  conversation_id     TEXT NOT NULL,
+  conversation_id     TEXT NOT NULL UNIQUE,
   status              TEXT,
   caller_phone        TEXT,
   transcript          TEXT,
