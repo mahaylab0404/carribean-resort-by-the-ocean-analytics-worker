@@ -683,6 +683,9 @@
     <button class="rev-tab active" id="tab-negative" onclick="switchReviewTab('negative')">Needs Attention</button>
     <button class="rev-tab" id="tab-all" onclick="switchReviewTab('all')">All Reviews</button>
     <button class="rev-tab" id="tab-phone" onclick="switchReviewTab('phone')">📞 Phone Mentions</button>
+    <div style="flex:1"></div>
+    <button class="rev-tab" onclick="runFix('fix-flags')" title="Re-evaluate which reviews mention phone issues">↺ Fix Phone Flags</button>
+    <button class="rev-tab" onclick="runFix('fix-suggestions')" title="Generate AI suggestions for reviews missing them">💡 Generate Suggestions</button>
   </div>
 
   <div id="review-feed">
@@ -1190,6 +1193,27 @@
     if (activeReviewTab === "phone")    filtered = filtered.filter(r => r.phone_flag === 1);
     filtered.sort((a, b) => new Date(b.fetched_at || 0) - new Date(a.fetched_at || 0));
     buildReviewFeed(filtered);
+  }
+
+  async function runFix(endpoint) {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = "Working…";
+    btn.disabled = true;
+    try {
+      const res = await fetch(WORKER_URL + endpoint, { method: "POST" });
+      const data = await res.json();
+      const msg = endpoint === "fix-flags"
+        ? `Done — re-evaluated ${data.updated} reviews, ${data.flagged} flagged as phone-related.`
+        : `Done — generated suggestions for ${data.updated} reviews.`;
+      alert(msg);
+      await loadReviews();
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      btn.textContent = orig;
+      btn.disabled = false;
+    }
   }
 
   async function triggerFetch() {

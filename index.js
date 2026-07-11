@@ -7,28 +7,22 @@ const CORS = {
 const GOOGLE_PLACE_ID     = "ChIJTbXIUSOr2YgRikZNCumgfvg";
 const TRIPADVISOR_LOC_ID  = "595285";
 
-// Phrases indicating a NEGATIVE phone/call experience (not just mentions of the word)
+// Only flag when a review explicitly complains about a phone/call problem
 const PHONE_ISSUE_PATTERNS = [
-  /no one (answered|picked up|was available)/i,
-  /couldn'?t (reach|get through|get anyone)/i,
-  /never (answered|called back|responded)/i,
-  /didn'?t (answer|pick up|call back|respond)/i,
+  /no one (answered|picked up)/i,
+  /couldn'?t (reach|get through|get anyone on the phone)/i,
+  /never (answered|called (me )?back)/i,
+  /didn'?t (answer|pick up|call (me )?back)/i,
+  /on hold (for \d|forever|too long|a long time)/i,
+  /hung up on (me|us)/i,
+  /phone (kept ringing|just rang|went to voicemail|was never answered)/i,
+  /called (multiple times|several times|again and again|back and forth) (and no|but no|with no)/i,
+  /no (callback|call back|response to my call|reply to my call|answer)/i,
   /unanswered (call|phone)/i,
-  /left (a message|voicemail|on hold)/i,
-  /on hold (for|forever|too long)/i,
-  /hung up on/i,
-  /phone (issue|problem|trouble|complaint)/i,
-  /hard to (reach|get|contact)/i,
-  /impossible to (reach|get|contact)/i,
-  /receptionist (was rude|ignored|unhelpful|didn'?t)/i,
-  /front desk (was rude|ignored|unhelpful|never|didn'?t)/i,
-  /called (multiple times|several times|again and again|back and forth)/i,
-  /no (response|callback|reply) (to my|to our) (call|message|voicemail)/i,
-  /phone (kept|always|just) (ringing|going to voicemail)/i,
-  /ai (was unhelpful|couldn'?t help|didn'?t understand|failed|gave wrong)/i,
-  /automated (system|voice|bot) (was|is) (confusing|useless|unhelpful|wrong)/i,
-  /robot (couldn'?t|didn'?t|failed)/i,
-  /spoke to (a bot|an ai|a machine) (and|that|who|but)/i,
+  /impossible to (reach|get through|contact) (by phone|on the phone|anyone)/i,
+  /automated (system|voice|bot) (was |is )?(confusing|useless|unhelpful|broken|wrong)/i,
+  /spoke to (a bot|an ai|a machine) (and|that|but) (it )?(couldn'?t|didn'?t|failed)/i,
+  /ai (receptionist|bot|system) (was |is )?(wrong|unhelpful|confused|broken|failed)/i,
 ];
 
 function phoneFlag(text) {
@@ -154,6 +148,16 @@ export default {
       return handleFetchReviews(env);
     }
 
+    // POST /fix-flags  — re-evaluate phone flags on all existing reviews
+    if (request.method === "POST" && url.pathname === "/fix-flags") {
+      return handleFixFlags(env);
+    }
+
+    // POST /fix-suggestions  — generate missing suggestions for existing reviews
+    if (request.method === "POST" && url.pathname === "/fix-suggestions") {
+      return handleFixSuggestions(env);
+    }
+
     return new Response("Not found", { status: 404 });
   },
 
@@ -239,6 +243,60 @@ async function handleGetReviews(env) {
     return new Response(JSON.stringify(results), {
       status: 200,
       headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500, headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  }
+}
+
+// ── Fix phone flags on existing reviews ────────────
+async function handleFixFlags(env) {
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT id, text FROM hotel_reviews`
+    ).all();
+
+    let updated = 0;
+    for (const r of results) {
+      const flag = phoneFlag(r.text);
+      await env.DB.prepare(
+        `UPDATE hotel_reviews SET phone_flag = ? WHERE id = ?`
+      ).bind(flag, r.id).run();
+      updated++;
+    }
+
+    return new Response(JSON.stringify({ updated, flagged: results.filter(r => phoneFlag(r.text)).length }), {
+      status: 200, headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500, headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  }
+}
+
+// ── Generate missing suggestions for existing reviews ──
+async function handleFixSuggestions(env) {
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT id, text, rating FROM hotel_reviews WHERE suggestion IS NULL AND rating <= 3`
+    ).all();
+
+    let updated = 0;
+    for (const r of results) {
+      const suggestion = await generateSuggestion(env, r.text, r.rating);
+      if (suggestion) {
+        await env.DB.prepare(
+          `UPDATE hotel_reviews SET suggestion = ? WHERE id = ?`
+        ).bind(suggestion, r.id).run();
+        updated++;
+      }
+    }
+
+    return new Response(JSON.stringify({ updated }), {
+      status: 200, headers: { ...CORS, "Content-Type": "application/json" },
     });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
