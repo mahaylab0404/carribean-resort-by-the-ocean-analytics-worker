@@ -73,11 +73,9 @@
 
     .brand-icon {
       width: 42px; height: 42px;
-      background: var(--burg);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
       flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     .brand-text h1 {
@@ -509,7 +507,28 @@
 <header>
   <div class="header-inner">
     <div class="brand">
-      <div class="brand-icon">🌴</div>
+      <div class="brand-icon">
+        <!-- Caribbean Resort logo: two crossed palms on brown -->
+        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="42" height="42" rx="8" fill="#7B3A2A"/>
+          <!-- Left palm trunk -->
+          <path d="M17 36 C16 28 13 22 10 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Right palm trunk -->
+          <path d="M25 36 C26 28 29 22 32 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Left palm fronds -->
+          <path d="M10 16 C7 12 4 13 3 10 C6 10 9 12 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C9 11 11 8 10 5 C12 7 12 12 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C13 12 14 9 16 8 C15 11 13 14 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C12 14 15 14 17 13 C15 16 12 16 10 16Z" fill="#D4C4B0"/>
+          <!-- Right palm fronds -->
+          <path d="M32 16 C35 12 38 13 39 10 C36 10 33 12 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C33 11 31 8 32 5 C30 7 30 12 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C29 12 28 9 26 8 C27 11 29 14 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C30 14 27 14 25 13 C27 16 30 16 32 16Z" fill="#D4C4B0"/>
+          <!-- Cross detail at base where trunks meet -->
+          <path d="M17 30 C20 27 22 27 25 30" stroke="#D4C4B0" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
       <div class="brand-text">
         <h1>Caribbean Resort &amp; Suite</h1>
         <p>AI Receptionist Analytics &nbsp;·&nbsp; Hollywood, FL</p>
