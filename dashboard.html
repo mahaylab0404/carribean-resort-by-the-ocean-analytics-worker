@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caribbean Resort — AI Receptionist Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0A1628;
+      --card:      #112240;
+      --card-hover:#152a50;
+      --border:    #1E3A5F;
+      --burgundy:  #8B2020;
+      --teal:      #00C2CB;
+      --teal-dim:  rgba(0,194,203,0.12);
+      --text:      #F0EDE8;
+      --muted:     #8B9EC7;
+      --positive:  #22C55E;
+      --negative:  #EF4444;
+      --neutral:   #F59E0B;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 2px solid var(--burgundy);
+      background: linear-gradient(135deg, #0c1e38 0%, #0A1628 100%);
+    }
+
+    .header-left h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.3px;
+    }
+
+    .header-left p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      text-align: right;
+    }
+
+    .header-right .label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .header-right .clock {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--teal);
+      margin-top: 2px;
+    }
+
+    .refresh-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .refresh-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--positive);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── MAIN LAYOUT ────────────────────────────── */
+    main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+
+    /* ── KPI TILES ──────────────────────────────── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+    }
+
+    .kpi-card.kpi-total::before    { background: var(--teal); }
+    .kpi-card.kpi-duration::before { background: var(--burgundy); }
+    .kpi-card.kpi-completion::before { background: var(--positive); }
+    .kpi-card.kpi-sentiment::before { background: var(--neutral); }
+
+    .kpi-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .kpi-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      opacity: 0.12;
+    }
+
+    /* ── CHARTS ─────────────────────────────────── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .chart-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    /* ── CALL FEED ───────────────────────────────── */
+    .feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .feed-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .feed-count {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 12px;
+    }
+
+    .call-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      position: relative;
+    }
+
+    .call-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 194, 203, 0.12);
+      background: var(--card-hover);
+    }
+
+    .call-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 20px;
+    }
+
+    .sentiment-bar {
+      width: 4px;
+      border-radius: 4px;
+      align-self: stretch;
+      flex-shrink: 0;
+      min-height: 48px;
+    }
+
+    .caller-block { min-width: 150px; }
+
+    .caller-number {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .caller-name {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex: 1;
+      align-items: center;
+    }
+
+    .pill {
+      font-size: 0.68rem;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .pill-completed { background: rgba(34,197,94,0.15); color: #22C55E; border: 1px solid rgba(34,197,94,0.3); }
+    .pill-failed    { background: rgba(239,68,68,0.15);  color: #EF4444; border: 1px solid rgba(239,68,68,0.3); }
+    .pill-category  { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(0,194,203,0.3); }
+    .pill-duration  { background: rgba(139,32,32,0.15); color: #D47070; border: 1px solid rgba(139,32,32,0.3); }
+
+    .transcript-preview {
+      flex: 2;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 380px;
+    }
+
+    .call-meta-right {
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 80px;
+    }
+
+    .call-time-day  { font-size: 0.7rem; color: var(--muted); }
+    .call-time-hour { font-size: 0.8rem; font-weight: 500; color: var(--text); margin-top: 2px; }
+
+    .chevron {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-left: 8px;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .call-card.open .chevron { transform: rotate(90deg); color: var(--teal); }
+
+    /* ── TRANSCRIPT EXPAND ──────────────────────── */
+    .transcript-expand {
+      display: none;
+      padding: 0 20px 20px 44px;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+    }
+
+    .call-card.open .transcript-expand { display: block; }
+
+    .transcript-expand h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      padding: 14px 0 10px;
+    }
+
+    .bubble-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+    .bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .bubble.agent {
+      background: var(--teal-dim);
+      border: 1px solid rgba(0,194,203,0.2);
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble.user {
+      background: rgba(139,32,32,0.2);
+      border: 1px solid rgba(139,32,32,0.3);
+      color: var(--text);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bubble-role {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      opacity: 0.6;
+    }
+
+    /* ── EMPTY / LOADING ────────────────────────── */
+    .state-box {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .state-box .icon { font-size: 3rem; margin-bottom: 12px; }
+    .state-box p { font-size: 0.9rem; }
+
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 24px 40px;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+
+    footer span { color: var(--teal); }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 900px) {
+      header, main { padding: 16px 20px; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+      .transcript-preview { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <h1>🌴 Caribbean Resort &amp; Suite</h1>
+    <p>AI Receptionist Analytics</p>
+  </div>
+  <div class="header-right">
+    <div class="label">Live Dashboard</div>
+    <div class="clock" id="clock">—</div>
+    <div class="refresh-badge">
+      <span class="refresh-dot"></span>
+      <span>Auto-refreshes every 60s</span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi-total">
+      <div class="kpi-label">Total Calls</div>
+      <div class="kpi-value" id="kpi-total">—</div>
+      <div class="kpi-sub">All time</div>
+      <div class="kpi-icon">📞</div>
+    </div>
+    <div class="kpi-card kpi-duration">
+      <div class="kpi-label">Avg Duration</div>
+      <div class="kpi-value" id="kpi-duration">—</div>
+      <div class="kpi-sub">Per call</div>
+      <div class="kpi-icon">⏱</div>
+    </div>
+    <div class="kpi-card kpi-completion">
+      <div class="kpi-label">Completion Rate</div>
+      <div class="kpi-value" id="kpi-completion">—</div>
+      <div class="kpi-sub">Calls completed</div>
+      <div class="kpi-icon">✅</div>
+    </div>
+    <div class="kpi-card kpi-sentiment">
+      <div class="kpi-label">Positive Sentiment</div>
+      <div class="kpi-value" id="kpi-sentiment">—</div>
+      <div class="kpi-sub">Happy guests</div>
+      <div class="kpi-icon">😊</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Call Volume — Last 30 Days</div>
+      <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Issues by Category</div>
+      <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CALL FEED -->
+  <div class="feed-header">
+    <div class="feed-title">Recent Calls</div>
+    <div class="feed-count" id="feed-count">0 calls</div>
+  </div>
+  <div id="call-feed">
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Loading call data…</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Powered by <span>Caribbean Resort AI</span> &mdash; Built by <span>Zuldeira Technologies</span>
+</footer>
+
+<script>
+  // ── CONFIG ── Update this to your deployed Worker URL
+  const WORKER_URL = "https://hotel-analytics-worker.YOUR-SUBDOMAIN.workers.dev";
+
+  // ── CLOCK ──────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    document.getElementById("clock").textContent = now.toLocaleDateString("en-US", {
+      weekday: "long", month: "long", day: "numeric", year: "numeric"
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 60000);
+
+  // ── HELPERS ────────────────────────────────────────────
+  function fmtDuration(secs) {
+    if (!secs) return "—";
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return m > 0 ? `${m}m ${s}s` : `${s}s`;
+  }
+
+  function fmtTimestamp(iso) {
+    const d = new Date(iso);
+    const today = new Date();
+    const isToday = d.toDateString() === today.toDateString();
+    const day = isToday ? "Today" : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    return { day, time };
+  }
+
+  function sentimentColor(s) {
+    if (!s) return "#8B9EC7";
+    const v = s.toLowerCase();
+    if (v === "positive") return "#22C55E";
+    if (v === "negative") return "#EF4444";
+    return "#F59E0B";
+  }
+
+  // ── CHARTS ─────────────────────────────────────────────
+  let lineChart, donutChart;
+
+  function buildCharts(calls) {
+    // Line chart — calls per day last 30 days
+    const now = new Date();
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() - (29 - i));
+      return d.toISOString().split("T")[0];
+    });
+
+    const countsByDay = {};
+    days.forEach(d => countsByDay[d] = 0);
+    calls.forEach(c => {
+      const day = c.created_at ? c.created_at.split("T")[0].split(" ")[0] : null;
+      if (day && countsByDay[day] !== undefined) countsByDay[day]++;
+    });
+
+    const labels = days.map(d => {
+      const [, m, dd] = d.split("-");
+      return `${m}/${dd}`;
+    });
+
+    if (lineChart) lineChart.destroy();
+    lineChart = new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          data: days.map(d => countsByDay[d]),
+          borderColor: "#00C2CB",
+          backgroundColor: "rgba(0,194,203,0.08)",
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: "#00C2CB",
+          fill: true,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: "#1E3A5F" }, ticks: { color: "#8B9EC7", maxTicksLimit: 8, font: { size: 11 } } },
+          y: { grid: { color: "#1E3A5F" }, ticks: { color: "#8B9EC7", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
+        }
+      }
+    });
+
+    // Donut chart — issue categories
+    const catCounts = {};
+    calls.forEach(c => {
+      const cat = c.issue_category || "Uncategorized";
+      catCounts[cat] = (catCounts[cat] || 0) + 1;
+    });
+    const catLabels = Object.keys(catCounts);
+    const catData = catLabels.map(k => catCounts[k]);
+    const palette = ["#8B2020", "#00C2CB", "#F59E0B", "#1B2D6B", "#22C55E", "#8B9EC7"];
+
+    if (donutChart) donutChart.destroy();
+    donutChart = new Chart(document.getElementById("donutChart"), {
+      type: "doughnut",
+      data: {
+        labels: catLabels,
+        datasets: [{
+          data: catData,
+          backgroundColor: palette.slice(0, catLabels.length),
+          borderColor: "#112240",
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: "65%",
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { color: "#8B9EC7", font: { size: 11 }, padding: 12, boxWidth: 12 }
+          }
+        }
+      }
+    });
+  }
+
+  // ── CALL FEED ───────────────────────────────────────────
+  function buildFeed(calls) {
+    const feed = document.getElementById("call-feed");
+    document.getElementById("feed-count").textContent = `${calls.length} call${calls.length !== 1 ? "s" : ""}`;
+
+    if (!calls.length) {
+      feed.innerHTML = `<div class="state-box"><div class="icon">🏖️</div><p>No calls recorded yet. The AI receptionist is standing by.</p></div>`;
+      return;
+    }
+
+    feed.innerHTML = calls.map((c, i) => {
+      const color = sentimentColor(c.sentiment);
+      const statusPill = c.status === "completed"
+        ? `<span class="pill pill-completed">✓ Completed</span>`
+        : `<span class="pill pill-failed">✗ ${c.status || "Unknown"}</span>`;
+      const catPill = c.issue_category
+        ? `<span class="pill pill-category">${c.issue_category}</span>` : "";
+      const durPill = c.duration
+        ? `<span class="pill pill-duration">⏱ ${fmtDuration(c.duration)}</span>` : "";
+      const { day, time } = fmtTimestamp(c.created_at);
+      const preview = c.transcript
+        ? `"${c.transcript.replace(/^[^:]+:\s*/,'').slice(0, 80)}…"` : "No transcript available.";
+
+      // Build chat bubbles
+      let bubbles = "";
+      if (c.transcript) {
+        const lines = c.transcript.split("\n").filter(Boolean);
+        bubbles = lines.map(line => {
+          const colon = line.indexOf(":");
+          if (colon === -1) return "";
+          const role = line.slice(0, colon).trim().toLowerCase();
+          const msg = line.slice(colon + 1).trim();
+          const cls = (role === "agent" || role === "assistant") ? "agent" : "user";
+          const label = cls === "agent" ? "🌴 AI Receptionist" : "👤 Guest";
+          return `<div class="bubble ${cls}"><div class="bubble-role">${label}</div>${msg}</div>`;
+        }).join("");
+      }
+
+      return `
+        <div class="call-card" onclick="toggleCard(this)">
+          <div class="call-card-inner">
+            <div class="sentiment-bar" style="background:${color}"></div>
+            <div class="caller-block">
+              <div class="caller-number">${c.caller_phone || "Unknown Number"}</div>
+              <div class="caller-name">${c.caller_name || "Unknown Guest"}</div>
+            </div>
+            <div class="pills">${statusPill}${catPill}${durPill}</div>
+            <div class="transcript-preview">${preview}</div>
+            <div class="call-meta-right">
+              <div class="call-time-day">${day}</div>
+              <div class="call-time-hour">${time}</div>
+            </div>
+            <div class="chevron">›</div>
+          </div>
+          <div class="transcript-expand">
+            <h4>Full Transcript</h4>
+            <div class="bubble-wrap">${bubbles || "<p style='color:var(--muted);font-size:0.8rem'>No transcript data.</p>"}</div>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function toggleCard(el) {
+    el.classList.toggle("open");
+  }
+
+  // ── KPI ─────────────────────────────────────────────────
+  function buildKPIs(calls) {
+    document.getElementById("kpi-total").textContent = calls.length;
+
+    const withDuration = calls.filter(c => c.duration);
+    const avgSecs = withDuration.length
+      ? Math.round(withDuration.reduce((a, c) => a + c.duration, 0) / withDuration.length) : 0;
+    document.getElementById("kpi-duration").textContent = fmtDuration(avgSecs);
+
+    const completed = calls.filter(c => c.status === "completed").length;
+    const compPct = calls.length ? Math.round((completed / calls.length) * 100) : 0;
+    document.getElementById("kpi-completion").textContent = `${compPct}%`;
+
+    const positive = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "positive").length;
+    const sentPct = calls.length ? Math.round((positive / calls.length) * 100) : 0;
+    document.getElementById("kpi-sentiment").textContent = `${sentPct}%`;
+  }
+
+  // ── FETCH & RENDER ──────────────────────────────────────
+  async function loadData() {
+    try {
+      const res = await fetch(WORKER_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const calls = await res.json();
+      buildKPIs(calls);
+      buildCharts(calls);
+      buildFeed(calls);
+    } catch (err) {
+      document.getElementById("call-feed").innerHTML = `
+        <div class="state-box">
+          <div class="icon">⚠️</div>
+          <p>Could not load data. Check that WORKER_URL is set correctly.<br><small style="opacity:0.6">${err.message}</small></p>
+        </div>`;
+    }
+  }
+
+  loadData();
+  setInterval(loadData, 60000);
+</script>
+</body>
+</html>
