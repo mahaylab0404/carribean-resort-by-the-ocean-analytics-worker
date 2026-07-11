@@ -5,27 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Caribbean Resort — AI Receptionist Analytics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --sand:      #FDF8F2;
-      --sand-dark: #F5EDE0;
+      --sand:      #FAF6EF;
+      --sand-dark: #F2EAD8;
       --card:      #FFFFFF;
-      --border:    #E8DDD0;
-      --burgundy:  #8B1A1A;
-      --burgundy2: #6B1414;
-      --ocean:     #0097A7;
-      --ocean-dim: rgba(0,151,167,0.1);
-      --navy:      #1B2D6B;
-      --coral:     #E07B54;
-      --text:      #2C1810;
-      --muted:     #7A6A5A;
-      --positive:  #2A9D5C;
-      --negative:  #C0392B;
-      --neutral:   #D48B2A;
-      --shadow:    0 2px 16px rgba(44,24,16,0.08);
-      --shadow-lg: 0 8px 32px rgba(44,24,16,0.14);
+      --border:    #E5D9C8;
+      --burgundy:  #7A1515;
+      --burgundy2: #5C0F0F;
+      --gold:      #C49A3C;
+      --gold-dim:  rgba(196,154,60,0.12);
+      --ocean:     #00868F;
+      --ocean-dim: rgba(0,134,143,0.1);
+      --palm:      #2D6A4F;
+      --navy:      #1A2B5E;
+      --coral:     #D4694A;
+      --text:      #251409;
+      --muted:     #6B5A48;
+      --positive:  #287A50;
+      --negative:  #B03020;
+      --neutral:   #C07F20;
+      --shadow:    0 2px 20px rgba(44,24,16,0.07);
+      --shadow-lg: 0 10px 40px rgba(44,24,16,0.13);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,71 +42,90 @@
 
     /* ── HEADER ─────────────────────────────────── */
     header {
-      background: var(--burgundy);
-      padding: 0 40px;
+      background: linear-gradient(135deg, var(--burgundy2) 0%, var(--burgundy) 60%, #9B2A1A 100%);
+      padding: 0 48px;
       position: relative;
       overflow: hidden;
+    }
+
+    /* Tropical texture overlay */
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 1;
+    }
+
+    header::after {
+      content: '🌴';
+      position: absolute;
+      right: 80px;
+      top: -20px;
+      font-size: 11rem;
+      opacity: 0.07;
+      z-index: 1;
+      pointer-events: none;
+      transform: rotate(-8deg);
     }
 
     .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 0;
+      padding: 26px 0;
       position: relative;
       z-index: 2;
     }
 
-    /* Subtle palm leaf watermark */
-    header::after {
-      content: '🌴';
-      position: absolute;
-      right: 100px;
-      top: -10px;
-      font-size: 9rem;
-      opacity: 0.06;
-      z-index: 1;
-      pointer-events: none;
+    .header-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 8px 0 0;
+      border-radius: 2px;
     }
 
     .header-left h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.55rem;
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-size: 1.9rem;
       font-weight: 700;
-      color: #FDF8F2;
-      letter-spacing: 0.2px;
+      color: #FDF6EC;
+      letter-spacing: 0.5px;
     }
 
     .header-left .subtitle {
-      font-size: 0.7rem;
-      color: rgba(253,248,242,0.65);
-      margin-top: 3px;
-      letter-spacing: 2px;
+      font-size: 0.65rem;
+      color: rgba(253,246,236,0.6);
+      margin-top: 5px;
+      letter-spacing: 3px;
       text-transform: uppercase;
     }
 
     .header-right { text-align: right; }
 
     .header-right .clock {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      color: #FDF8F2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: #FDF6EC;
       font-weight: 400;
+      font-style: italic;
     }
 
     .refresh-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      font-size: 0.68rem;
-      color: rgba(253,248,242,0.55);
-      margin-top: 5px;
+      font-size: 0.65rem;
+      color: rgba(253,246,236,0.5);
+      margin-top: 6px;
+      letter-spacing: 0.5px;
     }
 
     .refresh-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #5DE38A;
+      background: #6EEAA0;
       animation: pulse 2.5s infinite;
     }
 
@@ -111,22 +133,31 @@
 
     /* ── WAVE DIVIDER ───────────────────────────── */
     .wave-divider {
-      background: var(--burgundy);
+      background: #9B2A1A;
       line-height: 0;
     }
     .wave-divider svg { display: block; }
 
     /* ── MAIN ───────────────────────────────────── */
-    main { padding: 32px 40px 48px; max-width: 1400px; margin: 0 auto; }
+    main { padding: 36px 48px 56px; max-width: 1440px; margin: 0 auto; }
 
     /* ── SECTION LABEL ──────────────────────────── */
     .section-label {
-      font-size: 0.68rem;
+      font-size: 0.63rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--muted);
+      letter-spacing: 3px;
+      color: var(--gold);
       margin-bottom: 14px;
-      margin-top: 32px;
+      margin-top: 36px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
     }
     .section-label:first-child { margin-top: 0; }
 
@@ -141,52 +172,55 @@
     .kpi-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px 24px;
+      border-radius: 16px;
+      padding: 26px 28px;
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
-      transition: box-shadow 0.2s;
+      transition: box-shadow 0.2s, transform 0.2s;
     }
 
-    .kpi-card:hover { box-shadow: var(--shadow-lg); }
+    .kpi-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
 
     .kpi-card::after {
       content: attr(data-icon);
       position: absolute;
-      right: 16px; bottom: 10px;
-      font-size: 2.8rem;
-      opacity: 0.07;
+      right: 18px; bottom: 12px;
+      font-size: 3.2rem;
+      opacity: 0.06;
       line-height: 1;
     }
 
     .kpi-stripe {
-      height: 4px;
-      border-radius: 4px;
-      margin-bottom: 16px;
-      width: 40px;
+      height: 3px;
+      border-radius: 3px;
+      margin-bottom: 18px;
+      width: 36px;
     }
 
     .kpi-label {
-      font-size: 0.68rem;
+      font-size: 0.63rem;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .kpi-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-size: 3rem;
       font-weight: 700;
       line-height: 1;
       color: var(--text);
     }
 
     .kpi-sub {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     /* ── CHARTS ─────────────────────────────────── */
@@ -199,17 +233,18 @@
     .chart-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 28px;
       box-shadow: var(--shadow);
     }
 
     .chart-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--navy);
       margin-bottom: 20px;
+      letter-spacing: 0.2px;
     }
 
     .chart-wrap { position: relative; height: 210px; }
@@ -223,10 +258,11 @@
     }
 
     .feed-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--navy);
+      letter-spacing: 0.2px;
     }
 
     .feed-count {
@@ -242,17 +278,18 @@
     .call-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       margin-bottom: 10px;
       overflow: hidden;
       cursor: pointer;
       box-shadow: var(--shadow);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
     .call-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-lg);
+      border-color: var(--gold);
     }
 
     .call-card-inner {
@@ -420,15 +457,17 @@
     /* ── FOOTER ──────────────────────────────────── */
     footer {
       text-align: center;
-      padding: 24px 40px;
+      padding: 28px 48px;
       border-top: 1px solid var(--border);
-      font-size: 0.71rem;
+      font-size: 0.7rem;
       color: var(--muted);
       margin-top: 16px;
       background: var(--sand-dark);
+      letter-spacing: 0.3px;
     }
 
     footer strong { color: var(--burgundy); font-weight: 600; }
+    footer .gold { color: var(--gold); }
 
     /* ── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 960px) {
@@ -446,7 +485,8 @@
   <div class="header-inner">
     <div class="header-left">
       <h1>🌴 Caribbean Resort &amp; Suite</h1>
-      <div class="subtitle">AI Receptionist · Live Analytics</div>
+      <div class="subtitle">AI Receptionist &nbsp;·&nbsp; Live Analytics</div>
+      <div class="header-divider"></div>
     </div>
     <div class="header-right">
       <div class="clock" id="clock">—</div>
@@ -529,7 +569,7 @@
 </main>
 
 <footer>
-  Powered by <strong>Caribbean Resort AI Receptionist</strong> &nbsp;·&nbsp; Built by <strong>Zuldeira Technologies</strong>
+  Powered by <strong>Caribbean Resort AI Receptionist</strong> &nbsp;<span class="gold">·</span>&nbsp; Built by <strong>CayesDesk</strong>
 </footer>
 
 <script>
