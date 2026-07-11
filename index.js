@@ -107,6 +107,32 @@ async function generateSuggestion(env, reviewText, rating) {
   }
 }
 
+// Debug version — returns the actual Bedrock error so we can diagnose
+async function generateSuggestionDebug(env, reviewText, rating) {
+  if (!reviewText || !env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY) {
+    return { suggestion: null, error: "Missing credentials or review text" };
+  }
+  try {
+    const region  = env.AWS_REGION || "us-east-1";
+    const modelId = "anthropic.claude-3-haiku-20240307-v1:0";
+    const url     = `https://bedrock-runtime.${region}.amazonaws.com/model/${modelId}/invoke`;
+    const prompt  = `You are a hotel operations consultant. A guest left this ${rating}-star review for Caribbean Resort & Suite in Hollywood, FL:\n\n"${reviewText.slice(0, 600)}"\n\nWrite ONE specific, practical, actionable suggestion (2-3 sentences) for what hotel management should do to prevent this exact issue from recurring. Be direct and specific — no generic advice. Start with the concrete action.`;
+    const body = JSON.stringify({
+      anthropic_version: "bedrock-2023-05-31",
+      max_tokens: 150,
+      messages: [{ role: "user", content: prompt }],
+    });
+    const headers = await signBedrockRequest("POST", url, body, env.AWS_ACCESS_KEY_ID, env.AWS_SECRET_ACCESS_KEY, region);
+    const res = await fetch(url, { method: "POST", headers, body });
+    const text = await res.text();
+    if (!res.ok) return { suggestion: null, error: `Bedrock ${res.status}: ${text.slice(0, 300)}` };
+    const data = JSON.parse(text);
+    return { suggestion: data?.content?.[0]?.text?.trim() ?? null, error: null };
+  } catch (err) {
+    return { suggestion: null, error: err.message };
+  }
+}
+
 // ── ROUTER ──────────────────────────────────────────
 export default {
   async fetch(request, env) {
@@ -245,21 +271,23 @@ async function handleFixFlags(env) {
 // ── Fix suggestions ─────────────────────────────────
 async function handleFixSuggestions(env) {
   try {
-    // Process max 10 at a time to avoid Worker timeout
     const { results } = await env.DB.prepare(
       `SELECT id, text, rating FROM hotel_reviews WHERE suggestion IS NULL AND rating <= 3 LIMIT 10`
     ).all();
 
     let updated = 0;
+    const errors = [];
     for (const r of results) {
-      const suggestion = await generateSuggestion(env, r.text, r.rating);
+      const { suggestion, error } = await generateSuggestionDebug(env, r.text, r.rating);
       if (suggestion) {
         await env.DB.prepare(`UPDATE hotel_reviews SET suggestion = ? WHERE id = ?`).bind(suggestion, r.id).run();
         updated++;
+      } else if (error) {
+        errors.push(error);
       }
     }
     const remaining = results.length - updated;
-    return new Response(JSON.stringify({ updated, remaining }), { status: 200, headers: CORS_JSON });
+    return new Response(JSON.stringify({ updated, remaining, errors }), { status: 200, headers: CORS_JSON });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: CORS_JSON });
   }

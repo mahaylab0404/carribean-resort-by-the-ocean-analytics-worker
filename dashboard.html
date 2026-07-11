@@ -1204,9 +1204,10 @@
       const res = await fetch(WORKER_URL + endpoint, { method: "POST", headers: ADMIN_HEADERS });
       const data = await res.json();
       if (!res.ok) { alert("Error: " + (data.error || res.status)); return; }
+      const errInfo = data.errors?.length ? `\n\nBedrock error: ${data.errors[0]}` : "";
       const msg = endpoint === "fix-flags"
         ? `Done — re-evaluated ${data.updated} reviews, ${data.flagged} flagged as phone-related.`
-        : `Done — generated suggestions for ${data.updated} review${data.updated !== 1 ? "s" : ""}${data.remaining ? ` (${data.remaining} remaining — click again)` : ""}.`;
+        : `Done — generated suggestions for ${data.updated} review${data.updated !== 1 ? "s" : ""}${data.remaining ? ` (${data.remaining} remaining — click again)` : ""}.${errInfo}`;
       alert(msg);
       await loadReviews();
     } catch (err) {
