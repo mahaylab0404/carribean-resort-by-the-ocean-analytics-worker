@@ -22,3 +22,14 @@ CREATE TABLE hotel_calls (
 
   created_at          DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS hotel_reviews (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  source       TEXT NOT NULL,       -- 'google' or 'tripadvisor'
+  author       TEXT,
+  rating       INTEGER,             -- 1-5
+  text         TEXT,
+  published_at TEXT,
+  phone_flag   INTEGER DEFAULT 0,   -- 1 if review mentions phone/call/receptionist
+  fetched_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+);

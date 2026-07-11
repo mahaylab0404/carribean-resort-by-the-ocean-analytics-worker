@@ -362,6 +362,78 @@
     }
     footer b { color: var(--burg); }
 
+    /* ── REVIEWS ──────────────────────────────────── */
+    .review-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .review-kpi {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
+      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+    }
+
+    .review-kpi .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .review-kpi .rkpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 8px; }
+    .review-kpi .rkpi-value { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; line-height: 1; color: var(--navy); }
+    .review-kpi .rkpi-sub { font-size: 0.68rem; color: var(--muted); margin-top: 6px; }
+
+    .stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 1px; }
+
+    .review-tabs {
+      display: flex; gap: 4px; margin-bottom: 14px;
+    }
+
+    .rev-tab {
+      font-size: 0.68rem; font-weight: 500; padding: 6px 16px;
+      border-radius: 6px; border: 1px solid var(--border);
+      background: var(--card); color: var(--muted);
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    .rev-tab:hover { border-color: var(--border2); color: var(--text2); }
+    .rev-tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    .review-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+      margin-bottom: 8px; box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.15s;
+    }
+    .review-card:hover { box-shadow: var(--shadow); }
+    .review-card.negative { border-left: 4px solid var(--red); }
+    .review-card.positive { border-left: 4px solid var(--green); }
+    .review-card.neutral  { border-left: 4px solid var(--amber); }
+
+    .review-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+    }
+
+    .review-author { font-weight: 600; font-size: 0.82rem; color: var(--text); }
+
+    .source-badge {
+      font-size: 0.62rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .source-badge.google      { background: rgba(66,133,244,0.1); color: #2A6DB5; border: 1px solid rgba(66,133,244,0.2); }
+    .source-badge.tripadvisor { background: rgba(52,152,61,0.1);  color: #1E7832; border: 1px solid rgba(52,152,61,0.2); }
+
+    .phone-badge {
+      font-size: 0.62rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 4px; background: rgba(184,137,46,0.12);
+      color: var(--gold); border: 1px solid rgba(184,137,46,0.25);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .review-date { font-size: 0.67rem; color: var(--muted); margin-left: auto; }
+
+    .review-text {
+      font-size: 0.8rem; line-height: 1.6; color: var(--text2);
+    }
+
     /* ── RESPONSIVE ───────────────────────────────── */
     @media (max-width: 1100px) {
       header, main, footer { padding-left: 24px; padding-right: 24px; }
@@ -558,6 +630,47 @@
     <div class="state-card">
       <div class="spinner"></div>
       <p>Connecting to resort analytics…</p>
+    </div>
+  </div>
+
+  <!-- ── GUEST REVIEWS ── -->
+  <div class="section-head">
+    <h2>Guest Reviews</h2>
+    <div class="rule"></div>
+    <div class="tag">Google &amp; TripAdvisor</div>
+  </div>
+
+  <div class="review-kpi-row">
+    <div class="review-kpi">
+      <div class="top-bar" style="background:#4285F4"></div>
+      <div class="rkpi-label">Google Rating</div>
+      <div class="rkpi-value" id="rkpi-google">—</div>
+      <div class="rkpi-sub" id="rkpi-google-sub">No reviews yet</div>
+    </div>
+    <div class="review-kpi">
+      <div class="top-bar" style="background:#34983D"></div>
+      <div class="rkpi-label">TripAdvisor Rating</div>
+      <div class="rkpi-value" id="rkpi-ta">—</div>
+      <div class="rkpi-sub" id="rkpi-ta-sub">No reviews yet</div>
+    </div>
+    <div class="review-kpi">
+      <div class="top-bar" style="background:var(--red)"></div>
+      <div class="rkpi-label">Negative This Month</div>
+      <div class="rkpi-value" id="rkpi-neg">—</div>
+      <div class="rkpi-sub" id="rkpi-phone-flag">0 mention phone experience</div>
+    </div>
+  </div>
+
+  <div class="review-tabs">
+    <button class="rev-tab active" id="tab-negative" onclick="switchReviewTab('negative')">Needs Attention</button>
+    <button class="rev-tab" id="tab-all" onclick="switchReviewTab('all')">All Reviews</button>
+    <button class="rev-tab" id="tab-phone" onclick="switchReviewTab('phone')">📞 Phone Mentions</button>
+  </div>
+
+  <div id="review-feed">
+    <div class="state-card">
+      <div class="spinner"></div>
+      <p>Loading reviews…</p>
     </div>
   </div>
 
@@ -965,6 +1078,127 @@
 
   loadData();
   setInterval(loadData, 60000);
+
+  // ── REVIEWS ────────────────────────────────────
+  let allReviews = [];
+  let activeReviewTab = "negative";
+
+  function starsHtml(rating) {
+    if (!rating) return "—";
+    const full = Math.round(rating);
+    return "★".repeat(full) + "☆".repeat(Math.max(0, 5 - full));
+  }
+
+  function reviewClass(rating) {
+    if (!rating) return "neutral";
+    if (rating <= 2) return "negative";
+    if (rating >= 4) return "positive";
+    return "neutral";
+  }
+
+  function buildReviewKPIs(reviews) {
+    const google = reviews.filter(r => r.source === "google");
+    const ta     = reviews.filter(r => r.source === "tripadvisor");
+    const now    = new Date(); const msMonth = 30 * 86400000;
+    const thisMonth = reviews.filter(r => r.fetched_at && (now - new Date(r.fetched_at)) < msMonth);
+    const neg    = thisMonth.filter(r => r.rating && r.rating <= 2);
+    const flagged = reviews.filter(r => r.phone_flag === 1);
+
+    const gAvg = google.length && google.some(r => r.rating)
+      ? (google.filter(r => r.rating).reduce((a, r) => a + r.rating, 0) / google.filter(r => r.rating).length).toFixed(1)
+      : null;
+    const tAvg = ta.length && ta.some(r => r.rating)
+      ? (ta.filter(r => r.rating).reduce((a, r) => a + r.rating, 0) / ta.filter(r => r.rating).length).toFixed(1)
+      : null;
+
+    document.getElementById("rkpi-google").innerHTML = gAvg
+      ? `${gAvg} <span class="stars">${starsHtml(Math.round(gAvg))}</span>` : "—";
+    document.getElementById("rkpi-google-sub").textContent = google.length
+      ? `Based on ${google.length} review${google.length !== 1 ? "s" : ""}` : "No reviews yet";
+
+    document.getElementById("rkpi-ta").innerHTML = tAvg
+      ? `${tAvg} <span class="stars">${starsHtml(Math.round(tAvg))}</span>` : "—";
+    document.getElementById("rkpi-ta-sub").textContent = ta.length
+      ? `Based on ${ta.length} review${ta.length !== 1 ? "s" : ""}` : "No reviews yet";
+
+    document.getElementById("rkpi-neg").textContent = neg.length;
+    document.getElementById("rkpi-phone-flag").textContent =
+      `${flagged.length} mention phone experience`;
+  }
+
+  function buildReviewFeed(reviews) {
+    const feed = document.getElementById("review-feed");
+    if (!reviews.length) {
+      feed.innerHTML = `<div class="state-card"><div class="state-icon">⭐</div><p>No reviews to display.<br><small style="opacity:0.6">Reviews are fetched every Monday. <a href="#" onclick="triggerFetch()" style="color:var(--ocean)">Fetch now</a></small></p></div>`;
+      return;
+    }
+
+    feed.innerHTML = reviews.map(r => {
+      const cls = reviewClass(r.rating);
+      const src = r.source === "google" ? "google" : "tripadvisor";
+      const srcLabel = r.source === "google" ? "Google" : "TripAdvisor";
+      const dateStr = r.published_at
+        ? new Date(r.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+        : (r.fetched_at ? new Date(r.fetched_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—");
+      const phoneBadge = r.phone_flag === 1 ? `<span class="phone-badge">📞 Phone Mention</span>` : "";
+
+      return `<div class="review-card ${cls}">
+        <div class="review-header">
+          <span class="review-author">${r.author || "Anonymous"}</span>
+          <span class="source-badge ${src}">${srcLabel}</span>
+          <span class="stars" style="font-size:0.85rem">${starsHtml(r.rating)}</span>
+          ${phoneBadge}
+          <span class="review-date">${dateStr}</span>
+        </div>
+        <div class="review-text">${r.text || "<em style='opacity:0.5'>No review text.</em>"}</div>
+      </div>`;
+    }).join("");
+  }
+
+  function switchReviewTab(tab) {
+    activeReviewTab = tab;
+    document.querySelectorAll(".rev-tab").forEach(b => b.classList.remove("active"));
+    document.getElementById(`tab-${tab}`).classList.add("active");
+    renderReviews();
+  }
+
+  function renderReviews() {
+    let filtered = [...allReviews];
+    if (activeReviewTab === "negative") filtered = filtered.filter(r => r.rating && r.rating <= 2);
+    if (activeReviewTab === "phone")    filtered = filtered.filter(r => r.phone_flag === 1);
+    filtered.sort((a, b) => new Date(b.fetched_at || 0) - new Date(a.fetched_at || 0));
+    buildReviewFeed(filtered);
+  }
+
+  async function triggerFetch() {
+    try {
+      const res = await fetch(WORKER_URL + "fetch-reviews", { method: "POST" });
+      const data = await res.json();
+      alert(`Fetched ${data.fetched} new reviews. Refreshing…`);
+      await loadReviews();
+    } catch (err) {
+      alert("Fetch failed: " + err.message);
+    }
+  }
+
+  async function loadReviews() {
+    try {
+      const res = await fetch(WORKER_URL + "reviews");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      allReviews = await res.json();
+      buildReviewKPIs(allReviews);
+      renderReviews();
+    } catch (err) {
+      document.getElementById("review-feed").innerHTML = `
+        <div class="state-card">
+          <div class="state-icon">⚠️</div>
+          <p>Could not load reviews.<br><small style="opacity:0.55">${err.message}</small></p>
+        </div>`;
+    }
+  }
+
+  loadReviews();
+  setInterval(loadReviews, 300000); // refresh reviews every 5 min
 </script>
 </body>
 </html>
