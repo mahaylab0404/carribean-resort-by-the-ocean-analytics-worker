@@ -17,7 +17,6 @@
       --burg:       #7A1515;
       --burg-light: rgba(122,21,21,0.07);
       --gold:       #B8892E;
-      --gold-light: rgba(184,137,46,0.1);
       --ocean:      #006E7A;
       --ocean-light:rgba(0,110,122,0.08);
       --navy:       #172448;
@@ -25,7 +24,9 @@
       --text2:      #4A3828;
       --muted:      #7A6650;
       --green:      #1E7A48;
+      --green-light:rgba(30,122,72,0.08);
       --red:        #9E2318;
+      --red-light:  rgba(158,35,24,0.07);
       --amber:      #AD6E18;
       --shadow-sm:  0 1px 4px rgba(28,16,8,0.06);
       --shadow:     0 2px 12px rgba(28,16,8,0.08);
@@ -43,14 +44,9 @@
       line-height: 1.5;
     }
 
-    /* ─── TOPBAR ─────────────────────────────────── */
-    .topbar {
-      background: var(--burg);
-      height: 3px;
-      width: 100%;
-    }
+    .topbar { background: var(--burg); height: 3px; }
 
-    /* ─── HEADER ─────────────────────────────────── */
+    /* ── HEADER ───────────────────────────────────── */
     header {
       background: var(--card);
       border-bottom: 1px solid var(--border);
@@ -65,437 +61,319 @@
       height: 72px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .brand { display: flex; align-items: center; gap: 16px; }
 
-    .brand-icon {
-      width: 42px; height: 42px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+    .brand-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
 
     .brand-text h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--navy);
-      line-height: 1.2;
-      letter-spacing: 0.2px;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--navy); line-height: 1.2; letter-spacing: 0.2px;
     }
 
     .brand-text p {
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      margin-top: 1px;
+      font-size: 0.68rem; color: var(--muted);
+      letter-spacing: 1.8px; text-transform: uppercase; margin-top: 1px;
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
+    .header-right { display: flex; align-items: center; gap: 20px; }
 
-    .header-date {
-      text-align: right;
-    }
-
-    .header-date .date-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--muted);
-    }
-
-    .header-date .date-val {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.95rem;
-      color: var(--text2);
-      margin-top: 1px;
-    }
+    .header-date .date-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+    .header-date .date-val { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--text2); margin-top: 1px; }
 
     .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 0.68rem; color: var(--muted); letter-spacing: 0.5px;
     }
 
     .live-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: pulse 2.5s infinite;
-      flex-shrink: 0;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); animation: pulse 2.5s infinite; flex-shrink: 0;
     }
 
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ─── MAIN ───────────────────────────────────── */
-    main {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 48px 64px;
-    }
+    /* ── MAIN ─────────────────────────────────────── */
+    main { max-width: 1400px; margin: 0 auto; padding: 32px 48px 64px; }
 
-    /* ─── SECTION HEADER ─────────────────────────── */
+    /* ── SECTION HEAD ─────────────────────────────── */
     .section-head {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-      margin-top: 36px;
+      display: flex; align-items: center;
+      margin-bottom: 16px; margin-top: 36px; gap: 12px;
+    }
+    .section-head:first-child { margin-top: 0; }
+    .section-head h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 600; color: var(--navy); white-space: nowrap;
+    }
+    .section-head .rule { flex: 1; height: 1px; background: var(--border); }
+    .section-head .tag { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--gold); white-space: nowrap; }
+
+    /* ── KPI ROW (5 tiles) ────────────────────────── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
     }
 
-    .section-head:first-child { margin-top: 0; }
-
-    .section-head h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--navy);
-      white-space: nowrap;
-    }
-
-    .section-head .rule {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .section-head .tag {
-      font-size: 0.63rem;
-      text-transform: uppercase;
-      letter-spacing: 1.8px;
-      color: var(--gold);
-      white-space: nowrap;
-    }
-
-    /* ─── KPI ROW ────────────────────────────────── */
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
     .kpi-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 22px 24px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 20px 16px;
+      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
       transition: box-shadow 0.2s, transform 0.2s;
     }
+    .kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+    .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
 
-    .kpi-card:hover {
-      box-shadow: var(--shadow);
-      transform: translateY(-1px);
+    .kpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
+    .kpi-value { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
+
+    .kpi-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .kpi-foot-text { font-size: 0.68rem; color: var(--muted); }
+
+    .trend {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 0.68rem; font-weight: 600; padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .trend.up   { background: var(--green-light); color: var(--green); }
+    .trend.down { background: var(--red-light);   color: var(--red); }
+    .trend.flat { background: var(--bg2);          color: var(--muted); }
+
+    /* ── ALERT BANNER (needs follow-up) ──────────── */
+    .alert-banner {
+      background: #FFF8F8;
+      border: 1px solid rgba(158,35,24,0.25);
+      border-left: 4px solid var(--red);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
     }
 
-    .kpi-card .top-bar {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-
-    .kpi-label {
-      font-size: 0.63rem;
-      text-transform: uppercase;
-      letter-spacing: 1.8px;
-      color: var(--muted);
+    .alert-header {
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 12px;
     }
 
-    .kpi-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--navy);
+    .alert-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.78rem; font-weight: 600; color: var(--red);
+      text-transform: uppercase; letter-spacing: 1px;
     }
 
-    .kpi-footer {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
+    .alert-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red); animation: pulse 1.8s infinite;
     }
 
-    .kpi-foot-text {
-      font-size: 0.7rem;
-      color: var(--muted);
+    .alert-count {
+      font-size: 0.68rem; color: var(--red);
+      background: var(--red-light); border: 1px solid rgba(158,35,24,0.2);
+      border-radius: 4px; padding: 2px 8px; font-weight: 500;
     }
 
-    /* ─── CHARTS ─────────────────────────────────── */
+    .alert-cards { display: flex; flex-direction: column; gap: 6px; }
+
+    .alert-card {
+      background: var(--card); border: 1px solid rgba(158,35,24,0.15);
+      border-radius: 8px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer;
+      transition: box-shadow 0.15s;
+    }
+    .alert-card:hover { box-shadow: var(--shadow); }
+
+    .alert-card .ac-num  { font-weight: 600; font-size: 0.82rem; min-width: 130px; }
+    .alert-card .ac-cat  { font-size: 0.72rem; color: var(--muted); flex: 1; }
+    .alert-card .ac-snip { font-size: 0.75rem; color: var(--muted); font-style: italic; flex: 3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px; }
+    .alert-card .ac-time { font-size: 0.68rem; color: var(--muted); white-space: nowrap; text-align: right; min-width: 80px; }
+
+    .alert-empty { font-size: 0.8rem; color: var(--green); padding: 6px 2px; display: flex; align-items: center; gap: 6px; }
+
+    /* ── CHARTS ───────────────────────────────────── */
     .charts-row {
       display: grid;
-      grid-template-columns: 5fr 3fr;
-      gap: 14px;
+      grid-template-columns: 4fr 2fr 3fr;
+      gap: 12px;
     }
 
     .chart-card {
-      background: var(--card);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px; box-shadow: var(--shadow-sm);
+    }
+
+    .chart-card-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 18px; }
+    .chart-wrap { position: relative; height: 190px; }
+
+    /* ── FILTER BAR ───────────────────────────────── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+
+    .filter-label { font-size: 0.68rem; color: var(--muted); margin-right: 2px; white-space: nowrap; }
+
+    .filter-group { display: flex; gap: 4px; }
+
+    .f-btn {
+      font-size: 0.68rem; font-weight: 500;
+      padding: 5px 12px; border-radius: 6px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 28px;
-      box-shadow: var(--shadow-sm);
+      background: var(--card); color: var(--muted);
+      cursor: pointer; transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
     }
+    .f-btn:hover { border-color: var(--border2); color: var(--text2); }
+    .f-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 
-    .chart-card-title {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 1.8px;
-      color: var(--muted);
-      margin-bottom: 20px;
+    .f-select {
+      font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--muted); cursor: pointer; font-family: 'Inter', sans-serif;
+      outline: none;
     }
+    .f-select:focus { border-color: var(--border2); }
 
-    .chart-wrap { position: relative; height: 200px; }
+    .filter-spacer { flex: 1; }
 
-    /* ─── CALL FEED ──────────────────────────────── */
+    /* ── FEED META ────────────────────────────────── */
     .feed-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 10px;
     }
 
     .feed-count-badge {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-size: 0.68rem;
-      color: var(--muted);
-      font-weight: 500;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 3px 10px;
+      font-size: 0.68rem; color: var(--muted); font-weight: 500;
     }
 
-    /* ─── CALL CARD ──────────────────────────────── */
-    .call-card {
-      background: var(--card);
+    .export-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.68rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 6px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
+      background: var(--card); color: var(--text2);
+      cursor: pointer; transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .export-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    /* ── CALL CARD ────────────────────────────────── */
+    .call-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 7px; overflow: hidden;
+      cursor: pointer; box-shadow: var(--shadow-sm);
       transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
     }
+    .call-card:hover { box-shadow: var(--shadow); border-color: var(--border2); transform: translateY(-1px); }
+    .call-card.open  { border-color: var(--gold); }
 
-    .call-card:hover {
-      box-shadow: var(--shadow);
-      border-color: var(--border2);
-      transform: translateY(-1px);
-    }
+    .call-card-body { display: grid; grid-template-columns: 4px 1fr auto; align-items: stretch; }
+    .sent-bar { width: 4px; align-self: stretch; }
 
-    .call-card.open {
-      border-color: var(--gold);
-    }
+    .call-main { display: flex; align-items: center; gap: 18px; padding: 13px 16px; }
 
-    .call-card-body {
-      display: grid;
-      grid-template-columns: 4px 1fr auto;
-      align-items: stretch;
-    }
+    .caller-info { min-width: 155px; }
+    .caller-num  { font-weight: 600; font-size: 0.84rem; color: var(--text); letter-spacing: 0.2px; }
+    .caller-name-text { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
 
-    .sent-bar {
-      border-radius: 0;
-      width: 4px;
-      align-self: stretch;
-    }
-
-    .call-main {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 14px 18px;
-    }
-
-    .caller-info { min-width: 160px; }
-
-    .caller-num {
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: var(--text);
-      letter-spacing: 0.2px;
-    }
-
-    .caller-name-text {
-      font-size: 0.71rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      flex: 1;
-      align-items: center;
-    }
+    .pills { display: flex; flex-wrap: wrap; gap: 5px; flex: 1; align-items: center; }
 
     .pill {
-      font-size: 0.65rem;
-      font-weight: 500;
-      padding: 3px 9px;
-      border-radius: 4px;
-      letter-spacing: 0.2px;
-      border: 1px solid transparent;
+      font-size: 0.64rem; font-weight: 500;
+      padding: 3px 8px; border-radius: 4px;
+      letter-spacing: 0.2px; border: 1px solid transparent;
     }
-
-    .pill-ok   { background: rgba(30,122,72,0.08); color: var(--green); border-color: rgba(30,122,72,0.2); }
-    .pill-fail { background: rgba(158,35,24,0.08); color: var(--red);   border-color: rgba(158,35,24,0.2); }
-    .pill-cat  { background: var(--ocean-light); color: var(--ocean);   border-color: rgba(0,110,122,0.2); }
-    .pill-dur  { background: var(--burg-light);  color: var(--burg);    border-color: rgba(122,21,21,0.15);}
+    .pill-ok   { background: var(--green-light); color: var(--green); border-color: rgba(30,122,72,0.2); }
+    .pill-fail { background: var(--red-light);   color: var(--red);   border-color: rgba(158,35,24,0.2); }
+    .pill-cat  { background: var(--ocean-light);  color: var(--ocean); border-color: rgba(0,110,122,0.2); }
+    .pill-dur  { background: var(--burg-light);   color: var(--burg);  border-color: rgba(122,21,21,0.15); }
 
     .transcript-snip {
-      flex: 2;
-      font-size: 0.77rem;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 340px;
-      font-style: italic;
+      flex: 2; font-size: 0.76rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 340px; font-style: italic;
     }
 
     .call-time-col {
-      padding: 14px 18px 14px 0;
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 3px;
-      min-width: 90px;
+      padding: 13px 16px 13px 0; text-align: right;
+      display: flex; flex-direction: column; align-items: flex-end;
+      justify-content: center; gap: 3px; min-width: 88px;
     }
-
-    .call-time-day  { font-size: 0.65rem; color: var(--muted); }
-    .call-time-hr   { font-size: 0.78rem; font-weight: 500; color: var(--text2); }
+    .call-time-day { font-size: 0.64rem; color: var(--muted); }
+    .call-time-hr  { font-size: 0.77rem; font-weight: 500; color: var(--text2); }
 
     .chevron {
-      color: var(--border2);
-      font-size: 1rem;
-      margin-left: 10px;
-      transition: transform 0.2s, color 0.2s;
-      line-height: 1;
+      color: var(--border2); font-size: 1rem; margin-left: 8px;
+      transition: transform 0.2s, color 0.2s; line-height: 1;
     }
-
     .call-card.open .chevron { transform: rotate(90deg); color: var(--gold); }
 
-    /* ─── TRANSCRIPT EXPAND ──────────────────────── */
+    /* ── TRANSCRIPT ───────────────────────────────── */
     .call-expand {
-      display: none;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      padding: 16px 22px 20px 22px;
+      display: none; background: var(--bg);
+      border-top: 1px solid var(--border); padding: 14px 20px 18px;
     }
-
     .call-card.open .call-expand { display: block; }
 
-    .expand-label {
-      font-size: 0.62rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
+    .expand-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 12px; }
 
-    .bubble-feed { display: flex; flex-direction: column; gap: 8px; }
+    .bubble-feed { display: flex; flex-direction: column; gap: 7px; }
 
     .bubble {
-      max-width: 65%;
-      padding: 9px 14px;
-      font-size: 0.8rem;
-      line-height: 1.55;
-      border-radius: 10px;
+      max-width: 65%; padding: 9px 13px;
+      font-size: 0.79rem; line-height: 1.55; border-radius: 10px;
     }
-
     .bubble.agent {
-      background: var(--ocean-light);
-      border: 1px solid rgba(0,110,122,0.18);
-      color: var(--text);
-      align-self: flex-start;
-      border-bottom-left-radius: 3px;
+      background: var(--ocean-light); border: 1px solid rgba(0,110,122,0.18);
+      color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px;
     }
-
     .bubble.user {
-      background: var(--burg-light);
-      border: 1px solid rgba(122,21,21,0.15);
-      color: var(--text);
-      align-self: flex-end;
-      border-bottom-right-radius: 3px;
+      background: var(--burg-light); border: 1px solid rgba(122,21,21,0.15);
+      color: var(--text); align-self: flex-end; border-bottom-right-radius: 3px;
     }
+    .bubble-sender { font-size: 0.59rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; margin-bottom: 3px; font-weight: 600; }
 
-    .bubble-sender {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      opacity: 0.5;
-      margin-bottom: 4px;
-      font-weight: 600;
-    }
-
-    /* ─── EMPTY / LOADING ────────────────────────── */
+    /* ── EMPTY / LOADING ──────────────────────────── */
     .state-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      padding: 56px 24px;
-      color: var(--muted);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; box-shadow: var(--shadow-sm);
+      text-align: center; padding: 52px 24px; color: var(--muted);
     }
-
-    .state-card .state-icon { font-size: 2.8rem; margin-bottom: 12px; opacity: 0.6; }
-    .state-card p { font-size: 0.85rem; line-height: 1.6; }
+    .state-card .state-icon { font-size: 2.6rem; margin-bottom: 12px; opacity: 0.6; }
+    .state-card p { font-size: 0.84rem; line-height: 1.6; }
 
     .spinner {
-      width: 28px; height: 28px;
-      border: 2px solid var(--border);
-      border-top-color: var(--burg);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto 12px;
+      width: 28px; height: 28px; border: 2px solid var(--border);
+      border-top-color: var(--burg); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 0 auto 12px;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ─── FOOTER ─────────────────────────────────── */
+    /* ── FOOTER ───────────────────────────────────── */
     footer {
-      text-align: center;
-      padding: 20px 48px;
+      text-align: center; padding: 20px 48px;
       border-top: 1px solid var(--border);
-      font-size: 0.68rem;
-      color: var(--muted);
-      background: var(--bg2);
-      letter-spacing: 0.3px;
+      font-size: 0.68rem; color: var(--muted);
+      background: var(--bg2); letter-spacing: 0.3px;
     }
-
     footer b { color: var(--burg); }
 
-    /* ─── RESPONSIVE ─────────────────────────────── */
-    @media (max-width: 1024px) {
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media (max-width: 1100px) {
       header, main, footer { padding-left: 24px; padding-right: 24px; }
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .charts-row { grid-template-columns: 1fr 1fr; }
+      .charts-row .chart-card:last-child { grid-column: span 2; }
+    }
+    @media (max-width: 700px) {
       .kpi-row { grid-template-columns: repeat(2, 1fr); }
       .charts-row { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
+      .charts-row .chart-card:last-child { grid-column: auto; }
       .transcript-snip { display: none; }
-      .kpi-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -503,29 +381,22 @@
 
 <div class="topbar"></div>
 
-<!-- HEADER -->
 <header>
   <div class="header-inner">
     <div class="brand">
       <div class="brand-icon">
-        <!-- Caribbean Resort logo: two crossed palms on brown -->
         <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="42" height="42" rx="8" fill="#7B3A2A"/>
-          <!-- Left palm trunk -->
           <path d="M17 36 C16 28 13 22 10 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Right palm trunk -->
           <path d="M25 36 C26 28 29 22 32 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Left palm fronds -->
           <path d="M10 16 C7 12 4 13 3 10 C6 10 9 12 10 16Z" fill="#D4C4B0"/>
           <path d="M10 16 C9 11 11 8 10 5 C12 7 12 12 10 16Z" fill="#D4C4B0"/>
           <path d="M10 16 C13 12 14 9 16 8 C15 11 13 14 10 16Z" fill="#D4C4B0"/>
           <path d="M10 16 C12 14 15 14 17 13 C15 16 12 16 10 16Z" fill="#D4C4B0"/>
-          <!-- Right palm fronds -->
           <path d="M32 16 C35 12 38 13 39 10 C36 10 33 12 32 16Z" fill="#D4C4B0"/>
           <path d="M32 16 C33 11 31 8 32 5 C30 7 30 12 32 16Z" fill="#D4C4B0"/>
           <path d="M32 16 C29 12 28 9 26 8 C27 11 29 14 32 16Z" fill="#D4C4B0"/>
           <path d="M32 16 C30 14 27 14 25 13 C27 16 30 16 32 16Z" fill="#D4C4B0"/>
-          <!-- Cross detail at base where trunks meet -->
           <path d="M17 30 C20 27 22 27 25 30" stroke="#D4C4B0" stroke-width="1.5" stroke-linecap="round" fill="none"/>
         </svg>
       </div>
@@ -547,10 +418,9 @@
   </div>
 </header>
 
-<!-- MAIN -->
 <main>
 
-  <!-- KPI -->
+  <!-- ── KPI ROW ── -->
   <div class="section-head">
     <h2>Overview</h2>
     <div class="rule"></div>
@@ -562,29 +432,70 @@
       <div class="top-bar" style="background:var(--ocean)"></div>
       <div class="kpi-label">Total Calls</div>
       <div class="kpi-value" id="kpi-total">—</div>
-      <div class="kpi-footer"><span class="kpi-foot-text">All time</span></div>
+      <div class="kpi-footer">
+        <span class="kpi-foot-text">All time</span>
+        <span class="trend flat" id="trend-total">—</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="top-bar" style="background:#2A7A5C"></div>
+      <div class="kpi-label">Hours Saved</div>
+      <div class="kpi-value" id="kpi-hours">—</div>
+      <div class="kpi-footer">
+        <span class="kpi-foot-text">Front desk labor</span>
+        <span class="trend flat" id="trend-hours">—</span>
+      </div>
     </div>
     <div class="kpi-card">
       <div class="top-bar" style="background:var(--burg)"></div>
       <div class="kpi-label">Avg Duration</div>
       <div class="kpi-value" id="kpi-duration">—</div>
-      <div class="kpi-footer"><span class="kpi-foot-text">Per call</span></div>
+      <div class="kpi-footer">
+        <span class="kpi-foot-text">Per call</span>
+        <span class="trend flat" id="trend-duration">—</span>
+      </div>
     </div>
     <div class="kpi-card">
       <div class="top-bar" style="background:var(--green)"></div>
       <div class="kpi-label">Completion Rate</div>
       <div class="kpi-value" id="kpi-completion">—</div>
-      <div class="kpi-footer"><span class="kpi-foot-text">Successfully handled</span></div>
+      <div class="kpi-footer">
+        <span class="kpi-foot-text">Fully handled</span>
+        <span class="trend flat" id="trend-completion">—</span>
+      </div>
     </div>
     <div class="kpi-card">
       <div class="top-bar" style="background:var(--gold)"></div>
       <div class="kpi-label">Positive Sentiment</div>
       <div class="kpi-value" id="kpi-sentiment">—</div>
-      <div class="kpi-footer"><span class="kpi-foot-text">Satisfied guests</span></div>
+      <div class="kpi-footer">
+        <span class="kpi-foot-text">Satisfied guests</span>
+        <span class="trend flat" id="trend-sentiment">—</span>
+      </div>
     </div>
   </div>
 
-  <!-- CHARTS -->
+  <!-- ── NEEDS FOLLOW-UP ── -->
+  <div class="section-head" style="margin-top:32px">
+    <h2>Needs Follow-Up</h2>
+    <div class="rule"></div>
+    <div class="tag">Negative Sentiment</div>
+  </div>
+
+  <div class="alert-banner">
+    <div class="alert-header">
+      <div class="alert-title">
+        <span class="alert-dot"></span>
+        Guests requiring attention
+      </div>
+      <div class="alert-count" id="alert-count">0 calls</div>
+    </div>
+    <div class="alert-cards" id="alert-feed">
+      <div class="alert-empty">✓ No negative calls at this time</div>
+    </div>
+  </div>
+
+  <!-- ── CHARTS ── -->
   <div class="section-head">
     <h2>Analytics</h2>
     <div class="rule"></div>
@@ -593,25 +504,54 @@
 
   <div class="charts-row">
     <div class="chart-card">
-      <div class="chart-card-title">Call Volume</div>
+      <div class="chart-card-title">Call Volume — Daily</div>
       <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="chart-card-title">Issues by Category</div>
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
     </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Busiest Hours of Day</div>
+      <div class="chart-wrap"><canvas id="hourChart"></canvas></div>
+    </div>
   </div>
 
-  <!-- FEED -->
+  <!-- ── CALL LOG ── -->
   <div class="section-head">
     <h2>Guest Interaction Log</h2>
     <div class="rule"></div>
     <div class="tag">Recent Calls</div>
   </div>
 
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Sentiment:</span>
+    <div class="filter-group" id="filter-sentiment">
+      <button class="f-btn active" data-val="all">All</button>
+      <button class="f-btn" data-val="positive">Positive</button>
+      <button class="f-btn" data-val="neutral">Neutral</button>
+      <button class="f-btn" data-val="negative">Negative</button>
+    </div>
+    <span class="filter-label" style="margin-left:8px">Category:</span>
+    <select class="f-select" id="filter-category">
+      <option value="all">All Categories</option>
+    </select>
+    <span class="filter-label" style="margin-left:8px">Period:</span>
+    <div class="filter-group" id="filter-date">
+      <button class="f-btn active" data-val="all">All</button>
+      <button class="f-btn" data-val="today">Today</button>
+      <button class="f-btn" data-val="week">This Week</button>
+      <button class="f-btn" data-val="month">This Month</button>
+    </div>
+    <div class="filter-spacer"></div>
+  </div>
+
   <div class="feed-meta">
-    <div style="font-size:0.72rem;color:var(--muted)">Click any card to expand the full transcript</div>
     <div class="feed-count-badge" id="feed-count">0 calls</div>
+    <button class="export-btn" onclick="exportCSV()">
+      ↓ Export CSV
+    </button>
   </div>
 
   <div id="call-feed">
@@ -630,7 +570,10 @@
 <script>
   const WORKER_URL = "https://carribean-resort-by-the-ocean-analytics-worker.mahaylabalentine04.workers.dev/";
 
-  // Clock
+  let allCalls = [];
+  let activeFilters = { sentiment: "all", category: "all", date: "all" };
+
+  // ── CLOCK ──────────────────────────────────────
   function updateClock() {
     document.getElementById("clock").textContent = new Date().toLocaleDateString("en-US", {
       weekday: "long", month: "long", day: "numeric", year: "numeric"
@@ -639,21 +582,28 @@
   updateClock();
   setInterval(updateClock, 60000);
 
-  // Helpers
+  // ── HELPERS ────────────────────────────────────
   function fmtDuration(s) {
     if (!s) return "—";
     const m = Math.floor(s / 60), r = s % 60;
     return m > 0 ? `${m}m ${r}s` : `${r}s`;
   }
 
+  function fmtHours(totalSecs) {
+    const h = totalSecs / 3600;
+    if (h >= 10) return `${Math.round(h)}h`;
+    if (h >= 1)  return `${h.toFixed(1)}h`;
+    return `${Math.round(totalSecs / 60)}m`;
+  }
+
   function fmtTime(iso) {
+    if (!iso) return { day: "—", time: "—" };
     const d = new Date(iso);
     const today = new Date();
     const day = d.toDateString() === today.toDateString()
       ? "Today"
       : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-    return { day, time };
+    return { day, time: d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) };
   }
 
   function sentColor(s) {
@@ -664,25 +614,119 @@
     return "var(--amber)";
   }
 
-  // Charts
-  let lineChart, donutChart;
+  function dayKey(iso) {
+    if (!iso) return "";
+    return iso.includes("T") ? iso.split("T")[0] : iso.split(" ")[0];
+  }
+
+  function hourOf(iso) {
+    if (!iso) return -1;
+    return new Date(iso).getHours();
+  }
+
+  // ── TREND ──────────────────────────────────────
+  function trendArrow(thisWeek, lastWeek) {
+    if (lastWeek === 0 && thisWeek === 0) return { cls: "flat", label: "—" };
+    if (lastWeek === 0) return { cls: "up", label: "↑ New" };
+    const pct = Math.round(((thisWeek - lastWeek) / lastWeek) * 100);
+    if (pct > 0)  return { cls: "up",   label: `↑ ${pct}%` };
+    if (pct < 0)  return { cls: "down", label: `↓ ${Math.abs(pct)}%` };
+    return { cls: "flat", label: "→ 0%" };
+  }
+
+  function setTrend(id, thisWeek, lastWeek) {
+    const { cls, label } = trendArrow(thisWeek, lastWeek);
+    const el = document.getElementById(id);
+    el.className = `trend ${cls}`;
+    el.textContent = label;
+  }
+
+  // ── KPIs + TRENDS ──────────────────────────────
+  function buildKPIs(calls) {
+    const now = new Date();
+    const msPerDay = 86400000;
+    const thisWeek = calls.filter(c => c.created_at && (now - new Date(c.created_at)) < 7  * msPerDay);
+    const lastWeek = calls.filter(c => c.created_at && (now - new Date(c.created_at)) >= 7 * msPerDay && (now - new Date(c.created_at)) < 14 * msPerDay);
+
+    // Total calls
+    document.getElementById("kpi-total").textContent = calls.length || "0";
+    setTrend("trend-total", thisWeek.length, lastWeek.length);
+
+    // Hours saved
+    const totalSecs = calls.filter(c => c.duration).reduce((a, c) => a + c.duration, 0);
+    const twSecs    = thisWeek.filter(c => c.duration).reduce((a, c) => a + c.duration, 0);
+    const lwSecs    = lastWeek.filter(c => c.duration).reduce((a, c) => a + c.duration, 0);
+    document.getElementById("kpi-hours").textContent = fmtHours(totalSecs);
+    setTrend("trend-hours", twSecs, lwSecs);
+
+    // Avg duration
+    const withDur = calls.filter(c => c.duration);
+    const avg = withDur.length ? Math.round(withDur.reduce((a, c) => a + c.duration, 0) / withDur.length) : 0;
+    const twAvg = thisWeek.filter(c=>c.duration).length ? Math.round(thisWeek.filter(c=>c.duration).reduce((a,c)=>a+c.duration,0)/thisWeek.filter(c=>c.duration).length) : 0;
+    const lwAvg = lastWeek.filter(c=>c.duration).length ? Math.round(lastWeek.filter(c=>c.duration).reduce((a,c)=>a+c.duration,0)/lastWeek.filter(c=>c.duration).length) : 0;
+    document.getElementById("kpi-duration").textContent = fmtDuration(avg);
+    setTrend("trend-duration", twAvg, lwAvg);
+
+    // Completion
+    const done = calls.filter(c => c.status === "completed").length;
+    const compPct = calls.length ? Math.round((done / calls.length) * 100) : 0;
+    document.getElementById("kpi-completion").textContent = calls.length ? `${compPct}%` : "—";
+    const twDone = thisWeek.filter(c=>c.status==="completed").length;
+    const lwDone = lastWeek.filter(c=>c.status==="completed").length;
+    const twComp = thisWeek.length ? Math.round((twDone/thisWeek.length)*100) : 0;
+    const lwComp = lastWeek.length ? Math.round((lwDone/lastWeek.length)*100) : 0;
+    setTrend("trend-completion", twComp, lwComp);
+
+    // Positive sentiment
+    const pos = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "positive").length;
+    const sentPct = calls.length ? Math.round((pos / calls.length) * 100) : 0;
+    document.getElementById("kpi-sentiment").textContent = calls.length ? `${sentPct}%` : "—";
+    const twPos = thisWeek.filter(c=>c.sentiment&&c.sentiment.toLowerCase()==="positive").length;
+    const lwPos = lastWeek.filter(c=>c.sentiment&&c.sentiment.toLowerCase()==="positive").length;
+    const twSent = thisWeek.length ? Math.round((twPos/thisWeek.length)*100) : 0;
+    const lwSent = lastWeek.length ? Math.round((lwPos/lastWeek.length)*100) : 0;
+    setTrend("trend-sentiment", twSent, lwSent);
+  }
+
+  // ── NEEDS FOLLOW-UP ────────────────────────────
+  function buildAlerts(calls) {
+    const neg = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "negative");
+    const el = document.getElementById("alert-feed");
+    const cnt = document.getElementById("alert-count");
+    cnt.textContent = `${neg.length} call${neg.length !== 1 ? "s" : ""}`;
+
+    if (!neg.length) {
+      el.innerHTML = `<div class="alert-empty">✓ No negative calls at this time — guests are happy!</div>`;
+      return;
+    }
+
+    el.innerHTML = neg.slice(0, 5).map(c => {
+      const { day, time } = fmtTime(c.created_at);
+      const snip = c.transcript
+        ? c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 100)
+        : "No transcript";
+      return `<div class="alert-card">
+        <div class="ac-num">${c.caller_phone || "Unknown"}</div>
+        <div class="ac-cat">${c.issue_category || "General"}</div>
+        <div class="ac-snip">"${snip}…"</div>
+        <div class="ac-time">${day} · ${time}</div>
+      </div>`;
+    }).join("") + (neg.length > 5 ? `<div style="font-size:0.72rem;color:var(--muted);padding:6px 2px">+${neg.length - 5} more — scroll call log below</div>` : "");
+  }
+
+  // ── CHARTS ─────────────────────────────────────
+  let lineChart, donutChart, hourChart;
 
   function buildCharts(calls) {
+    // Line chart
     const now = new Date();
     const days = Array.from({ length: 30 }, (_, i) => {
-      const d = new Date(now);
-      d.setDate(d.getDate() - (29 - i));
+      const d = new Date(now); d.setDate(d.getDate() - (29 - i));
       return d.toISOString().split("T")[0];
     });
-
     const counts = {};
     days.forEach(d => counts[d] = 0);
-    calls.forEach(c => {
-      const raw = (c.created_at || "");
-      const day = raw.includes("T") ? raw.split("T")[0] : raw.split(" ")[0];
-      if (day && counts[day] !== undefined) counts[day]++;
-    });
-
+    calls.forEach(c => { const k = dayKey(c.created_at); if (k && counts[k] !== undefined) counts[k]++; });
     const labels = days.map(d => { const [,m,dd] = d.split("-"); return `${m}/${dd}`; });
 
     if (lineChart) lineChart.destroy();
@@ -692,15 +736,9 @@
         labels,
         datasets: [{
           data: days.map(d => counts[d]),
-          borderColor: "#006E7A",
-          backgroundColor: "rgba(0,110,122,0.06)",
-          borderWidth: 2,
-          pointRadius: 3,
-          pointBackgroundColor: "#006E7A",
-          pointBorderColor: "#fff",
-          pointBorderWidth: 2,
-          fill: true,
-          tension: 0.4,
+          borderColor: "#006E7A", backgroundColor: "rgba(0,110,122,0.06)",
+          borderWidth: 2, pointRadius: 3, pointBackgroundColor: "#006E7A",
+          pointBorderColor: "#fff", pointBorderWidth: 2, fill: true, tension: 0.4,
         }]
       },
       options: {
@@ -713,11 +751,9 @@
       }
     });
 
+    // Donut chart
     const cats = {};
-    calls.forEach(c => {
-      const k = c.issue_category || "Uncategorized";
-      cats[k] = (cats[k] || 0) + 1;
-    });
+    calls.forEach(c => { const k = c.issue_category || "Uncategorized"; cats[k] = (cats[k] || 0) + 1; });
     const catKeys = Object.keys(cats);
 
     if (donutChart) donutChart.destroy();
@@ -728,47 +764,116 @@
         datasets: [{
           data: catKeys.map(k => cats[k]),
           backgroundColor: ["#7A1515","#006E7A","#B8892E","#172448","#1E7A48","#AD6E18"],
-          borderColor: "#FFFFFF",
-          borderWidth: 3,
+          borderColor: "#FFFFFF", borderWidth: 3,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: "60%",
+        plugins: { legend: { position: "bottom", labels: { color: "#7A6650", font: { size: 10 }, padding: 10, boxWidth: 10 } } }
+      }
+    });
+
+    // Hour chart
+    const hourCounts = Array(24).fill(0);
+    calls.forEach(c => { const h = hourOf(c.created_at); if (h >= 0) hourCounts[h]++; });
+    const hourLabels = Array.from({ length: 24 }, (_, i) => {
+      if (i === 0) return "12a"; if (i === 12) return "12p";
+      return i < 12 ? `${i}a` : `${i - 12}p`;
+    });
+
+    if (hourChart) hourChart.destroy();
+    hourChart = new Chart(document.getElementById("hourChart"), {
+      type: "bar",
+      data: {
+        labels: hourLabels,
+        datasets: [{
+          data: hourCounts,
+          backgroundColor: hourCounts.map(v => v === Math.max(...hourCounts) ? "#7A1515" : "rgba(0,110,122,0.5)"),
+          borderRadius: 4, borderSkipped: false,
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        cutout: "60%",
-        plugins: {
-          legend: {
-            position: "bottom",
-            labels: { color: "#7A6650", font: { size: 11 }, padding: 12, boxWidth: 11 }
-          }
+        plugins: { legend: { display: false }, tooltip: {
+          callbacks: { title: i => `${i[0].label}`, label: i => `${i.raw} call${i.raw !== 1 ? "s" : ""}` }
+        }},
+        scales: {
+          x: { grid: { display: false }, ticks: { color: "#7A6650", font: { size: 10 }, maxTicksLimit: 12 } },
+          y: { grid: { color: "#E2D5C3" }, ticks: { color: "#7A6650", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
         }
       }
     });
   }
 
-  // KPIs
-  function buildKPIs(calls) {
-    document.getElementById("kpi-total").textContent = calls.length || "0";
-
-    const withDur = calls.filter(c => c.duration);
-    const avg = withDur.length ? Math.round(withDur.reduce((a,c) => a + c.duration, 0) / withDur.length) : 0;
-    document.getElementById("kpi-duration").textContent = fmtDuration(avg);
-
-    const done = calls.filter(c => c.status === "completed").length;
-    document.getElementById("kpi-completion").textContent =
-      calls.length ? `${Math.round((done / calls.length) * 100)}%` : "—";
-
-    const pos = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "positive").length;
-    document.getElementById("kpi-sentiment").textContent =
-      calls.length ? `${Math.round((pos / calls.length) * 100)}%` : "—";
+  // ── FILTERS ────────────────────────────────────
+  function populateCategoryFilter(calls) {
+    const sel = document.getElementById("filter-category");
+    const cats = [...new Set(calls.map(c => c.issue_category).filter(Boolean))].sort();
+    const existing = [...sel.options].map(o => o.value);
+    cats.forEach(cat => {
+      if (!existing.includes(cat)) {
+        const o = document.createElement("option");
+        o.value = cat; o.textContent = cat;
+        sel.appendChild(o);
+      }
+    });
   }
 
-  // Feed
+  function applyFilters() {
+    let filtered = [...allCalls];
+
+    if (activeFilters.sentiment !== "all")
+      filtered = filtered.filter(c => c.sentiment && c.sentiment.toLowerCase() === activeFilters.sentiment);
+
+    if (activeFilters.category !== "all")
+      filtered = filtered.filter(c => c.issue_category === activeFilters.category);
+
+    if (activeFilters.date !== "all") {
+      const now = new Date(); const msDay = 86400000;
+      filtered = filtered.filter(c => {
+        if (!c.created_at) return false;
+        const diff = now - new Date(c.created_at);
+        if (activeFilters.date === "today") return diff < msDay;
+        if (activeFilters.date === "week")  return diff < 7 * msDay;
+        if (activeFilters.date === "month") return diff < 30 * msDay;
+        return true;
+      });
+    }
+
+    buildFeed(filtered);
+  }
+
+  // Sentiment buttons
+  document.getElementById("filter-sentiment").addEventListener("click", e => {
+    if (!e.target.classList.contains("f-btn")) return;
+    document.querySelectorAll("#filter-sentiment .f-btn").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+    activeFilters.sentiment = e.target.dataset.val;
+    applyFilters();
+  });
+
+  // Date buttons
+  document.getElementById("filter-date").addEventListener("click", e => {
+    if (!e.target.classList.contains("f-btn")) return;
+    document.querySelectorAll("#filter-date .f-btn").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+    activeFilters.date = e.target.dataset.val;
+    applyFilters();
+  });
+
+  // Category dropdown
+  document.getElementById("filter-category").addEventListener("change", e => {
+    activeFilters.category = e.target.value;
+    applyFilters();
+  });
+
+  // ── CALL FEED ──────────────────────────────────
   function buildFeed(calls) {
     const feed = document.getElementById("call-feed");
     document.getElementById("feed-count").textContent = `${calls.length} call${calls.length !== 1 ? "s" : ""}`;
 
     if (!calls.length) {
-      feed.innerHTML = `<div class="state-card"><div class="state-icon">🏖️</div><p>No calls recorded yet.<br>The AI receptionist is standing by.</p></div>`;
+      feed.innerHTML = `<div class="state-card"><div class="state-icon">🏖️</div><p>No calls match the current filters.</p></div>`;
       return;
     }
 
@@ -780,9 +885,7 @@
       const cPill = c.issue_category ? `<span class="pill pill-cat">${c.issue_category}</span>` : "";
       const dPill = c.duration ? `<span class="pill pill-dur">${fmtDuration(c.duration)}</span>` : "";
       const { day, time } = fmtTime(c.created_at);
-      const snip = c.transcript
-        ? `"${c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 90)}…"`
-        : "No transcript available.";
+      const snip = c.transcript ? `"${c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 90)}…"` : "No transcript.";
 
       let bubbles = "";
       if (c.transcript) {
@@ -790,10 +893,9 @@
           const ci = line.indexOf(":");
           if (ci === -1) return "";
           const role = line.slice(0, ci).trim().toLowerCase();
-          const msg = line.slice(ci + 1).trim();
-          const cls = (role === "agent" || role === "assistant") ? "agent" : "user";
-          const sender = cls === "agent" ? "AI Receptionist" : "Guest";
-          return `<div class="bubble ${cls}"><div class="bubble-sender">${sender}</div>${msg}</div>`;
+          const msg  = line.slice(ci + 1).trim();
+          const cls  = (role === "agent" || role === "assistant") ? "agent" : "user";
+          return `<div class="bubble ${cls}"><div class="bubble-sender">${cls === "agent" ? "AI Receptionist" : "Guest"}</div>${msg}</div>`;
         }).join("");
       }
 
@@ -822,15 +924,35 @@
     }).join("");
   }
 
-  // Load
+  // ── EXPORT CSV ─────────────────────────────────
+  function exportCSV() {
+    const headers = ["ID","Conversation ID","Caller Phone","Caller Name","Status","Duration (s)","Category","Sentiment","Created At","Transcript"];
+    const rows = allCalls.map(c => [
+      c.id, c.conversation_id,
+      c.caller_phone || "", c.caller_name || "",
+      c.status || "", c.duration || "",
+      c.issue_category || "", c.sentiment || "",
+      c.created_at || "",
+      `"${(c.transcript || "").replace(/"/g, "'")}"`
+    ]);
+    const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `caribbean-resort-calls-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  }
+
+  // ── LOAD ───────────────────────────────────────
   async function loadData() {
     try {
       const res = await fetch(WORKER_URL);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const calls = await res.json();
-      buildKPIs(calls);
-      buildCharts(calls);
-      buildFeed(calls);
+      allCalls = await res.json();
+      buildKPIs(allCalls);
+      buildAlerts(allCalls);
+      buildCharts(allCalls);
+      populateCategoryFilter(allCalls);
+      applyFilters();
     } catch (err) {
       document.getElementById("call-feed").innerHTML = `
         <div class="state-card">
