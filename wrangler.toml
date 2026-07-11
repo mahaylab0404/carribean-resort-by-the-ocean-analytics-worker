@@ -2,11 +2,7 @@ name = "hotel-analytics-worker"
 main = "index.js"
 compatibility_date = "2025-01-01"
 
-# Add your Cloudflare Account ID here (Cloudflare Dashboard → top-right account menu)
-# account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "hotel-analytics-db"
-# Add your D1 database_id here (Cloudflare Dashboard → D1 → hotel-analytics-db)
-database_id = "YOUR_D1_DATABASE_ID"
+database_id = "1b464788-6e58-4096-a50c-3fcdfeb75975"
