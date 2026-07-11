@@ -1169,6 +1169,10 @@
           <span class="review-date">${dateStr}</span>
         </div>
         <div class="review-text">${r.text || "<em style='opacity:0.5'>No review text.</em>"}</div>
+        ${r.suggestion ? `<div class="review-suggestion">
+          <span class="sug-icon">💡</span>
+          <div><span class="sug-label">Management Suggestion</span>${r.suggestion}</div>
+        </div>` : ""}
       </div>`;
     }).join("");
   }

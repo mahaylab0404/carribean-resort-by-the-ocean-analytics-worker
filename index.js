@@ -36,22 +36,91 @@ function phoneFlag(text) {
   return PHONE_ISSUE_PATTERNS.some(p => p.test(text)) ? 1 : 0;
 }
 
-// Generate a tailored suggestion using Cloudflare Workers AI
+// ── AWS Signature V4 helpers (Web Crypto API) ───────
+async function hmacSHA256(key, data) {
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw", typeof key === "string" ? new TextEncoder().encode(key) : key,
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+  );
+  return crypto.subtle.sign("HMAC", cryptoKey, new TextEncoder().encode(data));
+}
+
+async function sha256hex(data) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function toHex(buf) {
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function signBedrockRequest(method, url, body, accessKeyId, secretAccessKey, region) {
+  const SERVICE = "bedrock";
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "").slice(0, 15) + "Z";
+  const dateStamp = amzDate.slice(0, 8);
+
+  const parsedUrl = new URL(url);
+  const host = parsedUrl.host;
+  const path = parsedUrl.pathname;
+  const bodyHash = await sha256hex(body);
+
+  const canonicalHeaders = `content-type:application/json\nhost:${host}\nx-amz-date:${amzDate}\n`;
+  const signedHeaders = "content-type;host;x-amz-date";
+  const canonicalRequest = [method, path, "", canonicalHeaders, signedHeaders, bodyHash].join("\n");
+
+  const credentialScope = `${dateStamp}/${region}/${SERVICE}/aws4_request`;
+  const stringToSign = ["AWS4-HMAC-SHA256", amzDate, credentialScope, await sha256hex(canonicalRequest)].join("\n");
+
+  const kDate    = await hmacSHA256("AWS4" + secretAccessKey, dateStamp);
+  const kRegion  = await hmacSHA256(kDate, region);
+  const kService = await hmacSHA256(kRegion, SERVICE);
+  const kSigning = await hmacSHA256(kService, "aws4_request");
+  const signature = toHex(await hmacSHA256(kSigning, stringToSign));
+
+  const authHeader = `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+  return {
+    "Authorization": authHeader,
+    "Content-Type": "application/json",
+    "X-Amz-Date": amzDate,
+  };
+}
+
+// Generate a tailored suggestion using Claude via AWS Bedrock
 async function generateSuggestion(env, reviewText, rating) {
-  if (!env.AI || !reviewText) return null;
+  if (!reviewText || !env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY) return null;
   try {
-    const prompt = `You are a hotel operations consultant. A guest left this ${rating}-star review for a hotel:
+    const region = env.AWS_REGION || "us-east-1";
+    const modelId = "anthropic.claude-3-haiku-20240307-v1:0";
+    const url = `https://bedrock-runtime.${region}.amazonaws.com/model/${modelId}/invoke`;
+
+    const prompt = `You are a hotel operations consultant. A guest left this ${rating}-star review for Caribbean Resort & Suite in Hollywood, FL:
 
 "${reviewText.slice(0, 600)}"
 
-Write ONE specific, practical, actionable suggestion (2-3 sentences max) for what the hotel management should do to prevent this issue from happening again. Be direct and specific — no generic advice. Do not start with "I suggest" or "You should". Start with the action itself.`;
+Write ONE specific, practical, actionable suggestion (2-3 sentences) for what hotel management should do to prevent this exact issue from recurring. Be direct and specific to this review — no generic advice. Do not start with "I suggest" or "You should". Start with the concrete action.`;
 
-    const response = await env.AI.run("@cf/meta/llama-3-8b-instruct", {
+    const body = JSON.stringify({
+      anthropic_version: "bedrock-2023-05-31",
+      max_tokens: 150,
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 120,
     });
-    return response?.response?.trim() ?? null;
-  } catch {
+
+    const headers = await signBedrockRequest(
+      "POST", url, body,
+      env.AWS_ACCESS_KEY_ID, env.AWS_SECRET_ACCESS_KEY, region
+    );
+
+    const res = await fetch(url, { method: "POST", headers, body });
+    if (!res.ok) {
+      console.error("Bedrock error:", res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    return data?.content?.[0]?.text?.trim() ?? null;
+  } catch (err) {
+    console.error("generateSuggestion error:", err.message);
     return null;
   }
 }

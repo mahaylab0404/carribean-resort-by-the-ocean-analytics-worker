@@ -9,6 +9,3 @@ crons = ["0 9 * * 1"]
 binding = "DB"
 database_name = "hotel-analytics-db"
 database_id = "1b464788-6e58-4096-a50c-3fcdfeb75975"
-
-[ai]
-binding = "AI"
