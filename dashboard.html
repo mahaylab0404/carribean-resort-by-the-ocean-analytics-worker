@@ -195,8 +195,12 @@
     /* ── CHARTS ───────────────────────────────────── */
     .charts-row {
       display: grid;
-      grid-template-columns: 4fr 2fr 3fr;
+      grid-template-columns: 3fr 2fr;
       gap: 12px;
+    }
+
+    .charts-row .chart-card-full {
+      grid-column: span 2;
     }
 
     .chart-card {
@@ -206,6 +210,54 @@
 
     .chart-card-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 18px; }
     .chart-wrap { position: relative; height: 190px; }
+
+    /* ── HEATMAP ──────────────────────────────────── */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 36px repeat(7, 1fr);
+      gap: 3px;
+      margin-top: 4px;
+    }
+
+    .heatmap-col-label {
+      font-size: 0.63rem; font-weight: 600; color: var(--muted);
+      text-align: center; padding-bottom: 4px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    .heatmap-row-label {
+      font-size: 0.6rem; color: var(--muted);
+      display: flex; align-items: center;
+      justify-content: flex-end; padding-right: 6px; line-height: 1;
+    }
+
+    .heatmap-cell {
+      height: 18px; border-radius: 3px;
+      background: var(--bg2);
+      transition: transform 0.1s;
+      position: relative; cursor: default;
+    }
+
+    .heatmap-cell:hover { transform: scale(1.2); z-index: 10; }
+
+    .heatmap-cell[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 130%; left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy); color: #fff;
+      font-size: 0.63rem; padding: 3px 7px;
+      border-radius: 4px; white-space: nowrap;
+      pointer-events: none; z-index: 20;
+    }
+
+    .heatmap-legend {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 8px; justify-content: flex-end;
+      font-size: 0.62rem; color: var(--muted);
+    }
+
+    .heatmap-swatch { display: flex; gap: 2px; }
+    .heatmap-swatch span { width: 12px; height: 9px; border-radius: 2px; }
 
     /* ── FILTER BAR ───────────────────────────────── */
     .filter-bar {
@@ -587,16 +639,16 @@
 
   <div class="charts-row">
     <div class="chart-card">
-      <div class="chart-card-title">Call Volume — Daily</div>
-      <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+      <div class="chart-card-title">Call Volume — Last 30 Days</div>
+      <div class="chart-wrap"><canvas id="barChart"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="chart-card-title">Issues by Category</div>
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
     </div>
-    <div class="chart-card">
-      <div class="chart-card-title">Busiest Hours of Day</div>
-      <div class="chart-wrap"><canvas id="hourChart"></canvas></div>
+    <div class="chart-card chart-card-full">
+      <div class="chart-card-title">Busiest Hours — Weekly Pattern</div>
+      <div id="heatmap"></div>
     </div>
   </div>
 
@@ -852,10 +904,10 @@
   }
 
   // ── CHARTS ─────────────────────────────────────
-  let lineChart, donutChart, hourChart;
+  let barChart, donutChart;
 
   function buildCharts(calls) {
-    // Line chart
+    // ── Bar chart: discrete call volume per day (last 30 days) ──
     const now = new Date();
     const days = Array.from({ length: 30 }, (_, i) => {
       const d = new Date(now); d.setDate(d.getDate() - (29 - i));
@@ -864,31 +916,37 @@
     const counts = {};
     days.forEach(d => counts[d] = 0);
     calls.forEach(c => { const k = dayKey(c.created_at); if (k && counts[k] !== undefined) counts[k]++; });
+    const barData = days.map(d => counts[d]);
+    const maxBar = Math.max(...barData, 1);
     const labels = days.map(d => { const [,m,dd] = d.split("-"); return `${m}/${dd}`; });
 
-    if (lineChart) lineChart.destroy();
-    lineChart = new Chart(document.getElementById("lineChart"), {
-      type: "line",
+    if (barChart) barChart.destroy();
+    barChart = new Chart(document.getElementById("barChart"), {
+      type: "bar",
       data: {
         labels,
         datasets: [{
-          data: days.map(d => counts[d]),
-          borderColor: "#006E7A", backgroundColor: "rgba(0,110,122,0.06)",
-          borderWidth: 2, pointRadius: 3, pointBackgroundColor: "#006E7A",
-          pointBorderColor: "#fff", pointBorderWidth: 2, fill: true, tension: 0.4,
+          data: barData,
+          backgroundColor: barData.map(v => v === maxBar && v > 0 ? "#7A1515" : "rgba(0,110,122,0.55)"),
+          hoverBackgroundColor: barData.map(v => v === maxBar && v > 0 ? "#9B2020" : "#006E7A"),
+          borderRadius: 3,
+          borderSkipped: false,
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: i => `${i.raw} call${i.raw !== 1 ? "s" : ""}` } }
+        },
         scales: {
-          x: { grid: { color: "#E2D5C3" }, ticks: { color: "#7A6650", maxTicksLimit: 8, font: { size: 11 } } },
+          x: { grid: { display: false }, ticks: { color: "#7A6650", maxTicksLimit: 10, font: { size: 10 } } },
           y: { grid: { color: "#E2D5C3" }, ticks: { color: "#7A6650", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
         }
       }
     });
 
-    // Donut chart
+    // ── Donut chart: issues by category ──
     const cats = {};
     calls.forEach(c => { const k = c.issue_category || "Uncategorized"; cats[k] = (cats[k] || 0) + 1; });
     const catKeys = Object.keys(cats);
@@ -910,36 +968,75 @@
       }
     });
 
-    // Hour chart
-    const hourCounts = Array(24).fill(0);
-    calls.forEach(c => { const h = hourOf(c.created_at); if (h >= 0) hourCounts[h]++; });
-    const hourLabels = Array.from({ length: 24 }, (_, i) => {
-      if (i === 0) return "12a"; if (i === 12) return "12p";
-      return i < 12 ? `${i}a` : `${i - 12}p`;
+    // ── Heatmap: day-of-week × hour-of-day ──
+    buildHeatmap(calls);
+  }
+
+  function buildHeatmap(calls) {
+    // Matrix: rows = hours 0–23, cols = days Sun–Sat
+    const matrix = Array.from({ length: 24 }, () => Array(7).fill(0));
+    calls.forEach(c => {
+      if (!c.created_at) return;
+      const d = new Date(c.created_at);
+      const h = d.getHours();
+      const dow = d.getDay(); // 0=Sun
+      matrix[h][dow]++;
     });
 
-    if (hourChart) hourChart.destroy();
-    hourChart = new Chart(document.getElementById("hourChart"), {
-      type: "bar",
-      data: {
-        labels: hourLabels,
-        datasets: [{
-          data: hourCounts,
-          backgroundColor: hourCounts.map(v => v === Math.max(...hourCounts) ? "#7A1515" : "rgba(0,110,122,0.5)"),
-          borderRadius: 4, borderSkipped: false,
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: {
-          callbacks: { title: i => `${i[0].label}`, label: i => `${i.raw} call${i.raw !== 1 ? "s" : ""}` }
-        }},
-        scales: {
-          x: { grid: { display: false }, ticks: { color: "#7A6650", font: { size: 10 }, maxTicksLimit: 12 } },
-          y: { grid: { color: "#E2D5C3" }, ticks: { color: "#7A6650", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
-        }
-      }
+    const maxVal = Math.max(...matrix.flat(), 1);
+    const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const HOUR_LABELS = Array.from({ length: 24 }, (_, i) => {
+      if (i === 0) return "12a"; if (i === 12) return "12p";
+      return i < 12 ? `${i}a` : `${i-12}p`;
     });
+
+    // Burgundy heat scale
+    function cellColor(val) {
+      if (val === 0) return "var(--bg2)";
+      const intensity = val / maxVal;
+      if (intensity < 0.25) return "rgba(122,21,21,0.18)";
+      if (intensity < 0.5)  return "rgba(122,21,21,0.38)";
+      if (intensity < 0.75) return "rgba(122,21,21,0.62)";
+      return "#7A1515";
+    }
+
+    function cellTextColor(val) {
+      return val / maxVal >= 0.62 ? "#fff" : "transparent";
+    }
+
+    const container = document.getElementById("heatmap");
+    let html = `<div class="heatmap-grid">`;
+
+    // Header row: empty corner + day labels
+    html += `<div></div>`;
+    DAY_LABELS.forEach(d => {
+      html += `<div class="heatmap-col-label">${d}</div>`;
+    });
+
+    // Data rows: hour label + 7 cells
+    for (let h = 0; h < 24; h++) {
+      html += `<div class="heatmap-row-label">${HOUR_LABELS[h]}</div>`;
+      for (let d = 0; d < 7; d++) {
+        const v = matrix[h][d];
+        const tip = v > 0 ? `${DAY_LABELS[d]} ${HOUR_LABELS[h]}: ${v} call${v !== 1 ? "s" : ""}` : "";
+        html += `<div class="heatmap-cell" style="background:${cellColor(v)};color:${cellTextColor(v)}" ${tip ? `data-tip="${tip}"` : ""}></div>`;
+      }
+    }
+
+    html += `</div>`;
+    html += `<div class="heatmap-legend">
+      <span>Low</span>
+      <div class="heatmap-swatch">
+        <span style="background:var(--bg2)"></span>
+        <span style="background:rgba(122,21,21,0.18)"></span>
+        <span style="background:rgba(122,21,21,0.38)"></span>
+        <span style="background:rgba(122,21,21,0.62)"></span>
+        <span style="background:#7A1515"></span>
+      </div>
+      <span>High</span>
+    </div>`;
+
+    container.innerHTML = html;
   }
 
   // ── FILTERS ────────────────────────────────────
