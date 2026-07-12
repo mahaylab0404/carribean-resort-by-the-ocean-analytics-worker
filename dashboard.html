@@ -16,6 +16,7 @@
       --border:     #CFC0A8;
       --border2:    #BAA890;
       --burg:       #7A1515;
+      --green2:     #2A7A5C;
       --burg-light: rgba(122,21,21,0.07);
       --gold:       #B8892E;
       --ocean:      #006E7A;
@@ -81,6 +82,14 @@
 
     .header-date .date-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
     .header-date .date-val { font-family: 'Lora', serif; font-style: italic; font-size: 1rem; color: var(--text2); margin-top: 1px; }
+
+    .demo-badge {
+      display: none;
+      background: #F59E0B; color: #1C1008;
+      font-size: 0.68rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 4px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
 
     .live-badge {
       display: flex; align-items: center; gap: 7px;
@@ -274,6 +283,8 @@
     }
 
     .filter-label { font-size: 0.68rem; color: var(--muted); margin-right: 2px; white-space: nowrap; }
+    .filter-label + .filter-label { margin-left: 8px; }
+    .brand-icon img { display: block; }
 
     .filter-group { display: flex; gap: 4px; }
 
@@ -357,7 +368,7 @@
     .pills { display: flex; flex-wrap: wrap; gap: 5px; flex: 1; align-items: center; }
 
     .pill {
-      font-size: 0.64rem; font-weight: 500;
+      font-size: 0.65rem; font-weight: 500;
       padding: 3px 8px; border-radius: 4px;
       letter-spacing: 0.2px; border: 1px solid transparent;
     }
@@ -385,7 +396,7 @@
       display: flex; flex-direction: column; align-items: flex-end;
       justify-content: center; gap: 3px; min-width: 88px;
     }
-    .call-time-day { font-size: 0.64rem; color: var(--muted); }
+    .call-time-day { font-size: 0.65rem; color: var(--muted); }
     .call-time-hr  { font-size: 0.77rem; font-weight: 500; color: var(--text2); }
 
     .chevron {
@@ -492,7 +503,7 @@
   <div class="header-inner">
     <div class="brand">
       <div class="brand-icon">
-        <img src="logo.jpg" alt="Caribbean Resort by the Ocean" width="52" height="52" style="border-radius:10px;display:block">
+        <img src="logo.jpg" alt="Caribbean Resort by the Ocean" width="52" height="52">
       </div>
       <div class="brand-text">
         <h1>Caribbean Resort by the Ocean</h1>
@@ -504,6 +515,7 @@
         <div class="date-label">Today</div>
         <div class="date-val" id="clock">—</div>
       </div>
+      <div class="demo-badge" id="demo-badge">Sample Data</div>
       <div class="live-badge">
         <span class="live-dot"></span>
         Live &nbsp;·&nbsp; 60s refresh
@@ -532,7 +544,7 @@
       </div>
     </div>
     <div class="kpi-card">
-      <div class="top-bar" style="background:#2A7A5C"></div>
+      <div class="top-bar" style="background:var(--green2)"></div>
       <div class="kpi-label">Hours Saved</div>
       <div class="kpi-value" id="kpi-hours">—</div>
       <div class="kpi-footer">
@@ -635,11 +647,11 @@
       <button class="f-btn" data-val="neutral">Neutral</button>
       <button class="f-btn" data-val="negative">Negative</button>
     </div>
-    <span class="filter-label" style="margin-left:8px">Category:</span>
+    <span class="filter-label">Category:</span>
     <select class="f-select" id="filter-category">
       <option value="all">All Categories</option>
     </select>
-    <span class="filter-label" style="margin-left:8px">Period:</span>
+    <span class="filter-label">Period:</span>
     <div class="filter-group" id="filter-date">
       <button class="f-btn active" data-val="all">All</button>
       <button class="f-btn" data-val="today">Today</button>
@@ -649,7 +661,7 @@
     </div>
     <div id="custom-date-row">
       <input type="date" id="date-from" class="f-date-input">
-      <span style="font-size:0.68rem;color:var(--muted)">→</span>
+      <span class="report-arrow">→</span>
       <input type="date" id="date-to" class="f-date-input">
     </div>
   </div>
@@ -682,6 +694,10 @@
 <script>
   const WORKER_URL = "https://carribean-resort-by-the-ocean-analytics-worker.mahaylabalentine04.workers.dev/";
 
+  // ── DEMO MODE ──────────────────────────────────
+  // Set to false to connect to live ElevenLabs/Worker data
+  const DEMO_MODE = true;
+
   // Fixed color map — keyed by normalized category name
   const CAT_COLORS = {
     "reservation":       { hex: "#7A1515", cls: "pill-cat-reservation" },
@@ -691,7 +707,7 @@
     "general inquiry":   { hex: "#172448", cls: "pill-cat-general" },
   };
 
-  const CAT_DEFAULT = { hex: "#7A6650", cls: "pill-cat-uncategorized" };
+  const CAT_DEFAULT = { hex: "#6B5C4C", cls: "pill-cat-uncategorized" };
 
   function catInfo(raw) {
     if (!raw) return CAT_DEFAULT;
@@ -854,8 +870,8 @@
           tooltip: { callbacks: { label: i => `${i.raw} call${i.raw !== 1 ? "s" : ""}` } }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: "#7A6650", maxTicksLimit: 10, font: { size: 10 } } },
-          y: { grid: { color: "#E2D5C3" }, ticks: { color: "#7A6650", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
+          x: { grid: { display: false }, ticks: { color: "#6B5C4C", maxTicksLimit: 10, font: { size: 10 } } },
+          y: { grid: { color: "#CFC0A8" }, ticks: { color: "#6B5C4C", font: { size: 11 }, stepSize: 1 }, beginAtZero: true }
         }
       }
     });
@@ -878,7 +894,7 @@
       },
       options: {
         responsive: true, maintainAspectRatio: false, cutout: "60%",
-        plugins: { legend: { position: "bottom", labels: { color: "#7A6650", font: { size: 10 }, padding: 10, boxWidth: 10,
+        plugins: { legend: { position: "bottom", labels: { color: "#6B5C4C", font: { size: 10 }, padding: 10, boxWidth: 10,
           generateLabels: chart => chart.data.labels.map((label, i) => ({
             text: label,
             fillStyle: catInfo(label).hex,
@@ -1191,14 +1207,119 @@
     a.click();
   }
 
+  // ── DEMO DATA ──────────────────────────────────
+  function getDemoData() {
+    const now = new Date();
+    const msDay = 86400000;
+
+    const names = ["Maria Rodriguez","James Carter","Linda Thompson","Carlos Vega","Patricia Lee",
+      "Michael Brown","Sandra Kim","Robert Diaz","Angela White","David Nguyen","Jennifer Scott",
+      "Anthony Rivera","Barbara Hall","Christopher Moore","Susan Walker","Kevin Martinez",
+      "Dorothy Harris","Brian Clark","Nancy Lewis","Edward Robinson"];
+
+    const phones = ["(954) 307-8821","(305) 442-7193","(954) 555-0134","(786) 212-9047",
+      "(954) 801-3356","(305) 667-4428","(954) 999-2201","(786) 340-8812","(954) 234-5571",
+      "(305) 780-1293","(954) 602-4417","(786) 555-8839","(954) 411-7723","(305) 899-0065",
+      "(954) 177-3341","(786) 443-9901","(954) 520-6614","(305) 331-8872","(954) 688-4453","(786) 212-5578"];
+
+    const categories = ["Reservation","Check-in/Check-out","Maintenance","Tiki Bar","General Inquiry"];
+    const sentiments = ["positive","positive","positive","neutral","neutral","negative"];
+
+    const transcripts = {
+      "Reservation": [
+        "user: Hi, I'd like to check availability for the weekend of July 18th for two adults.\nagent: Of course! We have oceanfront rooms available that weekend. The deluxe king room is $189 per night. Would you like me to hold one for you?\nuser: Yes please, that sounds perfect.\nagent: Great! I've noted the inquiry. Our reservations team will follow up to confirm within 24 hours. Is there anything else I can help with?\nuser: No that's all, thank you.",
+        "user: Do you have any rooms available for 3 nights starting this Friday?\nagent: Welcome to Caribbean Resort by the Ocean! Let me check — yes, we have availability starting Friday. We have garden view and oceanview rooms open. Would you prefer a king or two queens?\nuser: Oceanview king please. What's the rate?\nagent: The oceanview king is $215 per night. Shall I connect you with our reservations team to finalize?\nuser: Yes please.",
+      ],
+      "Check-in/Check-out": [
+        "user: What time is check-in?\nagent: Check-in at Caribbean Resort is at 3 PM. If you arrive earlier we're happy to store your luggage and you're welcome to enjoy the pool and Tiki Bar. Is there anything else?\nuser: Perfect thank you.",
+        "user: Hi we need a late checkout tomorrow, is that possible?\nagent: I'd be happy to help with that. Late checkout is available until 12 PM at no charge, or until 2 PM for a small fee. Which would you prefer?\nuser: 12 PM is fine, thank you.\nagent: Noted! I'll pass that along to the front desk. Have a wonderful stay.",
+      ],
+      "Maintenance": [
+        "user: The air conditioning in room 214 isn't working properly, it's not cooling down.\nagent: I'm sorry to hear that — our maintenance team will be right over to take a look. Can I confirm your name for the work order?\nuser: It's David Nguyen.\nagent: Thank you Mr. Nguyen. Maintenance will be there within 30 minutes. Is there anything else I can help with?\nuser: No that's all.",
+        "user: There's a light bulb out in our bathroom, room 118.\nagent: I'll submit a maintenance request right away for room 118. Someone will come by within the hour. Is there anything else?\nuser: No thank you.",
+      ],
+      "Tiki Bar": [
+        "user: What are the Tiki Bar hours today?\nagent: The Tiki Bar is open daily from 11 AM to 10 PM, with happy hour from 4 to 6 PM. We have live music tonight starting at 7.\nuser: Oh great, we'll definitely be there. Thanks!\nagent: Wonderful, enjoy your evening!",
+        "user: Does the Tiki Bar serve food?\nagent: Yes! We have a full menu with appetizers, burgers, fresh seafood, and our famous coconut shrimp. The kitchen is open until 9 PM.\nuser: Perfect, we'll head over for dinner.\nagent: We look forward to seeing you!",
+      ],
+      "General Inquiry": [
+        "user: Is the pool heated?\nagent: Yes, our pool is heated year-round and open from 8 AM to 10 PM daily. We also have poolside towel service and a full menu available from the Tiki Bar.\nuser: Wonderful, thank you.",
+        "user: Do you have free parking?\nagent: Yes, we offer complimentary self-parking for all guests. We also have valet available for $15 per night if you prefer. Is there anything else I can help you with?\nuser: No that covers it, thanks!",
+      ],
+    };
+
+    const calls = [];
+    let id = 1;
+
+    // Generate ~50 calls spread over last 30 days
+    // More on weekends, more during midday hours
+    const callDays = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now - i * msDay);
+      const dow = d.getDay(); // 0=Sun, 6=Sat
+      const isWeekend = dow === 0 || dow === 5 || dow === 6;
+      const count = isWeekend ? Math.floor(Math.random() * 4) + 2 : Math.floor(Math.random() * 3) + 1;
+      for (let j = 0; j < count; j++) callDays.push(new Date(now - i * msDay));
+    }
+
+    // Trim to ~52 calls
+    const selectedDays = callDays.slice(0, 52);
+
+    selectedDays.forEach((day, idx) => {
+      // Realistic hours: mostly 9am-7pm, peak at lunch
+      const hourWeights = [0,0,0,0,0,0,0,0,1,2,3,4,5,4,3,4,3,4,3,2,1,0,0,0];
+      const totalW = hourWeights.reduce((a,b)=>a+b,0);
+      let r = Math.random() * totalW, hour = 9;
+      let acc = 0;
+      for (let h = 0; h < 24; h++) { acc += hourWeights[h]; if (r <= acc) { hour = h; break; } }
+      const minute = Math.floor(Math.random() * 60);
+      const callDate = new Date(day);
+      callDate.setHours(hour, minute, Math.floor(Math.random()*60));
+
+      const cat = categories[idx % categories.length];
+      const name = names[idx % names.length];
+      const phone = "+1 " + phones[idx % phones.length];
+      const sentiment = sentiments[idx % sentiments.length];
+      const catTranscripts = transcripts[cat];
+      const transcript = catTranscripts[idx % catTranscripts.length];
+      const duration = 45 + Math.floor(Math.random() * 180); // 45s - 225s
+      const status = sentiment === "negative" && Math.random() < 0.3 ? "failed" : "completed";
+
+      calls.push({
+        id: id++,
+        conversation_id: `demo-conv-${String(id).padStart(4,"0")}`,
+        status,
+        caller_phone: phone,
+        caller_name: name,
+        transcript,
+        duration,
+        has_audio: 1, has_user_audio: 1, has_response_audio: 1,
+        issue_category: cat,
+        sentiment,
+        created_at: callDate.toISOString(),
+      });
+    });
+
+    // Sort newest first
+    return calls.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  }
+
   // ── LOAD ───────────────────────────────────────
   async function loadData() {
+    if (DEMO_MODE) {
+      document.getElementById("demo-badge").style.display = "inline-block";
+      allCalls = getDemoData();
+      buildKPIs(allCalls);
+      buildCharts(allCalls);
+      populateCategoryFilter(allCalls);
+      applyFilters();
+      return;
+    }
     try {
       const res = await fetch(WORKER_URL);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       allCalls = await res.json();
       buildKPIs(allCalls);
-
       buildCharts(allCalls);
       populateCategoryFilter(allCalls);
       applyFilters();
