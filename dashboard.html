@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --bg:         #F7F2EB;
@@ -109,7 +110,7 @@
       font-size: 1.15rem; font-weight: 600; color: var(--navy); white-space: nowrap;
     }
     .section-head .rule { flex: 1; height: 1px; background: var(--border); }
-    .section-head .tag { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--gold); white-space: nowrap; }
+    .section-head .tag { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--gold); white-space: nowrap; }
 
     /* ── KPI ROW (4 tiles) ────────────────────────── */
     .kpi-row {
@@ -141,7 +142,7 @@
     }
     .kpi-explainer-link a:hover { color: var(--ocean); }
 
-    .kpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
+    .kpi-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
     .kpi-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
 
     .kpi-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
@@ -184,13 +185,13 @@
     }
 
     .heatmap-col-label {
-      font-size: 0.63rem; font-weight: 600; color: var(--muted);
+      font-size: 0.65rem; font-weight: 600; color: var(--muted);
       text-align: center; padding-bottom: 4px;
       letter-spacing: 0.5px; text-transform: uppercase;
     }
 
     .heatmap-row-label {
-      font-size: 0.6rem; color: var(--muted);
+      font-size: 0.65rem; color: var(--muted);
       display: flex; align-items: center;
       justify-content: flex-end; padding-right: 6px; line-height: 1;
     }
@@ -210,7 +211,7 @@
     }
     .heatmap-toggle:hover { color: var(--text2); }
     .heatmap-toggle .toggle-arrow {
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       transition: transform 0.2s;
       display: inline-block;
     }
@@ -226,7 +227,7 @@
       position: absolute; bottom: 130%; left: 50%;
       transform: translateX(-50%);
       background: var(--navy); color: #fff;
-      font-size: 0.63rem; padding: 3px 7px;
+      font-size: 0.65rem; padding: 3px 7px;
       border-radius: 4px; white-space: nowrap;
       pointer-events: none; z-index: 20;
     }
@@ -234,11 +235,37 @@
     .heatmap-legend {
       display: flex; align-items: center; gap: 6px;
       margin-top: 8px; justify-content: flex-end;
-      font-size: 0.62rem; color: var(--muted);
+      font-size: 0.65rem; color: var(--muted);
     }
 
     .heatmap-swatch { display: flex; gap: 2px; }
     .heatmap-swatch span { width: 12px; height: 9px; border-radius: 2px; }
+
+    /* ── HEATMAP CARD HEADER ─────────────────────── */
+    .heatmap-card-header {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 8px;
+    }
+    .heatmap-card-header .chart-card-title { margin-bottom: 0; }
+    .heatmap-card-actions { display: flex; align-items: center; gap: 10px; }
+    .heatmap-toggle { margin-bottom: 0; }
+    .heatmap-export-btn { font-size: 0.65rem; padding: 4px 10px; }
+
+    /* ── EXPORT DROPDOWN ─────────────────────────── */
+    .export-dropdown { position: relative; display: inline-block; }
+    .export-menu {
+      display: none; position: absolute; right: 0; top: calc(100% + 4px);
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: 8px; box-shadow: var(--shadow);
+      min-width: 148px; z-index: 50; overflow: hidden;
+    }
+    .export-menu.open { display: block; }
+    .export-menu button {
+      width: 100%; text-align: left; background: none; border: none;
+      padding: 9px 14px; font-size: 0.78rem; color: var(--text2);
+      cursor: pointer; font-family: 'DM Sans', sans-serif; display: block;
+    }
+    .export-menu button:hover { background: var(--bg2); color: var(--navy); }
 
     /* ── FILTER BAR ───────────────────────────────── */
     .filter-bar {
@@ -374,7 +401,7 @@
     }
     .call-card.open .call-expand { display: block; }
 
-    .expand-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 12px; }
+    .expand-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 12px; }
 
     .bubble-feed { display: flex; flex-direction: column; gap: 8px; }
 
@@ -390,7 +417,7 @@
       background: var(--burg-light); border: 1px solid rgba(122,21,21,0.15);
       color: var(--text); align-self: flex-end; border-bottom-right-radius: 3px;
     }
-    .bubble-sender { font-size: 0.59rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; margin-bottom: 3px; font-weight: 600; }
+    .bubble-sender { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; margin-bottom: 3px; font-weight: 600; }
 
     /* ── EMPTY / LOADING ──────────────────────────── */
     .state-card {
@@ -528,11 +555,17 @@
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
     </div>
     <div class="chart-card chart-card-full">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div class="chart-card-title" style="margin-bottom:0">Busiest Hours — Weekly Pattern</div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <button class="export-btn" onclick="exportHoursCSV()" style="font-size:0.65rem;padding:4px 10px">↓ Export CSV</button>
-          <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()" style="margin-bottom:0">
+      <div class="heatmap-card-header">
+        <div class="chart-card-title">Busiest Hours — Weekly Pattern</div>
+        <div class="heatmap-card-actions">
+          <div class="export-dropdown">
+            <button class="export-btn heatmap-export-btn" onclick="toggleExportMenu(event,'export-hours')">Export ↓</button>
+            <div class="export-menu" id="export-hours">
+              <button onclick="exportHoursCSV();closeExportMenus()">CSV (.csv)</button>
+              <button onclick="exportHoursExcel();closeExportMenus()">Excel (.xlsx)</button>
+            </div>
+          </div>
+          <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()">
             <span class="toggle-arrow">›</span>
             <span id="heatmap-toggle-label">Show full week</span>
           </div>
@@ -582,9 +615,13 @@
 
   <div class="feed-meta">
     <div class="feed-count-badge" id="feed-count">0 calls</div>
-    <button class="export-btn" onclick="exportCSV()">
-      ↓ Export CSV
-    </button>
+    <div class="export-dropdown">
+      <button class="export-btn" onclick="toggleExportMenu(event,'export-calllog')">Export ↓</button>
+      <div class="export-menu" id="export-calllog">
+        <button onclick="exportCSV();closeExportMenus()">CSV (.csv)</button>
+        <button onclick="exportExcel();closeExportMenus()">Excel (.xlsx)</button>
+      </div>
+    </div>
   </div>
 
   <div id="call-feed">
@@ -1074,6 +1111,64 @@
     }
   }
 
+
+  // ── EXPORT DROPDOWN ────────────────────────────
+  function toggleExportMenu(evt, id) {
+    evt.stopPropagation();
+    const menu = document.getElementById(id);
+    const isOpen = menu.classList.contains("open");
+    closeExportMenus();
+    if (!isOpen) menu.classList.add("open");
+  }
+
+  function closeExportMenus() {
+    document.querySelectorAll(".export-menu.open").forEach(m => m.classList.remove("open"));
+  }
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".export-dropdown")) closeExportMenus();
+  });
+
+  // ── EXCEL EXPORTS ───────────────────────────────
+  function exportExcel() {
+    if (typeof XLSX === "undefined") { alert("Excel export not available. Please try CSV."); return; }
+    const today = new Date().toISOString().split("T")[0];
+    const rows = allCalls.map(c => ({
+      "ID": c.id,
+      "Conversation ID": c.conversation_id || "",
+      "Caller Phone": c.caller_phone || "",
+      "Caller Name": c.caller_name || "",
+      "Status": c.status || "",
+      "Duration (s)": c.duration || "",
+      "Category": c.issue_category || "",
+      "Sentiment": c.sentiment || "",
+      "Created At": c.created_at || "",
+      "Transcript": (c.transcript || "").replace(/\n/g, " | "),
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Guest Calls");
+    XLSX.writeFile(wb, `caribbean-resort-calls-${today}.xlsx`);
+  }
+
+  function exportHoursExcel() {
+    if (typeof XLSX === "undefined") { alert("Excel export not available. Please try CSV."); return; }
+    const today = new Date().toISOString().split("T")[0];
+    const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const HOUR_LABELS = Array.from({ length: 24 }, (_, i) => {
+      if (i === 0) return "12am"; if (i === 12) return "12pm";
+      return i < 12 ? `${i}am` : `${i-12}pm`;
+    });
+    const rows = heatmapMatrix.map((row, h) => {
+      const obj = { "Hour": HOUR_LABELS[h] };
+      DAY_LABELS.forEach((d, i) => { obj[d] = row[i]; });
+      return obj;
+    });
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Busiest Hours");
+    XLSX.writeFile(wb, `caribbean-resort-hours-${today}.xlsx`);
+  }
 
   function clearFilters() {
     activeFilters = { sentiment: "all", category: "all", date: "all" };

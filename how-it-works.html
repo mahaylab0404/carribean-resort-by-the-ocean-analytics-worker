@@ -386,7 +386,7 @@
         </div>
         <div class="metric-row">
           <div class="metric-row-label">How it's collected</div>
-          <div class="metric-row-text">When a guest hangs up, ElevenLabs fires a webhook to your Cloudflare Worker, which saves a record to your database. Each saved record increments this count.</div>
+          <div class="metric-row-text">When a guest hangs up, our voice platform automatically sends the call details to our cloud backend, which saves a record to your database. Each saved record increments this count.</div>
         </div>
         <div class="metric-row">
           <div class="metric-row-label">Why it matters</div>
@@ -411,7 +411,7 @@
         </div>
         <div class="metric-row">
           <div class="metric-row-label">How it's collected</div>
-          <div class="metric-row-text">ElevenLabs reports the exact duration of each call in seconds via the post-call webhook. This metric sums every call duration and converts it to hours.</div>
+          <div class="metric-row-text">Our voice platform automatically reports the exact duration of each call in seconds once the conversation ends. This metric adds up every call's duration and converts the total into hours.</div>
         </div>
         <div class="metric-row">
           <div class="metric-row-label">Why it matters</div>
@@ -436,7 +436,7 @@
         </div>
         <div class="metric-row">
           <div class="metric-row-label">How it's collected</div>
-          <div class="metric-row-text">Each call's duration is reported by ElevenLabs in seconds. This metric divides the total seconds by the number of calls with a duration value.</div>
+          <div class="metric-row-text">Each call's duration is automatically recorded in seconds. This metric divides the total seconds across all calls by the number of calls to get the average.</div>
         </div>
         <div class="metric-row">
           <div class="metric-row-label">Why it matters</div>
@@ -461,7 +461,7 @@
         </div>
         <div class="metric-row">
           <div class="metric-row-label">How it's collected</div>
-          <div class="metric-row-text">ElevenLabs marks each call with a status. A call is <em>completed</em> when the conversation reached a natural conclusion. Calls that dropped, errored, or were transferred are counted separately.</div>
+          <div class="metric-row-text">Every call is automatically assigned a status when it ends. A call is marked <em>completed</em> when the conversation reached a natural conclusion and the guest's request was handled. Calls that dropped or ended in error are tracked separately and not counted as completed.</div>
         </div>
         <div class="metric-row">
           <div class="metric-row-label">Why it matters</div>
@@ -486,7 +486,7 @@
     <div class="flow-step">
       <div class="flow-icon">📱</div>
       <div class="flow-label">Guest Calls</div>
-      <div class="flow-desc">A guest dials the hotel's phone number via Telnyx SIP</div>
+      <div class="flow-desc">A guest calls the hotel's phone number through our phone network</div>
     </div>
     <div class="flow-step">
       <div class="flow-icon">🤖</div>
@@ -496,17 +496,17 @@
     <div class="flow-step">
       <div class="flow-icon">📊</div>
       <div class="flow-label">Call Analyzed</div>
-      <div class="flow-desc">ElevenLabs extracts duration, transcript, category, and status</div>
+      <div class="flow-desc">Our voice platform analyzes the call and extracts duration, transcript, issue category, and outcome</div>
     </div>
     <div class="flow-step">
       <div class="flow-icon">⚡</div>
-      <div class="flow-label">Webhook Fires</div>
-      <div class="flow-desc">A POST request sends the call data to your Cloudflare Worker</div>
+      <div class="flow-label">Data Transmitted</div>
+      <div class="flow-desc">Call data is securely and automatically sent to our cloud backend</div>
     </div>
     <div class="flow-step">
       <div class="flow-icon">🗄️</div>
       <div class="flow-label">Data Stored</div>
-      <div class="flow-desc">Cloudflare D1 saves a permanent record of the call</div>
+      <div class="flow-desc">Our encrypted database saves a permanent record of every call</div>
     </div>
     <div class="flow-step">
       <div class="flow-icon">📈</div>
@@ -555,37 +555,37 @@
       <tr>
         <td class="field-name">Left color bar</td>
         <td>Guest sentiment during the call — <span class="sentiment-dot" style="background:#1E7A48"></span>green = positive, <span class="sentiment-dot" style="background:#AD6E18"></span>amber = neutral, <span class="sentiment-dot" style="background:#9E2318"></span>red = negative</td>
-        <td>ElevenLabs Evaluation Criteria (configured in agent settings)</td>
+        <td>Analyzed automatically by our sentiment analysis system after each call</td>
       </tr>
       <tr>
         <td class="field-name">Phone number</td>
-        <td>The caller's phone number as provided by Telnyx SIP trunking metadata</td>
-        <td>Telnyx → ElevenLabs metadata → Webhook payload</td>
+        <td>The caller's phone number, captured automatically when the call connects</td>
+        <td>Captured automatically from our phone network at the start of each call</td>
       </tr>
       <tr>
         <td class="field-name">Guest name</td>
         <td>The guest's name if they stated it during the call and the virtual receptionist extracted it</td>
-        <td>ElevenLabs Data Collection (configured in agent settings)</td>
+        <td>Extracted automatically from the conversation by our transcript analysis system</td>
       </tr>
       <tr>
         <td class="field-name">Status pill</td>
         <td>Whether the call completed successfully or encountered an issue</td>
-        <td>ElevenLabs call status field in the post-call webhook</td>
+        <td>Reported automatically by our voice platform at the end of each call</td>
       </tr>
       <tr>
         <td class="field-name">Category pill</td>
         <td>The type of request — Reservation, Check-in/Out, Maintenance, Tiki Bar, or General Inquiry</td>
-        <td>ElevenLabs Data Collection extracts this from the transcript automatically</td>
+        <td>Extracted automatically from the conversation transcript after each call ends</td>
       </tr>
       <tr>
         <td class="field-name">Duration pill</td>
         <td>How long the call lasted in minutes and seconds</td>
-        <td>ElevenLabs <code>call_duration_secs</code> field</td>
+        <td>Measured automatically for every call and recorded when the call ends</td>
       </tr>
       <tr>
         <td class="field-name">Transcript preview</td>
         <td>The first 90 characters of the conversation. Click the row to read the full transcript with chat-style bubbles.</td>
-        <td>ElevenLabs full transcript, stored verbatim in Cloudflare D1</td>
+        <td>Stored securely word-for-word in our encrypted cloud database</td>
       </tr>
     </tbody>
   </table>
@@ -609,7 +609,7 @@
       <span class="faq-q-text">How are issue categories determined?</span>
       <span class="faq-arrow">›</span>
     </button>
-    <div class="faq-a">Issue categories are extracted automatically by ElevenLabs using its native Data Collection feature. After each call, ElevenLabs reads the transcript and classifies the guest's request into one of five categories: Reservation, Check-in/Check-out, Maintenance, Tiki Bar, or General Inquiry. No manual tagging is required.</div>
+    <div class="faq-a">Issue categories are determined automatically by our transcript analysis system. After each call ends, the full conversation is analyzed and the guest's request is classified into one of five categories: Reservation, Check-in/Check-out, Maintenance, Tiki Bar, or General Inquiry. No manual tagging or review is required.</div>
   </div>
 
   <div class="faq-item" onclick="this.classList.toggle('open')">
@@ -625,7 +625,7 @@
       <span class="faq-q-text">Is call data stored securely?</span>
       <span class="faq-arrow">›</span>
     </button>
-    <div class="faq-a">Yes. All call records are stored in Cloudflare D1 — a serverless database that runs on Cloudflare's global infrastructure. Data is encrypted at rest and in transit. Only authorized users with access to this dashboard can view call records. No call audio is stored — only the text transcript and metadata.</div>
+    <div class="faq-a">Yes. All call records are stored in our encrypted cloud database, hosted on enterprise-grade infrastructure with encryption at rest and in transit. Only users with authorized access to this dashboard can view call records. No call audio is ever stored — only the text transcript and call metadata.</div>
   </div>
 
   <div class="faq-item" onclick="this.classList.toggle('open')">
@@ -633,7 +633,7 @@
       <span class="faq-q-text">Can I export the data?</span>
       <span class="faq-arrow">›</span>
     </button>
-    <div class="faq-a">Yes. The Guest Interaction Log has an "Export CSV" button that downloads the full call log — including phone numbers, names, durations, categories, and transcripts — as a spreadsheet. You can also use the date range filter to export a specific time period. The busiest hours heatmap has its own separate CSV export for the hour-by-day breakdown.</div>
+    <div class="faq-a">Yes. The Guest Interaction Log has an Export button that lets you download the full call log — including phone numbers, names, durations, categories, and transcripts — as either a CSV or Excel file. You can use the date range filter first to export only a specific time period. The busiest hours chart also has its own separate export.</div>
   </div>
 
 </main>
