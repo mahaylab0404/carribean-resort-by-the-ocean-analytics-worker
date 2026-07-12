@@ -129,12 +129,13 @@
 
     /* ── KPI INFO POPOVER ─────────────────────────── */
     .kpi-info-btn {
-      background: none; border: none; cursor: pointer;
-      font-size: 0.75rem; color: var(--muted); padding: 2px 4px;
+      background: var(--bg2); border: 1px solid var(--border); cursor: pointer;
+      font-size: 0.72rem; color: var(--muted); padding: 4px 8px;
       line-height: 1; letter-spacing: 2px; font-family: 'DM Sans', sans-serif;
-      transition: color 0.15s; flex-shrink: 0; border-radius: 4px;
+      transition: all 0.15s; flex-shrink: 0; border-radius: 4px;
+      min-width: 32px; min-height: 24px;
     }
-    .kpi-info-btn:hover { color: var(--navy); background: var(--bg2); }
+    .kpi-info-btn:hover { color: var(--navy); background: var(--border); }
 
     .kpi-popover {
       display: none;
@@ -1199,14 +1200,12 @@
   function togglePopover(evt, id) {
     evt.stopPropagation();
     const pop = document.getElementById(id);
+    if (!pop) { alert("popover element not found: " + id); return; }
     const isOpen = pop.classList.contains("open");
-    // Close all first
     document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
-    // If it wasn't open, open it
     if (!isOpen) pop.classList.add("open");
   }
 
-  // Close when clicking anywhere outside a popover
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".kpi-card")) {
       document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
