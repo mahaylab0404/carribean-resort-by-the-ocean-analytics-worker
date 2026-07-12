@@ -1200,14 +1200,22 @@
     }
   }
 
+  let popoverJustOpened = false;
+
   function togglePopover(evt, id) {
     evt.stopPropagation();
     const pop = document.getElementById(id);
     const isOpen = pop.classList.contains("open");
     document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
-    if (!isOpen) pop.classList.add("open");
+    if (!isOpen) {
+      pop.classList.add("open");
+      popoverJustOpened = true;
+      setTimeout(() => { popoverJustOpened = false; }, 10);
+    }
   }
+
   document.addEventListener("click", () => {
+    if (popoverJustOpened) return;
     document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
   });
 
