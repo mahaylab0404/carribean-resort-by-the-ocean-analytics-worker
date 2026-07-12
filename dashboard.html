@@ -232,11 +232,28 @@
     }
 
     .heatmap-cell {
-      height: 18px; border-radius: 3px;
+      height: 14px; border-radius: 2px;
       background: var(--bg2);
       transition: transform 0.1s;
       position: relative; cursor: default;
     }
+
+    .heatmap-toggle {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; color: var(--muted);
+      cursor: pointer; user-select: none;
+      margin-bottom: 10px;
+    }
+    .heatmap-toggle:hover { color: var(--text2); }
+    .heatmap-toggle .toggle-arrow {
+      font-size: 0.6rem;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .heatmap-toggle.open .toggle-arrow { transform: rotate(90deg); }
+
+    .heatmap-body { display: none; }
+    .heatmap-body.open { display: block; }
 
     .heatmap-cell:hover { transform: scale(1.2); z-index: 10; }
 
@@ -342,6 +359,14 @@
     .pill-ok   { background: var(--green-light); color: var(--green); border-color: rgba(30,122,72,0.2); }
     .pill-fail { background: var(--red-light);   color: var(--red);   border-color: rgba(158,35,24,0.2); }
     .pill-cat  { background: var(--ocean-light);  color: var(--ocean); border-color: rgba(0,110,122,0.2); }
+
+    /* Per-category color overrides */
+    .pill-cat-reservation    { background: rgba(122,21,21,0.08);  color: #7A1515; border-color: rgba(122,21,21,0.25); }
+    .pill-cat-checkin        { background: rgba(0,110,122,0.09);  color: #006E7A; border-color: rgba(0,110,122,0.25); }
+    .pill-cat-maintenance    { background: rgba(184,137,46,0.1);  color: #8A6210; border-color: rgba(184,137,46,0.3); }
+    .pill-cat-tikibar        { background: rgba(30,122,72,0.09);  color: #1E7A48; border-color: rgba(30,122,72,0.25); }
+    .pill-cat-general        { background: rgba(23,36,72,0.08);   color: #172448; border-color: rgba(23,36,72,0.2); }
+    .pill-cat-uncategorized  { background: rgba(122,102,80,0.1);  color: #5A4A38; border-color: rgba(122,102,80,0.2); }
     .pill-dur  { background: var(--burg-light);   color: var(--burg);  border-color: rgba(122,21,21,0.15); }
 
     .transcript-snip {
@@ -647,8 +672,14 @@
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
     </div>
     <div class="chart-card chart-card-full">
-      <div class="chart-card-title">Busiest Hours — Weekly Pattern</div>
-      <div id="heatmap"></div>
+      <div class="chart-card-title" style="margin-bottom:4px">Busiest Hours — Weekly Pattern</div>
+      <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()">
+        <span class="toggle-arrow">›</span>
+        <span id="heatmap-toggle-label">Show full grid</span>
+      </div>
+      <div class="heatmap-body" id="heatmap-body">
+        <div id="heatmap"></div>
+      </div>
     </div>
   </div>
 
@@ -705,6 +736,22 @@
 
 <script>
   const WORKER_URL = "https://carribean-resort-by-the-ocean-analytics-worker.mahaylabalentine04.workers.dev/";
+
+  // Fixed color map — keyed by normalized category name
+  const CAT_COLORS = {
+    "reservation":       { hex: "#7A1515", cls: "pill-cat-reservation" },
+    "check-in/check-out":{ hex: "#006E7A", cls: "pill-cat-checkin" },
+    "maintenance":       { hex: "#B8892E", cls: "pill-cat-maintenance" },
+    "tiki bar":          { hex: "#1E7A48", cls: "pill-cat-tikibar" },
+    "general inquiry":   { hex: "#172448", cls: "pill-cat-general" },
+  };
+
+  const CAT_DEFAULT = { hex: "#7A6650", cls: "pill-cat-uncategorized" };
+
+  function catInfo(raw) {
+    if (!raw) return CAT_DEFAULT;
+    return CAT_COLORS[raw.toLowerCase().trim()] || CAT_DEFAULT;
+  }
 
   let allCalls = [];
   let activeFilters = { sentiment: "all", category: "all", date: "all" };
@@ -853,7 +900,7 @@
         : "No transcript";
       return `<div class="alert-card">
         <div class="ac-num">${c.caller_phone || "Unknown"}</div>
-        <div class="ac-cat">${c.issue_category || "General"}</div>
+        <div class="ac-cat"><span class="pill ${catInfo(c.issue_category).cls}" style="font-size:0.65rem">${escHtml(c.issue_category) || "General"}</span></div>
         <div class="ac-snip">"${snip}…"</div>
         <div class="ac-time">${day} · ${time}</div>
       </div>`;
@@ -915,13 +962,21 @@
         labels: catKeys,
         datasets: [{
           data: catKeys.map(k => cats[k]),
-          backgroundColor: ["#7A1515","#006E7A","#B8892E","#172448","#1E7A48","#AD6E18"],
+          backgroundColor: catKeys.map(k => catInfo(k).hex),
           borderColor: "#FFFFFF", borderWidth: 3,
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: false, cutout: "60%",
-        plugins: { legend: { position: "bottom", labels: { color: "#7A6650", font: { size: 10 }, padding: 10, boxWidth: 10 } } }
+        plugins: { legend: { position: "bottom", labels: { color: "#7A6650", font: { size: 10 }, padding: 10, boxWidth: 10,
+          generateLabels: chart => chart.data.labels.map((label, i) => ({
+            text: label,
+            fillStyle: catInfo(label).hex,
+            strokeStyle: "#fff",
+            lineWidth: 2,
+            index: i,
+          }))
+        }}}
       }
     });
 
@@ -1004,7 +1059,8 @@
     cats.forEach(cat => {
       if (!existing.includes(cat)) {
         const o = document.createElement("option");
-        o.value = cat; o.textContent = cat;
+        o.value = cat;
+        o.textContent = cat;
         sel.appendChild(o);
       }
     });
@@ -1073,7 +1129,7 @@
       const sPill = c.status === "completed"
         ? `<span class="pill pill-ok">Completed</span>`
         : `<span class="pill pill-fail">${escHtml(c.status) || "Unknown"}</span>`;
-      const cPill = c.issue_category ? `<span class="pill pill-cat">${escHtml(c.issue_category)}</span>` : "";
+      const cPill = c.issue_category ? `<span class="pill ${catInfo(c.issue_category).cls}">${escHtml(c.issue_category)}</span>` : "";
       const dPill = c.duration ? `<span class="pill pill-dur">${fmtDuration(c.duration)}</span>` : "";
       const { day, time } = fmtTime(c.created_at);
       const snip = c.transcript ? `"${escHtml(c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 90))}…"` : "No transcript.";
@@ -1152,6 +1208,16 @@
           <small style="opacity:0.55">${err.message}</small></p>
         </div>`;
     }
+  }
+
+  function toggleHeatmap() {
+    const toggle = document.getElementById("heatmap-toggle");
+    const body   = document.getElementById("heatmap-body");
+    const label  = document.getElementById("heatmap-toggle-label");
+    const isOpen = body.classList.contains("open");
+    body.classList.toggle("open");
+    toggle.classList.toggle("open");
+    label.textContent = isOpen ? "Show full grid" : "Hide grid";
   }
 
   loadData();
