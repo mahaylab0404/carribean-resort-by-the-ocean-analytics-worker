@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Caribbean Resort — Virtual Receptionist Analytics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <style>
@@ -37,7 +37,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -59,28 +59,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 72px;
+      height: 80px;
     }
 
     .brand { display: flex; align-items: center; gap: 16px; }
 
-    .brand-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+    .brand-icon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 10px; overflow: hidden; }
 
     .brand-text h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.35rem; font-weight: 700;
-      color: var(--navy); line-height: 1.2; letter-spacing: 0.2px;
+      font-family: 'Lora', serif;
+      font-size: 1.6rem; font-weight: 600;
+      color: var(--navy); line-height: 1.2; letter-spacing: 0.1px;
     }
 
     .brand-text p {
-      font-size: 0.68rem; color: var(--muted);
-      letter-spacing: 1.8px; text-transform: uppercase; margin-top: 1px;
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 1.2px; text-transform: uppercase; margin-top: 3px;
     }
 
     .header-right { display: flex; align-items: center; gap: 20px; }
 
     .header-date .date-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
-    .header-date .date-val { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--text2); margin-top: 1px; }
+    .header-date .date-val { font-family: 'Lora', serif; font-style: italic; font-size: 1rem; color: var(--text2); margin-top: 1px; }
 
     .live-badge {
       display: flex; align-items: center; gap: 7px;
@@ -106,7 +106,7 @@
     }
     .section-head:first-child { margin-top: 0; }
     .section-head h2 {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Lora', serif;
       font-size: 1.15rem; font-weight: 600; color: var(--navy); white-space: nowrap;
     }
     .section-head .rule { flex: 1; height: 1px; background: var(--border); }
@@ -143,7 +143,7 @@
     .kpi-explainer-link a:hover { color: var(--ocean); }
 
     .kpi-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
-    .kpi-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
+    .kpi-value { font-family: 'Lora', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
 
     .kpi-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
     .kpi-foot-text { font-size: 0.68rem; color: var(--muted); }
@@ -263,7 +263,7 @@
     .export-menu button {
       width: 100%; text-align: left; background: none; border: none;
       padding: 9px 14px; font-size: 0.78rem; color: var(--text2);
-      cursor: pointer; font-family: 'DM Sans', sans-serif; display: block;
+      cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; display: block;
     }
     .export-menu button:hover { background: var(--bg2); color: var(--navy); }
 
@@ -283,7 +283,7 @@
       border: 1px solid var(--border);
       background: var(--card); color: var(--muted);
       cursor: pointer; transition: all 0.15s;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .f-btn:hover { border-color: var(--border2); color: var(--text2); }
     .f-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
@@ -291,7 +291,7 @@
     .f-select {
       font-size: 0.68rem; padding: 5px 10px; border-radius: 8px;
       border: 1px solid var(--border); background: var(--card);
-      color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif;
+      color: var(--muted); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
       outline: none;
     }
     .f-select:focus { border-color: var(--border2); }
@@ -299,7 +299,7 @@
     .f-date-input {
       font-size: 0.68rem; padding: 5px 10px; border-radius: 8px;
       border: 1px solid var(--border); background: var(--card);
-      color: var(--text2); font-family: 'DM Sans', sans-serif;
+      color: var(--text2); font-family: 'Plus Jakarta Sans', sans-serif;
       outline: none;
     }
     .f-date-input:focus { border-color: var(--border2); }
@@ -331,7 +331,7 @@
       border: 1px solid var(--border);
       background: var(--card); color: var(--text2);
       cursor: pointer; transition: all 0.15s;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .export-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 
@@ -444,6 +444,31 @@
     }
     footer b { color: var(--burg); }
 
+    /* ── REPORT BAR ──────────────────────────────── */
+    .report-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 20px;
+      margin-bottom: 20px; box-shadow: var(--shadow-sm);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .report-bar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .report-bar-right { display: flex; gap: 8px; }
+    .report-label { font-size: 0.75rem; font-weight: 600; color: var(--navy); white-space: nowrap; }
+    .report-arrow { font-size: 0.68rem; color: var(--muted); }
+    .report-btn {
+      font-size: 0.75rem; font-weight: 500; padding: 8px 16px;
+      border-radius: 8px; border: 1px solid var(--border);
+      cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .report-btn-print { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .report-btn-print:hover { background: #0F1C38; }
+    .report-btn-excel { background: var(--card); color: var(--text2); }
+    .report-btn-excel:hover { background: var(--bg2); border-color: var(--border2); }
+    #report-custom-dates { display: none; align-items: center; gap: 8px; }
+    #report-custom-dates.visible { display: flex; }
+
     /* ── RESPONSIVE ───────────────────────────────── */
     @media (max-width: 1100px) {
       header, main, footer { padding-left: 24px; padding-right: 24px; }
@@ -467,7 +492,7 @@
   <div class="header-inner">
     <div class="brand">
       <div class="brand-icon">
-        <img src="logo.jpg" alt="Caribbean Resort by the Ocean" width="42" height="42" style="border-radius:8px;display:block">
+        <img src="logo.jpg" alt="Caribbean Resort by the Ocean" width="52" height="52" style="border-radius:10px;display:block">
       </div>
       <div class="brand-text">
         <h1>Caribbean Resort by the Ocean</h1>
@@ -545,6 +570,29 @@
     <div class="tag">Last 30 Days</div>
   </div>
 
+  <!-- ── REPORT BAR ── -->
+  <div class="report-bar">
+    <div class="report-bar-left">
+      <span class="report-label">Generate Report</span>
+      <select class="f-select" id="report-range" onchange="toggleReportCustomDates()">
+        <option value="month">This Month</option>
+        <option value="week">This Week</option>
+        <option value="today">Today</option>
+        <option value="all">All Time</option>
+        <option value="custom">Custom Range</option>
+      </select>
+      <div id="report-custom-dates">
+        <input type="date" id="report-from" class="f-date-input">
+        <span class="report-arrow">→</span>
+        <input type="date" id="report-to" class="f-date-input">
+      </div>
+    </div>
+    <div class="report-bar-right">
+      <button class="report-btn report-btn-print" onclick="generatePrintReport()">🖨 Print / PDF</button>
+      <button class="report-btn report-btn-excel" onclick="generateReportExcel()">📊 Excel</button>
+    </div>
+  </div>
+
   <div class="charts-row">
     <div class="chart-card">
       <div class="chart-card-title">Call Volume — Last 30 Days</div>
@@ -558,13 +606,6 @@
       <div class="heatmap-card-header">
         <div class="chart-card-title">Busiest Hours — Weekly Pattern</div>
         <div class="heatmap-card-actions">
-          <div class="export-dropdown">
-            <button class="export-btn heatmap-export-btn" onclick="toggleExportMenu(event,'export-hours')">Export ↓</button>
-            <div class="export-menu" id="export-hours">
-              <button onclick="exportHoursCSV();closeExportMenus()">CSV (.csv)</button>
-              <button onclick="exportHoursExcel();closeExportMenus()">Excel (.xlsx)</button>
-            </div>
-          </div>
           <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()">
             <span class="toggle-arrow">›</span>
             <span id="heatmap-toggle-label">Show full week</span>
@@ -635,7 +676,7 @@
 </main>
 
 <footer>
-  Powered by <b>Caribbean Resort Virtual Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'DM Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
+  Powered by <b>Caribbean Resort Virtual Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'Plus Jakarta Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
 </footer>
 
 <script>
@@ -913,21 +954,81 @@
     renderGrid([0,1,2,3,4,5,6], DAY_LABELS, "heatmap");
   }
 
-  function exportHoursCSV() {
-    const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    const HOUR_LABELS = Array.from({ length: 24 }, (_, i) => {
-      if (i === 0) return "12am"; if (i === 12) return "12pm";
-      return i < 12 ? `${i}am` : `${i-12}pm`;
-    });
-    const rows = [["Hour", ...DAY_LABELS]];
-    for (let h = 0; h < 24; h++) {
-      rows.push([HOUR_LABELS[h], ...heatmapMatrix[h]]);
+  // ── REPORT HELPERS ─────────────────────────────
+  const HOUR_LABELS_FULL = Array.from({ length: 24 }, (_, i) => {
+    if (i === 0) return "12am"; if (i === 12) return "12pm";
+    return i < 12 ? `${i}am` : `${i-12}pm`;
+  });
+  const DAY_LABELS_FULL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+  function toggleReportCustomDates() {
+    const val = document.getElementById("report-range").value;
+    const row = document.getElementById("report-custom-dates");
+    val === "custom" ? row.classList.add("visible") : row.classList.remove("visible");
+  }
+
+  function getReportData() {
+    const range = document.getElementById("report-range").value;
+    const now = new Date(); const msDay = 86400000;
+    let fromDate = null, toDate = null, rangeLabel = "All Time";
+
+    if (range === "today") {
+      fromDate = new Date(now.toDateString());
+      toDate = now;
+      rangeLabel = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    } else if (range === "week") {
+      fromDate = new Date(now - 7 * msDay);
+      toDate = now;
+      rangeLabel = `${fromDate.toLocaleDateString("en-US",{month:"short",day:"numeric"})} – ${now.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}`;
+    } else if (range === "month") {
+      fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      toDate = now;
+      rangeLabel = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    } else if (range === "custom") {
+      const f = document.getElementById("report-from").value;
+      const t = document.getElementById("report-to").value;
+      if (f) { fromDate = new Date(f); }
+      if (t) { toDate = new Date(t + "T23:59:59"); }
+      rangeLabel = f && t ? `${new Date(f).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})} – ${new Date(t).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}` : "Custom Range";
     }
-    const csv = rows.map(r => r.join(",")).join("\n");
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-    a.download = `caribbean-resort-hours-${new Date().toISOString().split("T")[0]}.csv`;
-    a.click();
+
+    const calls = allCalls.filter(c => {
+      if (!c.created_at) return range === "all";
+      const d = new Date(c.created_at);
+      if (fromDate && d < fromDate) return false;
+      if (toDate && d > toDate) return false;
+      return true;
+    });
+
+    const withDur = calls.filter(c => c.duration);
+    const totalSecs = withDur.reduce((a, c) => a + c.duration, 0);
+    const avgSecs = withDur.length ? Math.round(totalSecs / withDur.length) : 0;
+    const done = calls.filter(c => c.status === "completed").length;
+
+    const cats = {};
+    calls.forEach(c => { const k = c.issue_category || "Uncategorized"; cats[k] = (cats[k]||0)+1; });
+
+    // Call volume by day
+    const dayMap = {};
+    calls.forEach(c => {
+      if (!c.created_at) return;
+      const d = new Date(c.created_at);
+      const key = d.toISOString().split("T")[0];
+      if (!dayMap[key]) dayMap[key] = { date: key, dow: DAY_LABELS_FULL[d.getDay()], count: 0 };
+      dayMap[key].count++;
+    });
+    const volumeByDay = Object.values(dayMap).sort((a,b) => a.date.localeCompare(b.date));
+
+    return {
+      rangeLabel,
+      calls,
+      totalCalls: calls.length,
+      hoursSaved: fmtHours(totalSecs),
+      avgDuration: fmtDuration(avgSecs),
+      completionRate: calls.length ? `${Math.round((done/calls.length)*100)}%` : "—",
+      categories: cats,
+      volumeByDay,
+    };
   }
 
   // ── FILTERS ────────────────────────────────────
@@ -1151,23 +1252,209 @@
     XLSX.writeFile(wb, `caribbean-resort-calls-${today}.xlsx`);
   }
 
-  function exportHoursExcel() {
-    if (typeof XLSX === "undefined") { alert("Excel export not available. Please try CSV."); return; }
-    const today = new Date().toISOString().split("T")[0];
-    const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    const HOUR_LABELS = Array.from({ length: 24 }, (_, i) => {
-      if (i === 0) return "12am"; if (i === 12) return "12pm";
-      return i < 12 ? `${i}am` : `${i-12}pm`;
-    });
-    const rows = heatmapMatrix.map((row, h) => {
-      const obj = { "Hour": HOUR_LABELS[h] };
-      DAY_LABELS.forEach((d, i) => { obj[d] = row[i]; });
-      return obj;
-    });
-    const ws = XLSX.utils.json_to_sheet(rows);
+  // ── GENERATE REPORT: EXCEL ─────────────────────
+  function generateReportExcel() {
+    if (typeof XLSX === "undefined") { alert("Excel export is not available right now."); return; }
+    const d = getReportData();
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Busiest Hours");
-    XLSX.writeFile(wb, `caribbean-resort-hours-${today}.xlsx`);
+    const generated = new Date().toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+
+    // Sheet 1 — Summary
+    const summaryRows = [
+      ["Caribbean Resort by the Ocean — Analytics Report"],
+      ["Report Period", d.rangeLabel],
+      ["Generated", generated],
+      [],
+      ["Metric", "Value"],
+      ["Total Calls", d.totalCalls],
+      ["Hours of Front Desk Labor Saved", d.hoursSaved],
+      ["Average Call Duration", d.avgDuration],
+      ["Completion Rate", d.completionRate],
+    ];
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+    wsSummary["!cols"] = [{wch:36},{wch:24}];
+    XLSX.utils.book_append_sheet(wb, wsSummary, "Summary");
+
+    // Sheet 2 — Call Volume by Day
+    const volRows = [["Date","Day of Week","Call Count"], ...d.volumeByDay.map(r => [r.date, r.dow, r.count])];
+    const wsVol = XLSX.utils.aoa_to_sheet(volRows);
+    wsVol["!cols"] = [{wch:14},{wch:14},{wch:12}];
+    XLSX.utils.book_append_sheet(wb, wsVol, "Call Volume by Day");
+
+    // Sheet 3 — Issues by Category
+    const total = d.totalCalls || 1;
+    const catRows = [["Category","Call Count","% of Total"],
+      ...Object.entries(d.categories).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k,v,`${Math.round(v/total*100)}%`])
+    ];
+    const wsCat = XLSX.utils.aoa_to_sheet(catRows);
+    wsCat["!cols"] = [{wch:24},{wch:12},{wch:12}];
+    XLSX.utils.book_append_sheet(wb, wsCat, "Issues by Category");
+
+    // Sheet 4 — Busiest Hours
+    const maxVal = Math.max(...heatmapMatrix.flat(), 1);
+    const hoursRows = [["Hour","Sun","Mon","Tue","Wed","Thu","Fri","Sat","Peak Hour?"],
+      ...heatmapMatrix.map((row, h) => {
+        const rowMax = Math.max(...row);
+        return [HOUR_LABELS_FULL[h], ...row, rowMax === maxVal && rowMax > 0 ? "★ Peak" : ""];
+      })
+    ];
+    const wsHours = XLSX.utils.aoa_to_sheet(hoursRows);
+    wsHours["!cols"] = [{wch:8},{wch:6},{wch:6},{wch:6},{wch:6},{wch:6},{wch:6},{wch:6},{wch:10}];
+    XLSX.utils.book_append_sheet(wb, wsHours, "Busiest Hours");
+
+    // Sheet 5 — Call Log
+    const callRows = [["Date","Time","Caller Phone","Guest Name","Status","Duration","Category","Sentiment","Transcript"],
+      ...d.calls.map(c => {
+        const dt = c.created_at ? new Date(c.created_at) : null;
+        return [
+          dt ? dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "",
+          dt ? dt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}) : "",
+          c.caller_phone || "", c.caller_name || "",
+          c.status || "", c.duration ? fmtDuration(c.duration) : "",
+          c.issue_category || "", c.sentiment || "",
+          (c.transcript || "").replace(/\n/g," | ").slice(0, 500),
+        ];
+      })
+    ];
+    const wsLog = XLSX.utils.aoa_to_sheet(callRows);
+    wsLog["!cols"] = [{wch:14},{wch:10},{wch:16},{wch:18},{wch:12},{wch:10},{wch:18},{wch:12},{wch:60}];
+    XLSX.utils.book_append_sheet(wb, wsLog, "Call Log");
+
+    const slug = d.rangeLabel.replace(/[^a-zA-Z0-9]/g,"-").replace(/-+/g,"-").toLowerCase();
+    XLSX.writeFile(wb, `caribbean-resort-report-${slug}.xlsx`);
+  }
+
+  // ── GENERATE REPORT: PRINT / PDF ───────────────
+  function generatePrintReport() {
+    const d = getReportData();
+    const generated = new Date().toLocaleString("en-US",{month:"long",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+
+    const catTableRows = Object.entries(d.categories)
+      .sort((a,b)=>b[1]-a[1])
+      .map(([k,v])=>`<tr><td>${k}</td><td>${v}</td><td>${d.totalCalls ? Math.round(v/d.totalCalls*100)+'%' : '—'}</td></tr>`)
+      .join("");
+
+    const volTableRows = d.volumeByDay
+      .map(r=>`<tr><td>${new Date(r.date).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}</td><td>${r.count}</td></tr>`)
+      .join("") || `<tr><td colspan="2" style="color:#999;font-style:italic">No calls in this period</td></tr>`;
+
+    // Top 5 busiest hour/day combos
+    const peakSlots = [];
+    for (let h = 0; h < 24; h++) {
+      for (let d2 = 0; d2 < 7; d2++) {
+        if (heatmapMatrix[h][d2] > 0) peakSlots.push({ hour: HOUR_LABELS_FULL[h], day: DAY_LABELS_FULL[d2], count: heatmapMatrix[h][d2] });
+      }
+    }
+    peakSlots.sort((a,b)=>b.count-a.count);
+    const peakRows = peakSlots.slice(0,5).map(s=>`<tr><td>${s.day}</td><td>${s.hour}</td><td>${s.count}</td></tr>`).join("")
+      || `<tr><td colspan="3" style="color:#999;font-style:italic">Not enough data yet</td></tr>`;
+
+    const callLogRows = d.calls.slice(0,100).map(c => {
+      const dt = c.created_at ? new Date(c.created_at) : null;
+      return `<tr>
+        <td>${dt ? dt.toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "—"}</td>
+        <td>${dt ? dt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}) : "—"}</td>
+        <td>${c.caller_phone||"Unknown"}</td>
+        <td>${c.issue_category||"—"}</td>
+        <td>${c.duration ? fmtDuration(c.duration) : "—"}</td>
+        <td><span style="color:${c.status==="completed"?"#1E7A48":"#9E2318"}">${c.status||"—"}</span></td>
+      </tr>`;
+    }).join("") || `<tr><td colspan="6" style="color:#999;font-style:italic">No calls in this period</td></tr>`;
+
+    const summary = d.totalCalls === 0
+      ? `No calls were recorded during this period.`
+      : `Your virtual receptionist handled <strong>${d.totalCalls} call${d.totalCalls!==1?"s":""}</strong> during this period, saving an estimated <strong>${d.hoursSaved}</strong> of front desk labor time with a <strong>${d.completionRate}</strong> completion rate and an average call duration of <strong>${d.avgDuration}</strong>.`;
+
+    const html = `<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<title>Analytics Report — ${d.rangeLabel}</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1C1008; font-size: 11pt; line-height: 1.5; padding: 40px 48px; }
+  .report-header { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+  .report-header img { width: 48px; height: 48px; border-radius: 8px; }
+  .report-header-text h1 { font-family: 'Lora', serif; font-size: 18pt; color: #172448; font-weight: 600; }
+  .report-header-text p { font-size: 9pt; color: #7A6650; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .report-meta { font-size: 9pt; color: #7A6650; margin-bottom: 28px; padding-bottom: 12px; border-bottom: 2px solid #7A1515; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .kpi-box { border: 1px solid #CFC0A8; border-radius: 8px; padding: 14px 16px; border-top: 4px solid #7A1515; }
+  .kpi-box:nth-child(2) { border-top-color: #2A7A5C; }
+  .kpi-box:nth-child(3) { border-top-color: #7A1515; }
+  .kpi-box:nth-child(4) { border-top-color: #1E7A48; }
+  .kpi-label { font-size: 7.5pt; text-transform: uppercase; letter-spacing: 1.5px; color: #7A6650; margin-bottom: 4px; }
+  .kpi-val { font-family: 'Lora', serif; font-size: 22pt; color: #172448; line-height: 1; }
+  .kpi-sub { font-size: 8pt; color: #7A6650; margin-top: 3px; }
+  .summary-box { background: #F7F2EB; border-left: 4px solid #7A1515; padding: 12px 16px; border-radius: 4px; font-size: 10.5pt; color: #1C1008; margin-bottom: 28px; }
+  h2 { font-family: 'Lora', serif; font-size: 13pt; color: #172448; margin-bottom: 10px; padding-top: 24px; border-top: 1px solid #E2D5C3; }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9.5pt; }
+  th { background: #172448; color: #fff; font-weight: 600; text-align: left; padding: 7px 10px; font-size: 8.5pt; letter-spacing: 0.3px; }
+  td { padding: 6px 10px; border-bottom: 1px solid #E2D5C3; color: #4A3828; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #FAF6EF; }
+  .report-footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #CFC0A8; font-size: 8.5pt; color: #7A6650; text-align: center; }
+  @media print {
+    body { padding: 20px 28px; }
+    @page { margin: 1.5cm; }
+    h2 { page-break-before: auto; }
+    table { page-break-inside: avoid; }
+  }
+</style>
+</head><body>
+<div class="report-header">
+  <img src="logo.jpg" alt="Logo">
+  <div class="report-header-text">
+    <h1>Caribbean Resort by the Ocean</h1>
+    <p>Virtual Receptionist Analytics Report</p>
+  </div>
+</div>
+<div class="report-meta">Period: <strong>${d.rangeLabel}</strong> &nbsp;·&nbsp; Generated: ${generated}</div>
+
+<div class="kpi-grid">
+  <div class="kpi-box">
+    <div class="kpi-label">Total Calls</div>
+    <div class="kpi-val">${d.totalCalls}</div>
+    <div class="kpi-sub">All time in period</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-label">Hours Saved</div>
+    <div class="kpi-val">${d.hoursSaved}</div>
+    <div class="kpi-sub">Front desk labor</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-label">Avg Duration</div>
+    <div class="kpi-val">${d.avgDuration}</div>
+    <div class="kpi-sub">Per call</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-label">Completion Rate</div>
+    <div class="kpi-val">${d.completionRate}</div>
+    <div class="kpi-sub">Fully handled</div>
+  </div>
+</div>
+
+<div class="summary-box">${summary}</div>
+
+<h2>Call Volume by Day</h2>
+<table><thead><tr><th>Date</th><th>Calls</th></tr></thead><tbody>${volTableRows}</tbody></table>
+
+<h2>Issues by Category</h2>
+<table><thead><tr><th>Category</th><th>Calls</th><th>% of Total</th></tr></thead><tbody>${catTableRows}</tbody></table>
+
+<h2>Top 5 Busiest Hours</h2>
+<table><thead><tr><th>Day</th><th>Hour</th><th>Calls</th></tr></thead><tbody>${peakRows}</tbody></table>
+
+<h2>Call Log ${d.calls.length > 100 ? "(Showing first 100)" : ""}</h2>
+<table><thead><tr><th>Date</th><th>Time</th><th>Caller</th><th>Category</th><th>Duration</th><th>Status</th></tr></thead><tbody>${callLogRows}</tbody></table>
+
+<div class="report-footer">Generated ${generated} &nbsp;·&nbsp; Caribbean Resort Virtual Receptionist &nbsp;·&nbsp; Built by CayesDesk</div>
+<script>window.onload=()=>window.print();<\/script>
+</body></html>`;
+
+    const w = window.open("","_blank");
+    if (w) { w.document.open(); w.document.write(html); w.document.close(); }
+    else alert("Please allow pop-ups to open the print report.");
   }
 
   function clearFilters() {
