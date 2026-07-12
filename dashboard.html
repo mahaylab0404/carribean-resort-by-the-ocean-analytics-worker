@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Caribbean Resort — AI Receptionist Analytics</title>
+  <title>Caribbean Resort — Virtual Receptionist Analytics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -120,8 +120,8 @@
 
     .kpi-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px 20px 16px;
-      box-shadow: var(--shadow-sm); position: relative; overflow: visible;
+      border-radius: 12px; padding: 22px 24px 18px;
+      box-shadow: var(--shadow-sm); position: relative;
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
@@ -311,7 +311,7 @@
     /* ── CALL CARD ────────────────────────────────── */
     .call-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; margin-bottom: 7px; overflow: hidden;
+      border-radius: 12px; margin-bottom: 8px; overflow: hidden;
       cursor: pointer; box-shadow: var(--shadow-sm);
       transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
     }
@@ -321,7 +321,7 @@
     .call-card-body { display: grid; grid-template-columns: 4px 1fr auto; align-items: stretch; }
     .sent-bar { width: 4px; align-self: stretch; }
 
-    .call-main { display: flex; align-items: center; gap: 18px; padding: 13px 16px; }
+    .call-main { display: flex; align-items: center; gap: 18px; padding: 14px 16px; }
 
     .caller-info { min-width: 155px; }
     .caller-num  { font-weight: 600; font-size: 0.84rem; color: var(--text); letter-spacing: 0.2px; }
@@ -354,7 +354,7 @@
     }
 
     .call-time-col {
-      padding: 13px 16px 13px 0; text-align: right;
+      padding: 14px 16px 14px 0; text-align: right;
       display: flex; flex-direction: column; align-items: flex-end;
       justify-content: center; gap: 3px; min-width: 88px;
     }
@@ -376,7 +376,7 @@
 
     .expand-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 12px; }
 
-    .bubble-feed { display: flex; flex-direction: column; gap: 7px; }
+    .bubble-feed { display: flex; flex-direction: column; gap: 8px; }
 
     .bubble {
       max-width: 65%; padding: 9px 13px;
@@ -417,89 +417,6 @@
     }
     footer b { color: var(--burg); }
 
-    /* ── REVIEWS ──────────────────────────────────── */
-    .review-kpi-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .review-kpi {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 18px 20px;
-      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
-    }
-
-    .review-kpi .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-    .review-kpi .rkpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 8px; }
-    .review-kpi .rkpi-value { font-family: 'DM Serif Display', serif; font-size: 2.2rem; font-weight: 700; line-height: 1; color: var(--navy); }
-    .review-kpi .rkpi-sub { font-size: 0.68rem; color: var(--muted); margin-top: 6px; }
-
-    .stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 1px; }
-
-    .review-tabs {
-      display: flex; gap: 4px; margin-bottom: 14px;
-    }
-
-    .rev-tab {
-      font-size: 0.68rem; font-weight: 500; padding: 6px 16px;
-      border-radius: 6px; border: 1px solid var(--border);
-      background: var(--card); color: var(--muted);
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s;
-    }
-    .rev-tab:hover { border-color: var(--border2); color: var(--text2); }
-    .rev-tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
-
-    .review-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px 18px;
-      margin-bottom: 8px; box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.15s;
-    }
-    .review-card:hover { box-shadow: var(--shadow); }
-    .review-card.negative { border-left: 4px solid var(--red); }
-    .review-card.positive { border-left: 4px solid var(--green); }
-    .review-card.neutral  { border-left: 4px solid var(--amber); }
-
-    .review-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
-    }
-
-    .review-author { font-weight: 600; font-size: 0.82rem; color: var(--text); }
-
-    .source-badge {
-      font-size: 0.62rem; font-weight: 600; padding: 2px 8px;
-      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .source-badge.google      { background: rgba(66,133,244,0.1); color: #2A6DB5; border: 1px solid rgba(66,133,244,0.2); }
-    .source-badge.tripadvisor { background: rgba(52,152,61,0.1);  color: #1E7832; border: 1px solid rgba(52,152,61,0.2); }
-
-.review-date { font-size: 0.67rem; color: var(--muted); margin-left: auto; }
-
-    .review-text {
-      font-size: 0.8rem; line-height: 1.6; color: var(--text2);
-    }
-
-    .review-suggestion {
-      display: flex; gap: 8px; align-items: flex-start;
-      margin-top: 10px; padding: 10px 12px;
-      background: rgba(184,137,46,0.07);
-      border: 1px solid rgba(184,137,46,0.2);
-      border-radius: 8px;
-      font-size: 0.76rem; line-height: 1.55; color: var(--text2);
-    }
-
-    .review-suggestion .sug-icon {
-      font-size: 0.9rem; flex-shrink: 0; margin-top: 1px;
-    }
-
-    .review-suggestion .sug-label {
-      font-size: 0.58rem; text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--gold); font-weight: 600; display: block; margin-bottom: 3px;
-    }
-
     /* ── RESPONSIVE ───────────────────────────────── */
     @media (max-width: 1100px) {
       header, main, footer { padding-left: 24px; padding-right: 24px; }
@@ -523,24 +440,11 @@
   <div class="header-inner">
     <div class="brand">
       <div class="brand-icon">
-        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="42" height="42" rx="8" fill="#7B3A2A"/>
-          <path d="M17 36 C16 28 13 22 10 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M25 36 C26 28 29 22 32 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M10 16 C7 12 4 13 3 10 C6 10 9 12 10 16Z" fill="#D4C4B0"/>
-          <path d="M10 16 C9 11 11 8 10 5 C12 7 12 12 10 16Z" fill="#D4C4B0"/>
-          <path d="M10 16 C13 12 14 9 16 8 C15 11 13 14 10 16Z" fill="#D4C4B0"/>
-          <path d="M10 16 C12 14 15 14 17 13 C15 16 12 16 10 16Z" fill="#D4C4B0"/>
-          <path d="M32 16 C35 12 38 13 39 10 C36 10 33 12 32 16Z" fill="#D4C4B0"/>
-          <path d="M32 16 C33 11 31 8 32 5 C30 7 30 12 32 16Z" fill="#D4C4B0"/>
-          <path d="M32 16 C29 12 28 9 26 8 C27 11 29 14 32 16Z" fill="#D4C4B0"/>
-          <path d="M32 16 C30 14 27 14 25 13 C27 16 30 16 32 16Z" fill="#D4C4B0"/>
-          <path d="M17 30 C20 27 22 27 25 30" stroke="#D4C4B0" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
+        <img src="logo.jpg" alt="Caribbean Resort by the Ocean" width="42" height="42" style="border-radius:8px;display:block">
       </div>
       <div class="brand-text">
-        <h1>Caribbean Resort &amp; Suite</h1>
-        <p>AI Receptionist Analytics &nbsp;·&nbsp; Hollywood, FL</p>
+        <h1>Caribbean Resort by the Ocean</h1>
+        <p>Virtual Receptionist Analytics &nbsp;·&nbsp; Hollywood, FL</p>
       </div>
     </div>
     <div class="header-right">
@@ -674,7 +578,6 @@
       <span style="font-size:0.68rem;color:var(--muted)">→</span>
       <input type="date" id="date-to" class="f-date-input">
     </div>
-    <div class="filter-spacer"></div>
   </div>
 
   <div class="feed-meta">
@@ -695,7 +598,7 @@
 </main>
 
 <footer>
-  Powered by <b>Caribbean Resort AI Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'DM Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
+  Powered by <b>Caribbean Resort Virtual Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'DM Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
 </footer>
 
 <script>
@@ -1081,7 +984,7 @@
     document.getElementById("feed-count").textContent = `${calls.length} call${calls.length !== 1 ? "s" : ""}`;
 
     if (!calls.length) {
-      feed.innerHTML = `<div class="state-card"><div class="state-icon">🏖️</div><p>No calls match the current filters.</p></div>`;
+      feed.innerHTML = `<div class="state-card"><div class="state-icon">🏖️</div><p>No calls match the current filters.<br><a href="#" onclick="clearFilters();return false;" style="color:var(--ocean);font-size:0.78rem;margin-top:8px;display:inline-block">Clear filters</a></p></div>`;
       return;
     }
 
@@ -1103,7 +1006,7 @@
           const role = line.slice(0, ci).trim().toLowerCase();
           const msg  = escHtml(line.slice(ci + 1).trim());
           const cls  = (role === "agent" || role === "assistant") ? "agent" : "user";
-          return `<div class="bubble ${cls}"><div class="bubble-sender">${cls === "agent" ? "AI Receptionist" : "Guest"}</div>${msg}</div>`;
+          return `<div class="bubble ${cls}"><div class="bubble-sender">${cls === "agent" ? "Virtual Receptionist" : "Guest"}</div>${msg}</div>`;
         }).join("");
       }
 
@@ -1171,6 +1074,16 @@
     }
   }
 
+
+  function clearFilters() {
+    activeFilters = { sentiment: "all", category: "all", date: "all" };
+    document.querySelectorAll("#filter-sentiment .f-btn, #filter-date .f-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.val === "all");
+    });
+    document.getElementById("filter-category").value = "all";
+    document.getElementById("custom-date-row").classList.remove("visible");
+    applyFilters();
+  }
 
   function toggleHeatmap() {
     const toggle = document.getElementById("heatmap-toggle");
