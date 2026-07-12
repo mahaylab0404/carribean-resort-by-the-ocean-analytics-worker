@@ -127,34 +127,19 @@
     .kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
     .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
 
-    /* ── KPI INFO POPOVER ─────────────────────────── */
-    .kpi-info-btn {
-      background: var(--bg2); border: 1px solid var(--border); cursor: pointer;
-      font-size: 0.72rem; color: var(--muted); padding: 4px 8px;
-      line-height: 1; letter-spacing: 2px; font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s; flex-shrink: 0; border-radius: 4px;
-      min-width: 32px; min-height: 24px;
+    .kpi-explainer-link {
+      text-align: right;
+      margin-top: 8px;
+      margin-bottom: 4px;
     }
-    .kpi-info-btn:hover { color: var(--navy); background: var(--border); }
-
-    .kpi-popover {
-      display: none;
-      margin-top: 10px;
-      background: var(--bg);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      padding: 12px 14px;
-      box-shadow: var(--shadow);
+    .kpi-explainer-link a {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: color 0.15s;
     }
-    .kpi-popover.open { display: block; }
-    .kpi-popover-title {
-      font-size: 0.6rem; text-transform: uppercase;
-      letter-spacing: 1.8px; color: var(--gold);
-      margin-bottom: 6px; font-weight: 600;
-    }
-    .kpi-popover-body {
-      font-size: 0.74rem; color: var(--text2); line-height: 1.6;
-    }
+    .kpi-explainer-link a:hover { color: var(--ocean); }
 
     .kpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
     .kpi-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
@@ -596,14 +581,7 @@
       <div class="kpi-value" id="kpi-hours">—</div>
       <div class="kpi-footer">
         <span class="kpi-foot-text">Front desk labor</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="trend flat" id="trend-hours">—</span>
-          <button class="kpi-info-btn" onclick="togglePopover(event,'pop-hours')">···</button>
-        </div>
-      </div>
-      <div class="kpi-popover" id="pop-hours">
-        <div class="kpi-popover-title">How this is measured</div>
-        <div class="kpi-popover-body">Hours Saved is calculated by summing the duration of every AI-handled call. Each second the AI receptionist is on a call is a second your front desk staff didn't have to be. This number represents the total front desk labor time absorbed by the AI since it went live.</div>
+        <span class="trend flat" id="trend-hours">—</span>
       </div>
     </div>
     <div class="kpi-card">
@@ -621,16 +599,12 @@
       <div class="kpi-value" id="kpi-completion">—</div>
       <div class="kpi-footer">
         <span class="kpi-foot-text">Fully handled</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="trend flat" id="trend-completion">—</span>
-          <button class="kpi-info-btn" onclick="togglePopover(event,'pop-completion')">···</button>
-        </div>
-      </div>
-      <div class="kpi-popover" id="pop-completion">
-        <div class="kpi-popover-title">How this is measured</div>
-        <div class="kpi-popover-body">Completion Rate is the percentage of calls where the AI successfully resolved the guest's request. A call is marked <em>completed</em> by ElevenLabs when the conversation reached a natural conclusion — the guest's issue was addressed and the call ended without an error or dropped connection.</div>
+        <span class="trend flat" id="trend-completion">—</span>
       </div>
     </div>
+  </div>
+  <div class="kpi-explainer-link">
+    <a href="how-it-works.html" target="_blank">How is this data collected? →</a>
   </div>
 
   <!-- ── CHARTS ── -->
@@ -1197,20 +1171,6 @@
     }
   }
 
-  function togglePopover(evt, id) {
-    evt.stopPropagation();
-    const pop = document.getElementById(id);
-    if (!pop) { alert("popover element not found: " + id); return; }
-    const isOpen = pop.classList.contains("open");
-    document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
-    if (!isOpen) pop.classList.add("open");
-  }
-
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".kpi-card")) {
-      document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
-    }
-  });
 
   function toggleHeatmap() {
     const toggle = document.getElementById("heatmap-toggle");

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caribbean Resort — Analytics Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #F7F2EB;
+      --bg2:      #EFE8DC;
+      --card:     #FFFFFF;
+      --border:   #E2D5C3;
+      --border2:  #CFC0A8;
+      --burg:     #7A1515;
+      --gold:     #B8892E;
+      --ocean:    #006E7A;
+      --navy:     #172448;
+      --text:     #1C1008;
+      --text2:    #4A3828;
+      --muted:    #7A6650;
+      --green:    #1E7A48;
+      --shadow:   0 2px 12px rgba(28,16,8,0.08);
+      --shadow-lg:0 8px 32px rgba(28,16,8,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar { background: var(--burg); height: 3px; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      box-shadow: 0 1px 4px rgba(28,16,8,0.06);
+    }
+
+    .header-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; height: 72px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 16px; }
+
+    .brand-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+
+    .brand-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem; font-weight: 400;
+      color: var(--navy); line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 0.68rem; color: var(--muted);
+      letter-spacing: 1.8px; text-transform: uppercase; margin-top: 1px;
+    }
+
+    .back-link {
+      font-size: 0.78rem; color: var(--muted);
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--navy); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(180deg, var(--card) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 48px 56px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 2.5px; color: var(--gold);
+      margin-bottom: 16px; font-weight: 600;
+    }
+
+    .hero h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.6rem; color: var(--navy);
+      line-height: 1.2; margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1rem; color: var(--text2);
+      max-width: 580px; margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── MAIN ── */
+    main { max-width: 1100px; margin: 0 auto; padding: 56px 48px 80px; }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem; color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      font-size: 0.88rem; color: var(--muted);
+      margin-bottom: 32px; max-width: 560px;
+    }
+
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 56px 0;
+    }
+
+    /* ── METRIC CARDS ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card-top {
+      height: 4px;
+    }
+
+    .metric-card-body { padding: 28px 28px 24px; }
+
+    .metric-icon { font-size: 1.8rem; margin-bottom: 12px; }
+
+    .metric-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem; color: var(--navy); margin-bottom: 20px;
+    }
+
+    .metric-row {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .metric-row-label {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 1.8px; color: var(--gold);
+      font-weight: 600; margin-bottom: 5px;
+    }
+
+    .metric-row-text {
+      font-size: 0.85rem; color: var(--text2); line-height: 1.6;
+    }
+
+    .metric-example {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 14px;
+      margin-top: 6px;
+      font-size: 0.82rem; color: var(--text2);
+    }
+
+    .metric-example-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; color: var(--navy); font-weight: 400;
+    }
+
+    /* ── DATA FLOW ── */
+    .flow-row {
+      display: flex; align-items: flex-start;
+      gap: 0; flex-wrap: wrap;
+    }
+
+    .flow-step {
+      flex: 1; min-width: 140px;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; position: relative;
+      padding: 0 8px;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -10px; top: 22px;
+      font-size: 1rem; color: var(--border2);
+    }
+
+    .flow-icon {
+      width: 48px; height: 48px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(28,16,8,0.06);
+    }
+
+    .flow-label {
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--navy); margin-bottom: 4px;
+    }
+
+    .flow-desc {
+      font-size: 0.7rem; color: var(--muted); line-height: 1.4;
+    }
+
+    /* ── CALL LOG BREAKDOWN ── */
+    .callcard-demo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .callcard-demo-inner {
+      display: grid;
+      grid-template-columns: 5px 1fr;
+    }
+
+    .demo-bar { background: var(--green); }
+
+    .demo-content {
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+
+    .demo-caller { min-width: 140px; }
+    .demo-caller-num { font-weight: 600; font-size: 0.88rem; }
+    .demo-caller-name { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+    .demo-pills { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+    .demo-pill {
+      font-size: 0.65rem; font-weight: 500; padding: 3px 9px;
+      border-radius: 4px; border: 1px solid transparent;
+    }
+
+    .demo-pill-ok   { background: rgba(30,122,72,0.08); color: #1E7A48; border-color: rgba(30,122,72,0.2); }
+    .demo-pill-cat  { background: rgba(0,110,122,0.08); color: #006E7A; border-color: rgba(0,110,122,0.2); }
+    .demo-pill-dur  { background: rgba(122,21,21,0.07); color: #7A1515; border-color: rgba(122,21,21,0.15); }
+
+    .demo-snip {
+      font-size: 0.78rem; color: var(--muted); font-style: italic;
+      flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .demo-time { text-align: right; min-width: 80px; }
+    .demo-time-day { font-size: 0.65rem; color: var(--muted); }
+    .demo-time-hr  { font-size: 0.8rem; font-weight: 500; color: var(--text2); margin-top: 2px; }
+
+    .field-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+
+    .field-table th {
+      font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--muted); font-weight: 600; padding: 8px 12px;
+      border-bottom: 1px solid var(--border); text-align: left;
+      background: var(--bg2);
+    }
+
+    .field-table td {
+      font-size: 0.82rem; color: var(--text2); padding: 10px 12px;
+      border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+
+    .field-table tr:last-child td { border-bottom: none; }
+
+    .field-table .field-name {
+      font-weight: 600; color: var(--navy); white-space: nowrap;
+    }
+
+    .sentiment-dot {
+      display: inline-block; width: 10px; height: 10px;
+      border-radius: 50%; margin-right: 5px; vertical-align: middle;
+    }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 10px;
+      background: var(--card); overflow: hidden;
+      box-shadow: 0 1px 4px rgba(28,16,8,0.04);
+    }
+
+    .faq-q {
+      width: 100%; text-align: left; background: none; border: none;
+      padding: 18px 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-family: 'DM Sans', sans-serif;
+    }
+
+    .faq-q-text {
+      font-size: 0.9rem; font-weight: 600; color: var(--navy);
+    }
+
+    .faq-arrow {
+      font-size: 0.8rem; color: var(--muted);
+      transition: transform 0.2s; flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-arrow { transform: rotate(90deg); color: var(--gold); }
+
+    .faq-a {
+      display: none;
+      padding: 0 20px 18px;
+      font-size: 0.85rem; color: var(--text2); line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 20px 48px;
+      border-top: 1px solid var(--border);
+      font-size: 0.68rem; color: var(--muted);
+      background: var(--bg2); letter-spacing: 0.3px;
+    }
+    footer b { color: var(--burg); }
+
+    @media (max-width: 768px) {
+      header, main, footer, .hero { padding-left: 20px; padding-right: 20px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .flow-row { flex-direction: column; gap: 20px; }
+      .flow-step:not(:last-child)::after { content: '↓'; right: auto; top: auto; position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="42" height="42" rx="8" fill="#7B3A2A"/>
+          <path d="M17 36 C16 28 13 22 10 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M25 36 C26 28 29 22 32 16" stroke="#D4C4B0" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M10 16 C7 12 4 13 3 10 C6 10 9 12 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C9 11 11 8 10 5 C12 7 12 12 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C13 12 14 9 16 8 C15 11 13 14 10 16Z" fill="#D4C4B0"/>
+          <path d="M10 16 C12 14 15 14 17 13 C15 16 12 16 10 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C35 12 38 13 39 10 C36 10 33 12 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C33 11 31 8 32 5 C30 7 30 12 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C29 12 28 9 26 8 C27 11 29 14 32 16Z" fill="#D4C4B0"/>
+          <path d="M32 16 C30 14 27 14 25 13 C27 16 30 16 32 16Z" fill="#D4C4B0"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Caribbean Resort &amp; Suite</h1>
+        <p>Analytics Guide</p>
+      </div>
+    </div>
+    <a class="back-link" href="dashboard.html">← Back to Dashboard</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Understanding Your Data</div>
+  <h2>Your AI Receptionist, Explained</h2>
+  <p>Every number on your dashboard comes from real guest calls — automatically captured, stored, and analyzed with zero manual effort. Here's exactly what each metric means and where it comes from.</p>
+</div>
+
+<main>
+
+  <!-- METRICS -->
+  <div class="section-title">The Four Key Metrics</div>
+  <div class="section-sub">Each KPI tile on your dashboard measures a specific dimension of your AI receptionist's performance.</div>
+
+  <div class="metrics-grid">
+
+    <!-- Total Calls -->
+    <div class="metric-card">
+      <div class="metric-card-top" style="background:#006E7A"></div>
+      <div class="metric-card-body">
+        <div class="metric-icon">📞</div>
+        <div class="metric-name">Total Calls</div>
+        <div class="metric-row">
+          <div class="metric-row-label">What it shows</div>
+          <div class="metric-row-text">The total number of guest calls your AI receptionist has handled since going live. Every call — whether it lasted 10 seconds or 10 minutes — counts as one.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">How it's collected</div>
+          <div class="metric-row-text">When a guest hangs up, ElevenLabs fires a webhook to your Cloudflare Worker, which saves a record to your database. Each saved record increments this count.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Why it matters</div>
+          <div class="metric-row-text">This is the baseline volume metric. The trend arrow shows whether call volume is growing or shrinking week over week.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Example</div>
+          <div><span class="metric-example"><span class="metric-example-val">247</span> calls handled all time</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hours Saved -->
+    <div class="metric-card">
+      <div class="metric-card-top" style="background:#2A7A5C"></div>
+      <div class="metric-card-body">
+        <div class="metric-icon">⏱</div>
+        <div class="metric-name">Hours Saved</div>
+        <div class="metric-row">
+          <div class="metric-row-label">What it shows</div>
+          <div class="metric-row-text">The total amount of front desk staff time the AI has absorbed. Every second the AI is on a call is a second your staff didn't have to be.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">How it's collected</div>
+          <div class="metric-row-text">ElevenLabs reports the exact duration of each call in seconds via the post-call webhook. This metric sums every call duration and converts it to hours.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Why it matters</div>
+          <div class="metric-row-text">This is your ROI number. Front desk labor costs money — every hour the AI handles frees your team for higher-value work.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Example</div>
+          <div><span class="metric-example"><span class="metric-example-val">14.3h</span> of front desk labor saved</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avg Duration -->
+    <div class="metric-card">
+      <div class="metric-card-top" style="background:#7A1515"></div>
+      <div class="metric-card-body">
+        <div class="metric-icon">🕐</div>
+        <div class="metric-name">Avg Duration</div>
+        <div class="metric-row">
+          <div class="metric-row-label">What it shows</div>
+          <div class="metric-row-text">The average length of a guest call, calculated across all calls that have a recorded duration. Shown as minutes and seconds.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">How it's collected</div>
+          <div class="metric-row-text">Each call's duration is reported by ElevenLabs in seconds. This metric divides the total seconds by the number of calls with a duration value.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Why it matters</div>
+          <div class="metric-row-text">Unusually long calls can signal that the AI is struggling with certain request types — a cue to review those transcripts and improve the agent's training.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Example</div>
+          <div><span class="metric-example"><span class="metric-example-val">2m 18s</span> average per call</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Rate -->
+    <div class="metric-card">
+      <div class="metric-card-top" style="background:#1E7A48"></div>
+      <div class="metric-card-body">
+        <div class="metric-icon">✅</div>
+        <div class="metric-name">Completion Rate</div>
+        <div class="metric-row">
+          <div class="metric-row-label">What it shows</div>
+          <div class="metric-row-text">The percentage of calls where the AI successfully handled the guest's request from start to finish. A higher rate means the AI is resolving more calls without issues.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">How it's collected</div>
+          <div class="metric-row-text">ElevenLabs marks each call with a status. A call is <em>completed</em> when the conversation reached a natural conclusion. Calls that dropped, errored, or were transferred are counted separately.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Why it matters</div>
+          <div class="metric-row-text">This is your reliability metric. A completion rate above 90% means your AI is consistently handling guest requests end to end.</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-row-label">Example</div>
+          <div><span class="metric-example"><span class="metric-example-val">94%</span> of calls fully resolved</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- DATA FLOW -->
+  <div class="section-title">How Data Gets to Your Dashboard</div>
+  <div class="section-sub">Every metric follows the same automatic pipeline — no manual input required.</div>
+
+  <div class="flow-row">
+    <div class="flow-step">
+      <div class="flow-icon">📱</div>
+      <div class="flow-label">Guest Calls</div>
+      <div class="flow-desc">A guest dials the hotel's phone number via Telnyx SIP</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">🤖</div>
+      <div class="flow-label">AI Answers</div>
+      <div class="flow-desc">ElevenLabs AI receptionist handles the conversation</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">📊</div>
+      <div class="flow-label">Call Analyzed</div>
+      <div class="flow-desc">ElevenLabs extracts duration, transcript, category, and status</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">⚡</div>
+      <div class="flow-label">Webhook Fires</div>
+      <div class="flow-desc">A POST request sends the call data to your Cloudflare Worker</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">🗄️</div>
+      <div class="flow-label">Data Stored</div>
+      <div class="flow-desc">Cloudflare D1 saves a permanent record of the call</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">📈</div>
+      <div class="flow-label">Dashboard Updates</div>
+      <div class="flow-desc">Your dashboard refreshes automatically every 60 seconds</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- CALL LOG -->
+  <div class="section-title">Reading the Guest Interaction Log</div>
+  <div class="section-sub">Each row in your call log is one guest conversation. Here's what every element means.</div>
+
+  <div class="callcard-demo">
+    <div class="callcard-demo-inner">
+      <div class="demo-bar"></div>
+      <div class="demo-content">
+        <div class="demo-caller">
+          <div class="demo-caller-num">+1 (954) 555-0182</div>
+          <div class="demo-caller-name">Maria Rodriguez</div>
+        </div>
+        <div class="demo-pills">
+          <span class="demo-pill demo-pill-ok">Completed</span>
+          <span class="demo-pill demo-pill-cat">Reservation</span>
+          <span class="demo-pill demo-pill-dur">⏱ 2m 14s</span>
+        </div>
+        <div class="demo-snip">"Hi, I'd like to check availability for the weekend of..."</div>
+        <div class="demo-time">
+          <div class="demo-time-day">Today</div>
+          <div class="demo-time-hr">2:41 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="field-table">
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>What it means</th>
+        <th>Where it comes from</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="field-name">Left color bar</td>
+        <td>Guest sentiment during the call — <span class="sentiment-dot" style="background:#1E7A48"></span>green = positive, <span class="sentiment-dot" style="background:#AD6E18"></span>amber = neutral, <span class="sentiment-dot" style="background:#9E2318"></span>red = negative</td>
+        <td>ElevenLabs Evaluation Criteria (configured in agent settings)</td>
+      </tr>
+      <tr>
+        <td class="field-name">Phone number</td>
+        <td>The caller's phone number as provided by Telnyx SIP trunking metadata</td>
+        <td>Telnyx → ElevenLabs metadata → Webhook payload</td>
+      </tr>
+      <tr>
+        <td class="field-name">Guest name</td>
+        <td>The guest's name if they stated it during the call and the AI extracted it</td>
+        <td>ElevenLabs Data Collection (configured in agent settings)</td>
+      </tr>
+      <tr>
+        <td class="field-name">Status pill</td>
+        <td>Whether the call completed successfully or encountered an issue</td>
+        <td>ElevenLabs call status field in the post-call webhook</td>
+      </tr>
+      <tr>
+        <td class="field-name">Category pill</td>
+        <td>The type of request — Reservation, Check-in/Out, Maintenance, Tiki Bar, or General Inquiry</td>
+        <td>ElevenLabs Data Collection extracts this from the transcript automatically</td>
+      </tr>
+      <tr>
+        <td class="field-name">Duration pill</td>
+        <td>How long the call lasted in minutes and seconds</td>
+        <td>ElevenLabs <code>call_duration_secs</code> field</td>
+      </tr>
+      <tr>
+        <td class="field-name">Transcript preview</td>
+        <td>The first 90 characters of the conversation. Click the row to read the full transcript with chat-style bubbles.</td>
+        <td>ElevenLabs full transcript, stored verbatim in Cloudflare D1</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider" />
+
+  <!-- FAQ -->
+  <div class="section-title">Frequently Asked Questions</div>
+  <div class="section-sub" style="margin-bottom:24px">Quick answers to common questions about how the dashboard works.</div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <button class="faq-q">
+      <span class="faq-q-text">How often does the dashboard update?</span>
+      <span class="faq-arrow">›</span>
+    </button>
+    <div class="faq-a">The dashboard automatically refreshes every 60 seconds in the background — you don't need to reload the page. New calls appear within one minute of the guest hanging up. The live indicator in the top-right corner pulses green to confirm the connection is active.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <button class="faq-q">
+      <span class="faq-q-text">How are issue categories determined?</span>
+      <span class="faq-arrow">›</span>
+    </button>
+    <div class="faq-a">Issue categories are extracted automatically by ElevenLabs using its native Data Collection feature. After each call, ElevenLabs reads the transcript and classifies the guest's request into one of five categories: Reservation, Check-in/Check-out, Maintenance, Tiki Bar, or General Inquiry. No manual tagging is required.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <button class="faq-q">
+      <span class="faq-q-text">What does the week-over-week trend arrow mean?</span>
+      <span class="faq-arrow">›</span>
+    </button>
+    <div class="faq-a">Each KPI tile has a small trend badge in the bottom-right corner. It compares the current 7-day window to the previous 7-day window. A green ↑ means the metric improved, a red ↓ means it declined, and → means it stayed flat. This helps you spot patterns week to week without having to do the math yourself.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <button class="faq-q">
+      <span class="faq-q-text">Is call data stored securely?</span>
+      <span class="faq-arrow">›</span>
+    </button>
+    <div class="faq-a">Yes. All call records are stored in Cloudflare D1 — a serverless database that runs on Cloudflare's global infrastructure. Data is encrypted at rest and in transit. Only authorized users with access to this dashboard can view call records. No call audio is stored — only the text transcript and metadata.</div>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <button class="faq-q">
+      <span class="faq-q-text">Can I export the data?</span>
+      <span class="faq-arrow">›</span>
+    </button>
+    <div class="faq-a">Yes. The Guest Interaction Log has an "Export CSV" button that downloads the full call log — including phone numbers, names, durations, categories, and transcripts — as a spreadsheet. You can also use the date range filter to export a specific time period. The busiest hours heatmap has its own separate CSV export for the hour-by-day breakdown.</div>
+  </div>
+
+</main>
+
+<footer>
+  Powered by <b>Caribbean Resort AI Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'DM Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
+</footer>
+
+</body>
+</html>
