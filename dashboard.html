@@ -10,11 +10,11 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
-      --bg:         #F7F2EB;
-      --bg2:        #EFE8DC;
+      --bg:         #EAE3D8;
+      --bg2:        #DED5C4;
       --card:       #FFFFFF;
-      --border:     #E2D5C3;
-      --border2:    #CFC0A8;
+      --border:     #CFC0A8;
+      --border2:    #BAA890;
       --burg:       #7A1515;
       --burg-light: rgba(122,21,21,0.07);
       --gold:       #B8892E;
@@ -23,15 +23,15 @@
       --navy:       #172448;
       --text:       #1C1008;
       --text2:      #4A3828;
-      --muted:      #7A6650;
+      --muted:      #6B5C4C;
       --green:      #1E7A48;
       --green-light:rgba(30,122,72,0.08);
       --red:        #9E2318;
       --red-light:  rgba(158,35,24,0.07);
       --amber:      #AD6E18;
-      --shadow-sm:  0 1px 4px rgba(28,16,8,0.06);
-      --shadow:     0 2px 12px rgba(28,16,8,0.08);
-      --shadow-lg:  0 8px 32px rgba(28,16,8,0.12);
+      --shadow-sm:  0 2px 8px rgba(28,16,8,0.09);
+      --shadow:     0 4px 16px rgba(28,16,8,0.12);
+      --shadow-lg:  0 8px 32px rgba(28,16,8,0.16);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -126,7 +126,7 @@
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
-    .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+    .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 12px 12px 0 0; }
 
     .kpi-explainer-link {
       text-align: right;
@@ -279,7 +279,7 @@
 
     .f-btn {
       font-size: 0.68rem; font-weight: 500;
-      padding: 5px 12px; border-radius: 6px;
+      padding: 5px 12px; border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--card); color: var(--muted);
       cursor: pointer; transition: all 0.15s;
@@ -289,7 +289,7 @@
     .f-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 
     .f-select {
-      font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+      font-size: 0.68rem; padding: 5px 10px; border-radius: 8px;
       border: 1px solid var(--border); background: var(--card);
       color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif;
       outline: none;
@@ -297,7 +297,7 @@
     .f-select:focus { border-color: var(--border2); }
 
     .f-date-input {
-      font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+      font-size: 0.68rem; padding: 5px 10px; border-radius: 8px;
       border: 1px solid var(--border); background: var(--card);
       color: var(--text2); font-family: 'DM Sans', sans-serif;
       outline: none;
@@ -320,14 +320,14 @@
 
     .feed-count-badge {
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 6px; padding: 3px 10px;
+      border-radius: 8px; padding: 3px 10px;
       font-size: 0.68rem; color: var(--muted); font-weight: 500;
     }
 
     .export-btn {
       display: flex; align-items: center; gap: 6px;
       font-size: 0.68rem; font-weight: 500;
-      padding: 6px 14px; border-radius: 6px;
+      padding: 6px 14px; border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--card); color: var(--text2);
       cursor: pointer; transition: all 0.15s;
