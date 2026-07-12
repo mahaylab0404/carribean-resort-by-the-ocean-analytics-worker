@@ -111,21 +111,53 @@
     .section-head .rule { flex: 1; height: 1px; background: var(--border); }
     .section-head .tag { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--gold); white-space: nowrap; }
 
-    /* ── KPI ROW (5 tiles) ────────────────────────── */
+    /* ── KPI ROW (4 tiles) ────────────────────────── */
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
 
     .kpi-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 12px; padding: 20px 20px 16px;
-      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+      box-shadow: var(--shadow-sm); position: relative; overflow: visible;
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
-    .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi-card .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+
+    /* ── KPI INFO POPOVER ─────────────────────────── */
+    .kpi-info-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.8rem; color: var(--muted); padding: 0 2px;
+      line-height: 1; letter-spacing: 2px; font-family: 'DM Sans', sans-serif;
+      transition: color 0.15s; flex-shrink: 0;
+    }
+    .kpi-info-btn:hover { color: var(--navy); }
+
+    .kpi-popover {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: 0;
+      width: 250px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+    }
+    .kpi-popover.open { display: block; }
+    .kpi-popover-title {
+      font-size: 0.63rem; text-transform: uppercase;
+      letter-spacing: 1.8px; color: var(--gold);
+      margin-bottom: 8px; font-weight: 600;
+    }
+    .kpi-popover-body {
+      font-size: 0.76rem; color: var(--text2); line-height: 1.65;
+    }
 
     .kpi-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--muted); margin-bottom: 10px; }
     .kpi-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--navy); }
@@ -141,56 +173,6 @@
     .trend.up   { background: var(--green-light); color: var(--green); }
     .trend.down { background: var(--red-light);   color: var(--red); }
     .trend.flat { background: var(--bg2);          color: var(--muted); }
-
-    /* ── ALERT BANNER (needs follow-up) ──────────── */
-    .alert-banner {
-      background: #FFF8F8;
-      border: 1px solid rgba(158,35,24,0.25);
-      border-left: 4px solid var(--red);
-      border-radius: 12px;
-      padding: 16px 20px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .alert-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .alert-title {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 0.78rem; font-weight: 600; color: var(--red);
-      text-transform: uppercase; letter-spacing: 1px;
-    }
-
-    .alert-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--red); animation: pulse 1.8s infinite;
-    }
-
-    .alert-count {
-      font-size: 0.68rem; color: var(--red);
-      background: var(--red-light); border: 1px solid rgba(158,35,24,0.2);
-      border-radius: 4px; padding: 2px 8px; font-weight: 500;
-    }
-
-    .alert-cards { display: flex; flex-direction: column; gap: 6px; }
-
-    .alert-card {
-      background: var(--card); border: 1px solid rgba(158,35,24,0.15);
-      border-radius: 8px; padding: 10px 14px;
-      display: flex; align-items: center; gap: 14px;
-      cursor: pointer;
-      transition: box-shadow 0.15s;
-    }
-    .alert-card:hover { box-shadow: var(--shadow); }
-
-    .alert-card .ac-num  { font-weight: 600; font-size: 0.82rem; min-width: 130px; }
-    .alert-card .ac-cat  { font-size: 0.72rem; color: var(--muted); flex: 1; }
-    .alert-card .ac-snip { font-size: 0.75rem; color: var(--muted); font-style: italic; flex: 3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px; }
-    .alert-card .ac-time { font-size: 0.68rem; color: var(--muted); white-space: nowrap; text-align: right; min-width: 80px; }
-
-    .alert-empty { font-size: 0.8rem; color: var(--green); padding: 6px 2px; display: flex; align-items: center; gap: 6px; }
 
     /* ── CHARTS ───────────────────────────────────── */
     .charts-row {
@@ -304,6 +286,20 @@
       outline: none;
     }
     .f-select:focus { border-color: var(--border2); }
+
+    .f-date-input {
+      font-size: 0.68rem; padding: 5px 10px; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text2); font-family: 'DM Sans', sans-serif;
+      outline: none;
+    }
+    .f-date-input:focus { border-color: var(--border2); }
+
+    #custom-date-row {
+      display: none; align-items: center; gap: 8px;
+      margin-left: 4px;
+    }
+    #custom-date-row.visible { display: flex; }
 
     .filter-spacer { flex: 1; }
 
@@ -603,7 +599,14 @@
       <div class="kpi-value" id="kpi-hours">—</div>
       <div class="kpi-footer">
         <span class="kpi-foot-text">Front desk labor</span>
-        <span class="trend flat" id="trend-hours">—</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="trend flat" id="trend-hours">—</span>
+          <button class="kpi-info-btn" onclick="togglePopover(event,'pop-hours')">···</button>
+        </div>
+      </div>
+      <div class="kpi-popover" id="pop-hours">
+        <div class="kpi-popover-title">How this is measured</div>
+        <div class="kpi-popover-body">Hours Saved is calculated by summing the duration of every AI-handled call. Each second the AI receptionist is on a call is a second your front desk staff didn't have to be. This number represents the total front desk labor time absorbed by the AI since it went live.</div>
       </div>
     </div>
     <div class="kpi-card">
@@ -621,37 +624,15 @@
       <div class="kpi-value" id="kpi-completion">—</div>
       <div class="kpi-footer">
         <span class="kpi-foot-text">Fully handled</span>
-        <span class="trend flat" id="trend-completion">—</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="trend flat" id="trend-completion">—</span>
+          <button class="kpi-info-btn" onclick="togglePopover(event,'pop-completion')">···</button>
+        </div>
       </div>
-    </div>
-    <div class="kpi-card">
-      <div class="top-bar" style="background:var(--gold)"></div>
-      <div class="kpi-label">Positive Sentiment</div>
-      <div class="kpi-value" id="kpi-sentiment">—</div>
-      <div class="kpi-footer">
-        <span class="kpi-foot-text">Satisfied guests</span>
-        <span class="trend flat" id="trend-sentiment">—</span>
+      <div class="kpi-popover" id="pop-completion">
+        <div class="kpi-popover-title">How this is measured</div>
+        <div class="kpi-popover-body">Completion Rate is the percentage of calls where the AI successfully resolved the guest's request. A call is marked <em>completed</em> by ElevenLabs when the conversation reached a natural conclusion — the guest's issue was addressed and the call ended without an error or dropped connection.</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ── NEEDS FOLLOW-UP ── -->
-  <div class="section-head" style="margin-top:32px">
-    <h2>Needs Follow-Up</h2>
-    <div class="rule"></div>
-    <div class="tag">Negative Sentiment</div>
-  </div>
-
-  <div class="alert-banner">
-    <div class="alert-header">
-      <div class="alert-title">
-        <span class="alert-dot"></span>
-        Guests requiring attention
-      </div>
-      <div class="alert-count" id="alert-count">0 calls</div>
-    </div>
-    <div class="alert-cards" id="alert-feed">
-      <div class="alert-empty">✓ No negative calls at this time</div>
     </div>
   </div>
 
@@ -672,11 +653,17 @@
       <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
     </div>
     <div class="chart-card chart-card-full">
-      <div class="chart-card-title" style="margin-bottom:4px">Busiest Hours — Weekly Pattern</div>
-      <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()">
-        <span class="toggle-arrow">›</span>
-        <span id="heatmap-toggle-label">Show full grid</span>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="chart-card-title" style="margin-bottom:0">Busiest Hours — Weekly Pattern</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="export-btn" onclick="exportHoursCSV()" style="font-size:0.65rem;padding:4px 10px">↓ Export CSV</button>
+          <div class="heatmap-toggle" id="heatmap-toggle" onclick="toggleHeatmap()" style="margin-bottom:0">
+            <span class="toggle-arrow">›</span>
+            <span id="heatmap-toggle-label">Show full week</span>
+          </div>
+        </div>
       </div>
+      <div id="heatmap-preview"></div>
       <div class="heatmap-body" id="heatmap-body">
         <div id="heatmap"></div>
       </div>
@@ -709,6 +696,12 @@
       <button class="f-btn" data-val="today">Today</button>
       <button class="f-btn" data-val="week">This Week</button>
       <button class="f-btn" data-val="month">This Month</button>
+      <button class="f-btn" data-val="custom">Custom</button>
+    </div>
+    <div id="custom-date-row">
+      <input type="date" id="date-from" class="f-date-input">
+      <span style="font-size:0.68rem;color:var(--muted)">→</span>
+      <input type="date" id="date-to" class="f-date-input">
     </div>
     <div class="filter-spacer"></div>
   </div>
@@ -731,7 +724,7 @@
 </main>
 
 <footer>
-  Powered by <b>Caribbean Resort AI Receptionist</b> &nbsp;·&nbsp; Built by <b>CayesDesk</b>
+  Powered by <b>Caribbean Resort AI Receptionist</b> &nbsp;·&nbsp; Built by <b style="font-family:'DM Sans',sans-serif"><span style="color:#0F1C38">Cayes</span><span style="color:#3B82C4">Desk</span></b>
 </footer>
 
 <script>
@@ -870,41 +863,6 @@
     const lwComp = lastWeek.length ? Math.round((lwDone/lastWeek.length)*100) : 0;
     setTrend("trend-completion", twComp, lwComp);
 
-    // Positive sentiment
-    const pos = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "positive").length;
-    const sentPct = calls.length ? Math.round((pos / calls.length) * 100) : 0;
-    document.getElementById("kpi-sentiment").textContent = calls.length ? `${sentPct}%` : "—";
-    const twPos = thisWeek.filter(c=>c.sentiment&&c.sentiment.toLowerCase()==="positive").length;
-    const lwPos = lastWeek.filter(c=>c.sentiment&&c.sentiment.toLowerCase()==="positive").length;
-    const twSent = thisWeek.length ? Math.round((twPos/thisWeek.length)*100) : 0;
-    const lwSent = lastWeek.length ? Math.round((lwPos/lastWeek.length)*100) : 0;
-    setTrend("trend-sentiment", twSent, lwSent);
-  }
-
-  // ── NEEDS FOLLOW-UP ────────────────────────────
-  function buildAlerts(calls) {
-    const neg = calls.filter(c => c.sentiment && c.sentiment.toLowerCase() === "negative");
-    const el = document.getElementById("alert-feed");
-    const cnt = document.getElementById("alert-count");
-    cnt.textContent = `${neg.length} call${neg.length !== 1 ? "s" : ""}`;
-
-    if (!neg.length) {
-      el.innerHTML = `<div class="alert-empty">✓ No negative calls at this time — guests are happy!</div>`;
-      return;
-    }
-
-    el.innerHTML = neg.slice(0, 5).map(c => {
-      const { day, time } = fmtTime(c.created_at);
-      const snip = c.transcript
-        ? c.transcript.replace(/^[^:]+:\s*/, "").slice(0, 100)
-        : "No transcript";
-      return `<div class="alert-card">
-        <div class="ac-num">${c.caller_phone || "Unknown"}</div>
-        <div class="ac-cat"><span class="pill ${catInfo(c.issue_category).cls}" style="font-size:0.65rem">${escHtml(c.issue_category) || "General"}</span></div>
-        <div class="ac-snip">"${snip}…"</div>
-        <div class="ac-time">${day} · ${time}</div>
-      </div>`;
-    }).join("") + (neg.length > 5 ? `<div style="font-size:0.72rem;color:var(--muted);padding:6px 2px">+${neg.length - 5} more — scroll call log below</div>` : "");
   }
 
   // ── CHARTS ─────────────────────────────────────
@@ -984,16 +942,16 @@
     buildHeatmap(calls);
   }
 
+  let heatmapMatrix = Array.from({ length: 24 }, () => Array(7).fill(0));
+
   function buildHeatmap(calls) {
-    // Matrix: rows = hours 0–23, cols = days Sun–Sat
     const matrix = Array.from({ length: 24 }, () => Array(7).fill(0));
     calls.forEach(c => {
       if (!c.created_at) return;
       const d = new Date(c.created_at);
-      const h = d.getHours();
-      const dow = d.getDay(); // 0=Sun
-      matrix[h][dow]++;
+      matrix[d.getHours()][d.getDay()]++;
     });
+    heatmapMatrix = matrix;
 
     const maxVal = Math.max(...matrix.flat(), 1);
     const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -1002,53 +960,63 @@
       return i < 12 ? `${i}a` : `${i-12}p`;
     });
 
-    // Burgundy heat scale
     function cellColor(val) {
       if (val === 0) return "var(--bg2)";
-      const intensity = val / maxVal;
-      if (intensity < 0.25) return "rgba(122,21,21,0.18)";
-      if (intensity < 0.5)  return "rgba(122,21,21,0.38)";
-      if (intensity < 0.75) return "rgba(122,21,21,0.62)";
+      const t = val / maxVal;
+      if (t < 0.25) return "rgba(122,21,21,0.18)";
+      if (t < 0.5)  return "rgba(122,21,21,0.38)";
+      if (t < 0.75) return "rgba(122,21,21,0.62)";
       return "#7A1515";
     }
 
-    function cellTextColor(val) {
-      return val / maxVal >= 0.62 ? "#fff" : "transparent";
-    }
-
-    const container = document.getElementById("heatmap");
-    let html = `<div class="heatmap-grid">`;
-
-    // Header row: empty corner + day labels
-    html += `<div></div>`;
-    DAY_LABELS.forEach(d => {
-      html += `<div class="heatmap-col-label">${d}</div>`;
-    });
-
-    // Data rows: hour label + 7 cells
-    for (let h = 0; h < 24; h++) {
-      html += `<div class="heatmap-row-label">${HOUR_LABELS[h]}</div>`;
-      for (let d = 0; d < 7; d++) {
-        const v = matrix[h][d];
-        const tip = v > 0 ? `${DAY_LABELS[d]} ${HOUR_LABELS[h]}: ${v} call${v !== 1 ? "s" : ""}` : "";
-        html += `<div class="heatmap-cell" style="background:${cellColor(v)};color:${cellTextColor(v)}" ${tip ? `data-tip="${tip}"` : ""}></div>`;
+    function renderGrid(colIndices, colLabels, containerId) {
+      const cols = colIndices.length;
+      let html = `<div class="heatmap-grid" style="grid-template-columns:36px repeat(${cols},1fr)">`;
+      html += `<div></div>`;
+      colLabels.forEach(l => { html += `<div class="heatmap-col-label">${l}</div>`; });
+      for (let h = 0; h < 24; h++) {
+        html += `<div class="heatmap-row-label">${HOUR_LABELS[h]}</div>`;
+        colIndices.forEach((d, ci) => {
+          const v = matrix[h][d];
+          const tip = v > 0 ? `${colLabels[ci]} ${HOUR_LABELS[h]}: ${v} call${v !== 1 ? "s" : ""}` : "";
+          html += `<div class="heatmap-cell" style="background:${cellColor(v)}" ${tip ? `data-tip="${tip}"` : ""}></div>`;
+        });
       }
-    }
-
-    html += `</div>`;
-    html += `<div class="heatmap-legend">
-      <span>Low</span>
-      <div class="heatmap-swatch">
+      html += `</div>`;
+      html += `<div class="heatmap-legend"><span>Low</span><div class="heatmap-swatch">
         <span style="background:var(--bg2)"></span>
         <span style="background:rgba(122,21,21,0.18)"></span>
         <span style="background:rgba(122,21,21,0.38)"></span>
         <span style="background:rgba(122,21,21,0.62)"></span>
         <span style="background:#7A1515"></span>
-      </div>
-      <span>High</span>
-    </div>`;
+      </div><span>High</span></div>`;
+      document.getElementById(containerId).innerHTML = html;
+    }
 
-    container.innerHTML = html;
+    // Preview: today + yesterday only
+    const todayDow = new Date().getDay();
+    const yestDow = (todayDow + 6) % 7;
+    renderGrid([yestDow, todayDow], [DAY_LABELS[yestDow] + " (yesterday)", DAY_LABELS[todayDow] + " (today)"], "heatmap-preview");
+
+    // Full grid: all 7 days
+    renderGrid([0,1,2,3,4,5,6], DAY_LABELS, "heatmap");
+  }
+
+  function exportHoursCSV() {
+    const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const HOUR_LABELS = Array.from({ length: 24 }, (_, i) => {
+      if (i === 0) return "12am"; if (i === 12) return "12pm";
+      return i < 12 ? `${i}am` : `${i-12}pm`;
+    });
+    const rows = [["Hour", ...DAY_LABELS]];
+    for (let h = 0; h < 24; h++) {
+      rows.push([HOUR_LABELS[h], ...heatmapMatrix[h]]);
+    }
+    const csv = rows.map(r => r.join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `caribbean-resort-hours-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
   }
 
   // ── FILTERS ────────────────────────────────────
@@ -1083,6 +1051,14 @@
         if (activeFilters.date === "today") return diff < msDay;
         if (activeFilters.date === "week")  return diff < 7 * msDay;
         if (activeFilters.date === "month") return diff < 30 * msDay;
+        if (activeFilters.date === "custom") {
+          const from = document.getElementById("date-from").value;
+          const to   = document.getElementById("date-to").value;
+          const ts   = new Date(c.created_at);
+          if (from && ts < new Date(from)) return false;
+          if (to   && ts > new Date(to + "T23:59:59")) return false;
+          return true;
+        }
         return true;
       });
     }
@@ -1105,7 +1081,21 @@
     document.querySelectorAll("#filter-date .f-btn").forEach(b => b.classList.remove("active"));
     e.target.classList.add("active");
     activeFilters.date = e.target.dataset.val;
-    applyFilters();
+    const row = document.getElementById("custom-date-row");
+    if (activeFilters.date === "custom") {
+      row.classList.add("visible");
+    } else {
+      row.classList.remove("visible");
+      applyFilters();
+    }
+  });
+
+  // Custom date inputs
+  document.getElementById("date-from").addEventListener("change", () => {
+    if (activeFilters.date === "custom") applyFilters();
+  });
+  document.getElementById("date-to").addEventListener("change", () => {
+    if (activeFilters.date === "custom") applyFilters();
   });
 
   // Category dropdown
@@ -1196,7 +1186,7 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       allCalls = await res.json();
       buildKPIs(allCalls);
-      buildAlerts(allCalls);
+
       buildCharts(allCalls);
       populateCategoryFilter(allCalls);
       applyFilters();
@@ -1210,6 +1200,17 @@
     }
   }
 
+  function togglePopover(evt, id) {
+    evt.stopPropagation();
+    const pop = document.getElementById(id);
+    const isOpen = pop.classList.contains("open");
+    document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
+    if (!isOpen) pop.classList.add("open");
+  }
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".kpi-popover.open").forEach(p => p.classList.remove("open"));
+  });
+
   function toggleHeatmap() {
     const toggle = document.getElementById("heatmap-toggle");
     const body   = document.getElementById("heatmap-body");
@@ -1217,7 +1218,7 @@
     const isOpen = body.classList.contains("open");
     body.classList.toggle("open");
     toggle.classList.toggle("open");
-    label.textContent = isOpen ? "Show full grid" : "Hide grid";
+    label.textContent = isOpen ? "Show full week" : "Hide full week";
   }
 
   loadData();
