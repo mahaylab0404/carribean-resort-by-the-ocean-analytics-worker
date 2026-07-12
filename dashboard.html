@@ -640,13 +640,6 @@
 
   <!-- Filter bar -->
   <div class="filter-bar">
-    <span class="filter-label">Sentiment:</span>
-    <div class="filter-group" id="filter-sentiment">
-      <button class="f-btn active" data-val="all">All</button>
-      <button class="f-btn" data-val="positive">Positive</button>
-      <button class="f-btn" data-val="neutral">Neutral</button>
-      <button class="f-btn" data-val="negative">Negative</button>
-    </div>
     <span class="filter-label">Category:</span>
     <select class="f-select" id="filter-category">
       <option value="all">All Categories</option>
@@ -715,7 +708,7 @@
   }
 
   let allCalls = [];
-  let activeFilters = { sentiment: "all", category: "all", date: "all" };
+  let activeFilters = { category: "all", date: "all" };
 
   // ── CLOCK ──────────────────────────────────────
   function updateClock() {
@@ -1065,9 +1058,6 @@
   function applyFilters() {
     let filtered = [...allCalls];
 
-    if (activeFilters.sentiment !== "all")
-      filtered = filtered.filter(c => c.sentiment && c.sentiment.toLowerCase() === activeFilters.sentiment);
-
     if (activeFilters.category !== "all")
       filtered = filtered.filter(c => c.issue_category === activeFilters.category);
 
@@ -1093,15 +1083,6 @@
 
     buildFeed(filtered);
   }
-
-  // Sentiment buttons
-  document.getElementById("filter-sentiment").addEventListener("click", e => {
-    if (!e.target.classList.contains("f-btn")) return;
-    document.querySelectorAll("#filter-sentiment .f-btn").forEach(b => b.classList.remove("active"));
-    e.target.classList.add("active");
-    activeFilters.sentiment = e.target.dataset.val;
-    applyFilters();
-  });
 
   // Date buttons
   document.getElementById("filter-date").addEventListener("click", e => {
@@ -1579,8 +1560,8 @@
   }
 
   function clearFilters() {
-    activeFilters = { sentiment: "all", category: "all", date: "all" };
-    document.querySelectorAll("#filter-sentiment .f-btn, #filter-date .f-btn").forEach(b => {
+    activeFilters = { category: "all", date: "all" };
+    document.querySelectorAll("#filter-date .f-btn").forEach(b => {
       b.classList.toggle("active", b.dataset.val === "all");
     });
     document.getElementById("filter-category").value = "all";
